@@ -282,7 +282,3 @@ p.691-692 のサンプルコードを以下のように SharedArrayBuffer およ
 このようないわゆるメッセージパッシングによって排他制御処理相当を行う並行処理モデルを何と呼ぶか書きなさい。
 
 **出題範囲: 16.11.5**
-
-## 問題 16.16 💻📄💪
-
-[テストケース](https://github.com/YoshikiShibata/jpltest/blob/master/jpl/ch14/ex10/ThreadPoolTest.java)) を移植しようと思ったものの JS ってスレッド間で共有できるのって SharedArrayBuffer だから簡単に移植できないような...?
