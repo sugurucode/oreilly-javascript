@@ -11,4 +11,4 @@ const maxPlusTwo = Number.MAX_SAFE_INTEGER + 2;
 console.log('最大値+1 === 最大値+2:', maxPlusOne === maxPlusTwo);
 
 // 理由を出力
-console.log('理由: JavaScript では安全な整数範囲を超えると精度が失われ、最大値+1 と最大値+2 が同じ値として扱われるためです。');
+console.log('JavaScriptでは安全な整数範囲を超えると精度が失われる。最大値+1 と最大値+2 が同じ値として扱われる。');
