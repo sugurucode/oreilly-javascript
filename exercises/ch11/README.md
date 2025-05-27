@@ -1,16 +1,17 @@
 # 練習問題: 11 章
 
 ## 問題 11.1 💻🧪
+
 以下のような動作を実現する、 `TypeMap` クラスを作成しなさい。
 
 ```js
 class Foo {}
 
 const typeMap = new TypeMap();
-typeMap.set(String, "string");
+typeMap.set(String, 'string');
 typeMap.set(Number, 123);
 typeMap.set(Foo, new Foo());
-typeMap.set(Date, "not a date"); // -> Error
+typeMap.set(Date, 'not a date'); // -> Error
 
 typeMap.get(String); // -> "string"
 typeMap.get(Number); // -> 123
@@ -113,12 +114,8 @@ ch11/ex04/index.js の実装を完成させ型付き配列と通常の配列で�
 
 ```js
 const p = seq(
-  seq(
-    charFrom("Jj"),
-    quote("ava"),
-    repeat(seq(charFrom("Ss"), quote("cript")), 0, 1)
-  ),
-  quote(" is fun")
+  seq(charFrom('Jj'), quote('ava'), repeat(seq(charFrom('Ss'), quote('cript')), 0, 1)),
+  quote(' is fun'),
 );
 ```
 

@@ -1,0 +1,24 @@
+<!-- 予想　{answer:42}　{answer:0} ...でもアドレスを渡してるから~みたいな感じで0じゃないんだろうな... -->
+<!-- 検証  
+ 開発者ツールを開いた状態でHTML：{"answer": 42}　{"answer": 0} >
+HTMLを開いた状態で開発社ツール：{"answer": 0}　{"answer": 0}
+ <!-- 理由：
+「オブジェクトに関する情報は、遅延して取得されます。
+これは、ログメッセージはオブジェクトがログ出力された時点ではなく、
+最初に表示された時点のオブジェクトのコンテンツを表示させるからです」
+https://x.gd/VYtYy
+-->
+
+<!doctype html>
+<html>
+  <body>
+    <script>
+      let life = { answer: 42 };
+      console.log(JSON.stringify(life));
+      life.answer = 0;
+      console.log(JSON.stringify(life));
+    </script>
+  </body>
+</html>
+
+<!-- 深堀→https://www.perplexity.ai/search/doctype-html-html-body-script-ewUMP0opRMeldv714P5xeQ -->

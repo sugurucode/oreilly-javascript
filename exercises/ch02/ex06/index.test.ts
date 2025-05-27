@@ -1,8 +1,8 @@
-import { fizzbuzz } from "./index.js";
+import { fizzbuzz } from './index.ts'
 
-describe("FizzBuzz", () => {
-  it("1から100までのFizzBuzzの結果を返すこと", () => {
-    const actual = fizzbuzz();
+describe('FizzBuzz', () => {
+  it('1から100までのFizzBuzzの結果を返すこと', () => {
+    const actual = fizzbuzz()
     const expected = `1
 2
 Fizz
@@ -103,8 +103,8 @@ Fizz
 98
 Fizz
 Buzz
-`;
+`
 
-    expect(actual).toBe(expected);
-  });
-});
+    expect(actual).toBe(expected)
+  })
+})

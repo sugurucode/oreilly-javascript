@@ -74,16 +74,16 @@ console.log(a, b, e);
 プログラム言語のソースコードの構造は、抽象構文木 (AST) で表現することができる。ソースコードを AST に変換して解析することで、最適化や lint の検出など、ソースコードの変換や検証を行うことができる。
 書籍 p.22 の以下の2つのプログラムをそれぞれ AST に変換し、JSONとして出力しなさい。AST を生成するために [acorn](https://www.npmjs.com/package/acorn) などのJavaScript のソースコードをパースして抽象構文木 (AST) を生成するライブラリを使っても良い。
 
-``` javascript
-let a
-a
-=
-3
-console.log(a)
+```javascript
+let a;
+a = 3;
+console.log(a);
 ```
 
-``` javascript
-let a; a = 3; console.log(a);
+```javascript
+let a;
+a = 3;
+console.log(a);
 ```
 
 また、生成された AST を図で表現しなさい。例えば `1 + 1` という単純なプログラムは以下のような図で表現できる。

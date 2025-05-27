@@ -14,7 +14,7 @@
 
 ```javascript
 for (i = 1; i < 101; i++)
-  console.log(i % 15 ? (i % 3 ? (i % 5 ? i : "Buzz") : "Fizz") : "FizzBuzz");
+  console.log(i % 15 ? (i % 3 ? (i % 5 ? i : 'Buzz') : 'Fizz') : 'FizzBuzz');
 ```
 
 **出題範囲**: 4.7
@@ -73,8 +73,7 @@ for (i = 1; i < 101; i++)
 Fizz、Buzz、FizzBuzz、数値、それぞれのケースで式がどのように評価されるか言及しつつ処理を説明しなさい。
 
 ```javascript
-for (i = 1; i < 101; i++)
-  console.log((i % 3 ? "" : "Fizz") + (i % 5 ? "" : "Buzz") || i);
+for (i = 1; i < 101; i++) console.log((i % 3 ? '' : 'Fizz') + (i % 5 ? '' : 'Buzz') || i);
 ```
 
 **出題範囲**: 4.10
@@ -121,7 +120,7 @@ function set42(key) {
 }
 
 // 例:
-set42("hello");
+set42('hello');
 console.log(hello); // 42
 ```
 

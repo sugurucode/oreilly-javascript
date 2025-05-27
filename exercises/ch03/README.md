@@ -96,11 +96,11 @@ test("テスト名を適切につけてなさい", () => {
 オブジェクトが可変であることと、オブジェクトが参照で比較されることを以下のコードを書いて確認しなさい:
 
 ```js
-const obj1 = {x: 1};
+const obj1 = { x: 1 };
 // 問題: ここに1行コードを書くことで以下の行で {x: 1, y: 2} が出力されること
 console.log(obj1);
 
-const obj2 = {x: 1, y: 2};
+const obj2 = { x: 1, y: 2 };
 // 問題: 以下の行では何が出力されるか、予想してから結果を確認しなさい
 console.log(obj1 === obj2);
 ```
@@ -120,16 +120,16 @@ equals(42, 42); // true
 equals(null, null); // true
 
 // 厳密等価ではない場合オブジェクト以外が指定されれば false
-equals({x: 42}, 42); // false
-equals(null, {x: 42}); // false
+equals({ x: 42 }, 42); // false
+equals(null, { x: 42 }); // false
 
 // プロパティの数・名前が一致しなければ false
-equals({x: 1}, {y: 1}); // false
-equals({x: 1}, {x: 1, y: 1}); // false
+equals({ x: 1 }, { y: 1 }); // false
+equals({ x: 1 }, { x: 1, y: 1 }); // false
 
 // プロパティの各値を equals で再帰的に比較
-equals({x: {y: {z: 10}}}, {x: {y: {z: 10}}}); // true
-equals({x: {y: {z: 10}}}, {x: {y: {z: 10, w: 1}}}); // false
+equals({ x: { y: { z: 10 } } }, { x: { y: { z: 10 } } }); // true
+equals({ x: { y: { z: 10 } } }, { x: { y: { z: 10, w: 1 } } }); // false
 ```
 
 **出題範囲**: 3.8
