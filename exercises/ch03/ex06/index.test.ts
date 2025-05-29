@@ -1,6 +1,6 @@
-import { slice } from "./index.js"; // typescript で書く場合は "./index.ts"
+import { slice } from "./index.ts"; // typescript で書く場合は "./index.ts"
 
-function sliceTestCase(str, indexStart, indexEnd) {
+function sliceTestCase(str:string, indexStart=0, indexEnd:number = str.length): [string, number, number, string] {
   return [str, indexStart, indexEnd, str.slice(indexStart, indexEnd)];
 }
 
