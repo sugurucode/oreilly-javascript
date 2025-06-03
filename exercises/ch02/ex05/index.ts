@@ -1,3 +1,4 @@
+export
 // セミコロンを削除
 class DefaultMap extends Map {
   constructor(defaultvalue) {

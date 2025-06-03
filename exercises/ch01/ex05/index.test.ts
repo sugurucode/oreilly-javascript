@@ -1,5 +1,5 @@
 //import { abs, sum, factorial } from "./index.js";
-
+export {};
 // TypeScript の場合は以下:
 import { abs, sum, factorial } from './index';
 

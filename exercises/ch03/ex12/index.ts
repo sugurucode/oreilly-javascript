@@ -1,24 +1,21 @@
 class Example {
-value: number;
-
-  constructor(value: number) {
-    this.value = value;
-  }
  // JavaScriptの全てのオブジェクトが継承している。
   valueOf() {
-    return this.value;
+    return 10;
   }
 
   toString() {
-    return this.value
+    return "Hello, World!";
   }
 }
 
 // インスタンスを作成
-const exampleObj = new Example(42);
+const obj = new Example();
 
-// valueOf() の結果を出力
-console.log(exampleObj.value + 3); // 暗黙的に呼び出される
+// valueOf()の結果を直接呼ばずに出力（暗黙の型変換を利用）
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+console.log(obj + 1); // 11（obj.valueOf()が呼ばれる）
 
-// toString() の結果を出力
-console.log(`これは${exampleObj}左文字列か？`); // 暗黙的に呼び出される
+// toString()の結果を直接呼ばずに出力（暗黙の型変換を利用）
+console.log(`${obj}`); // "Hello, World!"（obj.toString()が呼ばれる）

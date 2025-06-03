@@ -3,20 +3,15 @@
 //   return "TODO";
 // }
 
-export const slice = (str: string, indexStart?: number, indexEnd?: number): string => {
-  // デフォルト値の設定
-  if (indexStart === undefined) {
-    indexStart = 0;
-  }
-  if (indexEnd === undefined) {
-    indexEnd = str.length;
-  }
+export const slice = (str: string, indexStart: number = 0, indexEnd: number = str.length): string => {
 
-  // NaN や Infinity の処理
+  // NaNの処理
+  // slice("Hello World!", NaN, 2) => "He"
   indexStart = Math.floor(isNaN(indexStart) ? 0 : indexStart);
-  indexEnd = Math.floor(isNaN(indexEnd) ? indexStart : indexEnd); // 修正箇所
+  // slice("Hello World!", 2, NaN) => ""
+  indexEnd = Math.floor(isNaN(indexEnd) ? indexStart : indexEnd);
 
-  // 負のインデックスを正のインデックスに変換
+  // 負→正に変換。
   if (indexStart < 0) {
     indexStart = str.length + indexStart;
   }
@@ -25,9 +20,12 @@ export const slice = (str: string, indexStart?: number, indexEnd?: number): stri
   }
 
   // 範囲外のインデックスを調整
+  // slice("Hello World!", 100, 2) => ""
+  // indexStartにindex.length採用
   indexStart = Math.max(0, Math.min(indexStart, str.length));
+  // slice("Hello World!", 2, 100) => "llo World!"
   indexEnd = Math.max(0, Math.min(indexEnd, str.length));
-
+  // slice("Hello World!", 7, 2) => ""
   // 開始インデックスが終了インデックス以上の場合は空文字列を返す
   if (indexStart >= indexEnd) {
     return "";

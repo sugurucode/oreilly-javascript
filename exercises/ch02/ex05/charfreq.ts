@@ -1,3 +1,4 @@
+export{};
 /**
  * This Node program reads text from standard input, computes the frequency
  * of each letter in that text, and displays a histogram of the most
@@ -10,7 +11,7 @@
 // This class extends Map so that the get() method returns the specified
 // value instead of null when the key is not in the map
 class DefaultMap extends Map {
-  constructor(defaultValue) {
+  constructor(defaultValue:) {
     super(); // Invoke superclass constructor
     this.defaultValue = defaultValue; // Remember the default value
   }

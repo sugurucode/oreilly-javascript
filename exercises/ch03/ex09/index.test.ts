@@ -1,6 +1,6 @@
 test("points配列の分割代入をテスト", () => {
     let points = [{x:1, y:2}, {x:3, y:4}];
-    let [{x: x1, y: y1}, {x: x2, y: y2}] = points;
+    let [{x: x1, y: y1}, {x: x2, y: y2}] = points; //p64
     expect(x1).toBe(1);
     expect(y1).toBe(2);
     expect(x2).toBe(3);
