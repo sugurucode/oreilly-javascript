@@ -1,5 +1,4 @@
-export
-// セミコロンを削除
+export // セミコロンを削除
 class DefaultMap extends Map {
   constructor(defaultvalue) {
     super()

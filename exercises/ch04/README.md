@@ -13,8 +13,7 @@
 このプログラムを三項演算子のかわりに `if` 文を用いて実装し直しなさい。
 
 ```javascript
-for (i = 1; i < 101; i++)
-  console.log(i % 15 ? (i % 3 ? (i % 5 ? i : 'Buzz') : 'Fizz') : 'FizzBuzz');
+for (i = 1; i < 101; i++) console.log(i % 15 ? (i % 3 ? (i % 5 ? i : 'Buzz') : 'Fizz') : 'FizzBuzz')
 ```
 
 **出題範囲**: 4.7
@@ -73,7 +72,7 @@ for (i = 1; i < 101; i++)
 Fizz、Buzz、FizzBuzz、数値、それぞれのケースで式がどのように評価されるか言及しつつ処理を説明しなさい。
 
 ```javascript
-for (i = 1; i < 101; i++) console.log((i % 3 ? '' : 'Fizz') + (i % 5 ? '' : 'Buzz') || i);
+for (i = 1; i < 101; i++) console.log((i % 3 ? '' : 'Fizz') + (i % 5 ? '' : 'Buzz') || i)
 ```
 
 **出題範囲**: 4.10
@@ -92,18 +91,18 @@ for (i = 1; i < 101; i++) console.log((i % 3 ? '' : 'Fizz') + (i % 5 ? '' : 'Buz
 // - params.maxWidth が与えられる場合 (正の整数と仮定して良い) はその値を利用する
 // - params.maxHeight が与えられる場合 (正の整数と仮定して良い) はその値を利用する
 function resize(params) {
-  let maxWidth = 600;
-  let maxHeight = 480;
+  let maxWidth = 600
+  let maxHeight = 480
 
   if (params && params.maxWidth) {
-    maxWidth = params.maxWidth;
+    maxWidth = params.maxWidth
   }
 
   if (params && params.maxHeight) {
-    maxHeight = params.maxHeight;
+    maxHeight = params.maxHeight
   }
 
-  console.log({ maxWidth, maxHeight });
+  console.log({ maxWidth, maxHeight })
 }
 ```
 
@@ -116,12 +115,12 @@ function resize(params) {
 ```js
 // このような関数は絶対に書いてはならない。
 function set42(key) {
-  eval(`${key} = 42;`);
+  eval(`${key} = 42;`)
 }
 
 // 例:
-set42('hello');
-console.log(hello); // 42
+set42('hello')
+console.log(hello) // 42
 ```
 
 `set42` に意図せぬ動作 (例: システムに負荷を与える、セキュリティの問題となる挙動を取る) を行わさせるにはどのような引数を与えればいいか答えなさい。

@@ -10,22 +10,22 @@
 // 重すぎ
 export const fib1 = (n: number): number => {
   if (n == 0) {
-    return 0;
+    return 0
   } else if (n == 1) {
-    return 1;
+    return 1
   } else {
-    return fib1(n - 1) + fib1(n - 2);
+    return fib1(n - 1) + fib1(n - 2)
   }
-};
+}
 
 export const fib2 = (n: number): number => {
-  if (n === 0) return 0;
+  if (n === 0) return 0
   let a = 0,
-    b = 1;
+    b = 1
   for (let i = 2; i <= n; i++) {
-    [a, b] = [b, a + b];
+    ;[a, b] = [b, a + b]
   }
-  return b;
-};
+  return b
+}
 
-console.log(fib2(75)); // 一瞬で終わる！
+console.log(fib2(75)) // 一瞬で終わる！

@@ -14,4 +14,4 @@ module.exports = {
     // 通常業務ではほぼ確実に採用されるルールのため、offにはしない。
     'prefer-const': 'warn',
   },
-};
+}

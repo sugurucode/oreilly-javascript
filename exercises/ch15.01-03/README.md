@@ -106,13 +106,13 @@ navigator から取得できる要素をページ中に描画して詐欺サイ�
 ```
 
 ```js
-async () => {
+;async () => {
   // YouTube が利用者に推薦する動画タイトルを取得すれば、利用者に最適な商品セットを表示できるのではないか？
-  const titles = document.getElementById('').contentWindowquerySelectorAll('#video-title');
+  const titles = document.getElementById('').contentWindowquerySelectorAll('#video-title')
   for (const t of titles) {
-    await fetch('your-server-path', { method: 'POST', body: t.textContent });
+    await fetch('your-server-path', { method: 'POST', body: t.textContent })
   }
-};
+}
 ```
 
 しかし、トップページを読み込むとエラーになります。用語「クリックジャッキング」を調べて理由を説明しなさい。<br>
@@ -161,39 +161,39 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EVENT propagation, dispatch</title>
     <script type="module">
-      const div = document.querySelector('#div');
-      const btn = document.querySelector('#btn');
+      const div = document.querySelector('#div')
+      const btn = document.querySelector('#btn')
       div.addEventListener(
         'click',
         () => {
-          console.log('div');
+          console.log('div')
         },
         { capture: true },
-      );
+      )
       btn.addEventListener('click', () => {
-        console.log('button');
-      });
+        console.log('button')
+      })
 
       class RandomEventTarget extends EventTarget {
         constructor() {
-          super();
+          super()
         }
 
         trigger() {
           const randomNumber = new CustomEvent('random', {
             detail: Math.random(),
-          });
-          this.dispatchEvent(randomNumber);
+          })
+          this.dispatchEvent(randomNumber)
         }
       }
 
-      const randomEventTarget = new RandomEventTarget();
+      const randomEventTarget = new RandomEventTarget()
 
       // 1. htmlのpタグ要素を生成しなさい。また、ボタン要素の直後の位置にpタグ要素を配置しなさい。
 
       randomEventTarget.addEventListener('random', (e) => {
         // 2. 生成済みのpタグ要素のテキストに、イベントの保持する乱数値を代入しなさい。
-      });
+      })
 
       // 3. ボタンにイベントリスナを追加し、ボタン押下するごとに乱数値を変更しなさい。変更にはRandomEventTargetのtriggerメソッドを利用しなさい。
 
@@ -259,12 +259,12 @@ index.html に対して以下の要素を CSS セレクタで指定して consol
     <title>Product List</title>
     <script type="module">
       document.getElementById('category-select').addEventListener('change', (e) => {
-        const selectedCategory = e.target.value;
-        const products = document.querySelectorAll('#productList li');
+        const selectedCategory = e.target.value
+        const products = document.querySelectorAll('#productList li')
         products.forEach((product) => {
           // ここにコードを書いて完成させる
-        });
-      });
+        })
+      })
     </script>
   </head>
   <body>

@@ -1,2 +1,2 @@
-const elem = document.querySelector('#target')!;
-elem.innerHTML = 'a';
+const elem = document.querySelector('#target')!
+elem.innerHTML = 'a'

@@ -9,7 +9,7 @@
  * @return {Promise}  Promise - 指定時間後に解決される Promise
  */
 function wait(msec) {
-  return new Promise((resolve) => setTimeout(resolve, msec));
+  return new Promise((resolve) => setTimeout(resolve, msec))
 }
 
 // 例: 1秒後に "A" と出力し、その2秒後に "B" と出力し、その3秒後に "C" と出力する
@@ -18,31 +18,31 @@ wait(1000)
   .then(() => wait(2000))
   .then(() => console.log('B'))
   .then(() => wait(3000))
-  .then(() => console.log('C'));
+  .then(() => console.log('C'))
 ```
 
 また記述を簡潔にするために以下の関数を利用する:
 
 ```js
 // 0, 1, 2, 3 秒待つ
-const wait0 = () => wait(0);
-const wait1 = () => wait(1000);
-const wait2 = () => wait(2000);
-const wait3 = () => wait(3000);
+const wait0 = () => wait(0)
+const wait1 = () => wait(1000)
+const wait2 = () => wait(2000)
+const wait3 = () => wait(3000)
 
 // ログ出力
-const log = (v) => console.log(v);
-const logA = (v) => console.log('A');
-const logB = (v) => console.log('B');
-const logC = (v) => console.log('C');
+const log = (v) => console.log(v)
+const logA = (v) => console.log('A')
+const logB = (v) => console.log('B')
+const logC = (v) => console.log('C')
 
 // 例外
 const errX = () => {
-  throw new Error('X');
-};
+  throw new Error('X')
+}
 const errY = () => {
-  throw new Error('Y');
-};
+  throw new Error('Y')
+}
 ```
 
 ## 問題 13.1 🖋️
@@ -51,7 +51,7 @@ const errY = () => {
 また「[タスク](https://developer.mozilla.org/ja/docs/Web/API/HTML_DOM_API/Microtask_guide)」について調査し、この用語を用いて理由を説明しなさい。
 
 ```js
-setTimeout(() => console.log('Hello, world!'), 1000);
+setTimeout(() => console.log('Hello, world!'), 1000)
 
 function longRunningFunction() {
   while (true) {
@@ -60,7 +60,7 @@ function longRunningFunction() {
   }
 }
 
-longRunningFunction();
+longRunningFunction()
 ```
 
 **出題範囲**: 13.1
@@ -96,7 +96,7 @@ function f1() {
   wait3()
     .then(logA)
     .then(() => wait2().then(logB))
-    .then(() => wait1().then(logC));
+    .then(() => wait1().then(logC))
 }
 
 function f2() {
@@ -123,19 +123,19 @@ function f2() {
   wait3()
     .then(logA)
     .then(() => {
-      wait2().then(logB);
+      wait2().then(logB)
     })
-    .then(() => wait1().then(logC));
+    .then(() => wait1().then(logC))
 }
 
 function f3() {
   // NOTE: then のコールバック内の例外は try/catch でキャッチできるだろうか
   try {
-    wait(0).then(logA).then(errX);
+    wait(0).then(logA).then(errX)
   } catch (e) {
-    logB();
+    logB()
   } finally {
-    logC();
+    logC()
   }
 }
 
@@ -143,51 +143,51 @@ function f4() {
   // NOTE: f5 との比較用
   wait2()
     .then(() => {
-      logA();
-      return 40;
+      logA()
+      return 40
     })
     .then((value) =>
       wait(1000).then(() => {
-        logB();
-        return 100;
+        logB()
+        return 100
       }),
     )
-    .then((v) => log(v));
+    .then((v) => log(v))
 }
 
 function f5() {
   // NOTE: 2つ目の then の引数が関数でなく Promise になっている (典型的なミス)
   wait2()
     .then(() => {
-      logA();
-      return 40;
+      logA()
+      return 40
     })
     .then(
       wait1().then(() => {
-        logB();
-        return 100;
+        logB()
+        return 100
       }),
     )
-    .then((v) => log(v));
+    .then((v) => log(v))
 }
 
 function f6() {
   // NOTE: 1つの Promise に対し then を2回呼び出すとどうなるか
 
-  const p = wait1().then(logA);
-  p.then(() => wait1()).then(logB);
-  p.then(() => wait2()).then(logC);
+  const p = wait1().then(logA)
+  p.then(() => wait1()).then(logB)
+  p.then(() => wait2()).then(logC)
 }
 
 function f7() {
   // NOTE: 2つ目の wait の引数が実行される差には p は解決済み
   // (= 解決済みの Promise の then を呼び出すとどうなるか)
-  const p = wait1().then(logA);
+  const p = wait1().then(logA)
   wait2()
     .then(() => {
-      return p.then(logB);
+      return p.then(logB)
     })
-    .then(logC);
+    .then(logC)
 }
 
 function f8() {
@@ -196,7 +196,7 @@ function f8() {
     .then(errX)
     .then(errY)
     .catch((e) => log(e.message))
-    .finally(logA);
+    .finally(logA)
 }
 
 function f9() {
@@ -205,7 +205,7 @@ function f9() {
     .then(() => 42)
     .then(errY)
     .catch((e) => log(e.message))
-    .finally(logA);
+    .finally(logA)
 }
 
 function f10() {
@@ -213,21 +213,21 @@ function f10() {
   wait1()
     .then(() => 42)
     .then(errY, (e) => log(e.message))
-    .finally(logA);
+    .finally(logA)
 }
 
 function f11() {
   // f12 との比較用: new Promise 内の throw は .catch でキャッチできるか？
   new Promise((resolve, reject) => {
-    errX();
-  }).catch((e) => log(e.message));
+    errX()
+  }).catch((e) => log(e.message))
 }
 
 function f12() {
   // new Promise 内だがコールバック関数で throw した場合は？
   new Promise((resolve, reject) => {
-    setTimeout(() => errX(), 0);
-  }).catch((e) => log(e.message));
+    setTimeout(() => errX(), 0)
+  }).catch((e) => log(e.message))
 }
 ```
 
@@ -239,32 +239,32 @@ function f12() {
 以下は Node.js 標準ライブラリのディレクトリ (フォルダ) を作成する関数 `fs.mkdir` を変換する例である:
 
 ```js
-import * as fs from 'node:fs';
+import * as fs from 'node:fs'
 
 function mkdir(path, options) {
   return new Promise((resolve, reject) => {
     fs.mkdir(path, options, (err) => {
       if (err) {
-        reject(err);
-        return;
+        reject(err)
+        return
       }
-      resolve();
-    });
-  });
+      resolve()
+    })
+  })
 }
 
 // ディレクトリ A → B → C を順に作る以下のコード (※ エラーハンドリングは省略) を...
 fs.mkdir('A', () => {
   fs.mkdir('B', () => {
-    fs.mkdir('C', () => console.log('COMPLETED'));
-  });
-});
+    fs.mkdir('C', () => console.log('COMPLETED'))
+  })
+})
 
 // 以下のように書くことができる
 mkdir('A')
   .then(() => mkdir('B'))
   .then(() => mkdir('C'))
-  .then(() => console.log('COMPLETED'));
+  .then(() => console.log('COMPLETED'))
 ```
 
 同様にして以下の関数の Promise 版を作成しなさい:
@@ -280,13 +280,13 @@ mkdir('A')
 このため先の問題のようにわざわざ自分で Promise 版の関数を作る必要はない。
 
 ```js
-import * as fs from 'node:fs';
-import * as fsPromises from 'node:fs/promises';
+import * as fs from 'node:fs'
+import * as fsPromises from 'node:fs/promises'
 
 fsPromises
   .mkdir('A')
   .then(() => fsPromises.mkdir('B'))
-  .then(() => fsPromises.mkdir('C'));
+  .then(() => fsPromises.mkdir('C'))
 ```
 
 それでは以下の 2 つの関数を `node:fs/promises` を利用し Promise を返す関数に書き換えなさい:
@@ -295,52 +295,52 @@ fsPromises
 function fetchFirstFileSize(path, callback) {
   fs.readdir(path, (err, files) => {
     if (err) {
-      callback(err);
-      return;
+      callback(err)
+      return
     }
     if (files.length === 0) {
-      callback(null, null);
-      return;
+      callback(null, null)
+      return
     }
 
     fs.stat(join(path, files[0]), (err, stats) => {
       if (err) {
-        callback(err);
-        return;
+        callback(err)
+        return
       }
-      callback(null, stats.size);
-    });
-  });
+      callback(null, stats.size)
+    })
+  })
 }
 
 function fetchSumOfFileSizes(path, callback) {
   fs.readdir(path, (err, files) => {
     if (err) {
-      callback(err);
-      return;
+      callback(err)
+      return
     }
 
-    let total = 0;
-    const rest = [...files];
+    let total = 0
+    const rest = [...files]
 
     function iter() {
       if (rest.length === 0) {
-        callback(null, total);
-        return;
+        callback(null, total)
+        return
       }
 
-      const next = rest.pop();
+      const next = rest.pop()
       fs.stat(join(path, next), (err, stats) => {
         if (err) {
-          callback(err);
-          return;
+          callback(err)
+          return
         }
-        total += stats.size;
-        iter();
-      });
+        total += stats.size
+        iter()
+      })
     }
-    iter();
-  });
+    iter()
+  })
 }
 ```
 
@@ -354,14 +354,14 @@ function fetchSumOfFileSizes(path, callback) {
 function g1() {
   // TODO: then のネストを無くしなさい
   return wait(1000).then(() => {
-    console.log('A');
+    console.log('A')
     return wait(2000).then(() => {
-      console.log('B');
+      console.log('B')
       return wait(3000).then(() => {
-        console.log('C');
-      });
-    });
-  });
+        console.log('C')
+      })
+    })
+  })
 }
 
 function g2() {
@@ -373,46 +373,46 @@ function g2() {
       .then(() => console.log('B'))
       .then(() => wait(3000))
       .then(() => console.log('C'))
-      .then(resolve, reject);
-  });
+      .then(resolve, reject)
+  })
 }
 
 function g3() {
   // 以下2つの関数が存在するとします (中身は適当)
   function fetchUser() {
-    return Promise.resolve({ id: 42, name: 'John' });
+    return Promise.resolve({ id: 42, name: 'John' })
   }
   function fetchUserFriends(user) {
     return Promise.resolve([
       { name: 'Sam', id: 100 },
       { name: 'Bob', id: 1 },
-    ]);
+    ])
   }
 
   // TODO: var, let, const による変数宣言を無くしなさい。async/awaitは使用しないこと。
-  let temp = 0;
+  let temp = 0
   return fetchUser()
     .then((user) => {
-      temp = user;
-      return fetchUserFriends(user);
+      temp = user
+      return fetchUserFriends(user)
     })
     .then((friends) => {
-      console.log(`${temp.name} has ${friends.length} friends!`);
-    });
+      console.log(`${temp.name} has ${friends.length} friends!`)
+    })
 }
 
 function g4() {
   function someFunction() {
-    return 42;
+    return 42
   }
 
   // NOTE: この関数 g4 は Promise を返す必要があるものとする
   // (利用しているフレームワークはライブラリがそういう関数を要求するとでも思って下さい)
   // TODO: new Promise を使わないように書き換えなさい。async/awaitは使用しないこと。
   return new Promise((resolve) => {
-    let value = someFunction();
-    return value;
-  });
+    let value = someFunction()
+    return value
+  })
 }
 ```
 
@@ -432,44 +432,44 @@ jQuery Deferred について調べ [`Promise`](https://developer.mozilla.org/ja/
 ```js
 async function h1() {
   try {
-    await wait3();
-    logA();
-    await wait2();
-    logB();
-    await wait1();
-    logC();
+    await wait3()
+    logA()
+    await wait2()
+    logB()
+    await wait1()
+    logC()
   } catch (e) {
-    log(e.message);
+    log(e.message)
   }
 }
 
 function h2() {
   // NOTE: h3 との比較用
   new Promise(() => {
-    errX();
-  }).catch((e) => log(e.message));
+    errX()
+  }).catch((e) => log(e.message))
 }
 
 function h3() {
   // NOTE: new Promise の引数が async function の場合、例外はどう扱われるだろう
   new Promise(async () => {
-    errX();
-  }).catch((e) => log(e.message));
+    errX()
+  }).catch((e) => log(e.message))
 }
 
 async function h4() {
   // NOTE: 2つの例外は両方 catch できるか？
   try {
     const p1 = wait2().then(() => {
-      errX();
-    });
+      errX()
+    })
     const p2 = wait1().then(() => {
-      errY();
-    });
-    await p1;
-    await p2;
+      errY()
+    })
+    await p1
+    await p2
   } catch (e) {
-    log(e.message);
+    log(e.message)
   }
 }
 ```
@@ -490,138 +490,138 @@ async function h4() {
 ```js
 async function i1() {
   // NOTE: any で1つ Promise が解決された時に他の Promise はどうなるだろうか
-  let v = 0;
+  let v = 0
 
   v = await Promise.any([
     wait1().then(() => 42),
     wait2()
       .then(() => (v = 100))
       .then(() => 0),
-  ]);
+  ])
 
-  log(v);
-  await wait2();
-  log(v);
+  log(v)
+  await wait2()
+  log(v)
 }
 
 async function i2() {
   const v = await Promise.all([
     wait3().then(() => {
-      logA();
-      return 'A';
+      logA()
+      return 'A'
     }),
     wait2().then(() => {
-      logB();
-      return 'B';
+      logB()
+      return 'B'
     }),
     wait1().then(() => {
-      logC();
-      return 'C';
+      logC()
+      return 'C'
     }),
-  ]);
-  log(v);
+  ])
+  log(v)
 }
 
 async function i3() {
   // NOTE: all で引数の1つが失敗すると他の Promise はどうなるだろうか
-  let v = 42;
+  let v = 42
   try {
     await Promise.all([
       wait3().then(() => {
-        v = 0;
-        errX();
+        v = 0
+        errX()
       }),
       wait2().then(() => {
-        logB();
-        return 'B';
+        logB()
+        return 'B'
       }),
       wait1().then(() => {
-        errY();
+        errY()
       }),
-    ]);
+    ])
   } catch (e) {
-    log(e.message);
-    log(v);
-    await wait3();
-    log(v);
+    log(e.message)
+    log(v)
+    await wait3()
+    log(v)
   }
 }
 
 async function i4() {
   // NOTE: i5, i6 との比較用 (直列に処理を実行したいものとする)
-  let p = Promise.resolve(null);
+  let p = Promise.resolve(null)
   for (let i = 0; i < 5; ++i) {
-    p = p.then(() => wait((5 - i) * 1000).then(() => log(i)));
+    p = p.then(() => wait((5 - i) * 1000).then(() => log(i)))
   }
-  return p.then(() => log('COMPLETED'));
+  return p.then(() => log('COMPLETED'))
 }
 
 async function i5() {
   // NOTE: このコードは期待通りの挙動をすると考えられるだろうか？(典型的なミス)
-  let p = Promise.resolve(null);
+  let p = Promise.resolve(null)
   for (let i = 0; i < 5; ++i) {
-    p = p.then(wait((5 - i) * 1000).then(() => log(i)));
+    p = p.then(wait((5 - i) * 1000).then(() => log(i)))
   }
-  return p.then(() => log('COMPLETED'));
+  return p.then(() => log('COMPLETED'))
 }
 
 async function i6() {
   return Promise.all([0, 1, 2, 3, 4].map((i) => wait((5 - i) * 1000).then(() => log(i)))).then(() =>
     log('COMPLETED'),
-  );
+  )
 }
 
 async function i7() {
   // NOTE: i8 との比較用
-  let v = 0;
+  let v = 0
 
   // 1秒待った後に2秒間隔で value の値を更新
   const p1 = async () => {
-    await wait1();
+    await wait1()
     for (let i = 0; i < 5; i++) {
-      const next = v + 1;
-      v = next;
-      await wait2();
+      const next = v + 1
+      v = next
+      await wait2()
     }
-  };
+  }
 
   // 2秒間隔で value の値を更新
   const p2 = async () => {
     for (let i = 0; i < 5; i++) {
-      const next = v + 1;
-      v = next;
-      await wait2();
+      const next = v + 1
+      v = next
+      await wait2()
     }
-  };
+  }
 
-  await Promise.all([p1(), p2()]);
-  log(v);
+  await Promise.all([p1(), p2()])
+  log(v)
 }
 
 async function i8() {
   // NOTE: 複数の非同期処理が1つの変数に対し書き込みを行う場合、読み込みと書き込みの間に await が入るとどうなるだろうか
-  let v = 0;
+  let v = 0
 
   const p1 = async () => {
-    await wait1();
+    await wait1()
     for (let i = 0; i < 5; i++) {
       // NOTE: value の読み込み (value + 1) と書き込み (value = ...) の間に await が...
-      const next = v + 1;
-      await wait2();
-      v = next;
+      const next = v + 1
+      await wait2()
+      v = next
     }
-  };
+  }
 
   const p2 = async () => {
     for (let i = 0; i < 5; i++) {
-      const next = v + 1;
-      await wait2();
-      v = next;
+      const next = v + 1
+      await wait2()
+      v = next
     }
-  };
+  }
 
-  await Promise.all([p1(), p2()]);
-  log(v);
+  await Promise.all([p1(), p2()])
+  log(v)
 }
 ```
 
@@ -644,7 +644,7 @@ async function i8() {
 作成した関数を使えば以下のようなコードで HTTP リクエストのリトライを行える:
 
 ```js
-const resp = await retryWithExponentialBackoff(() => fetch('https://example.com'), 5);
+const resp = await retryWithExponentialBackoff(() => fetch('https://example.com'), 5)
 ```
 
 ## 問題 13.12 🖋️
@@ -655,17 +655,17 @@ const resp = await retryWithExponentialBackoff(() => fetch('https://example.com'
 また「[マイクロタスク](https://developer.mozilla.org/ja/docs/Web/API/HTML_DOM_API/Microtask_guide)」について調査し、この用語を用いて理由を説明しなさい。
 
 ```js
-setTimeout(() => console.log('Hello, world!'), 1000);
+setTimeout(() => console.log('Hello, world!'), 1000)
 
 async function longRunningButAsyncFunction() {
   while (true) {
     // NOTE: ループの中で凄く時間のかかる処理 (大きい行列の処理とか...) を実行していると想像して下さい。
     // (適当な値で await するのが目的であり null に理由はない)
-    await null;
+    await null
   }
 }
 
-longRunningButAsyncFunction();
+longRunningButAsyncFunction()
 ```
 
 **出題範囲**: なし
@@ -678,10 +678,10 @@ longRunningButAsyncFunction();
 
 ```js
 // 利用例
-(async () => {
+;(async () => {
   // カレントディレクトリ (.) のファイル・フォルダを再帰的に取得し表示する
   for await (const elem of walk('.')) {
-    console.log(elem);
+    console.log(elem)
   }
 
   // NOTE: walk に与えたパスが以下のようなディレクトリ・ファイルを持つ時を考える
@@ -698,7 +698,7 @@ longRunningButAsyncFunction();
   // - { path: "B/C", isDirectory: true }
   // - { path: "B/C/buz.txt", isDirectory: false }
   // - { path: "foo.txt", isDirectory: false }
-})();
+})()
 ```
 
 **出題範囲**: 13.4
@@ -709,28 +709,28 @@ longRunningButAsyncFunction();
 
 ```js
 // 以下では 1000 HTTP リクエストが同時に実行される
-const promises = [];
+const promises = []
 for (let i = 0; i < 1000; i++) {
-  promises.push(fetch(`https://example.com`));
+  promises.push(fetch(`https://example.com`))
 }
-console.log(await Promise.all(promises));
+console.log(await Promise.all(promises))
 ```
 
 一方で以下のように 1 つ 1 つ `Promise` を実行するのは時間がかかる:
 
 ```js
 // 以下では 1000 HTTP リクエストを順に実行する
-const promise = Promise.resolve([]);
-const results = [];
+const promise = Promise.resolve([])
+const results = []
 for (let i = 0; i < 1000; i++) {
   promise = promise.then((results) => {
     return fetch(`https://example.com`).then((resp) => {
-      results.push(resp);
-      return results;
-    });
-  });
+      results.push(resp)
+      return results
+    })
+  })
 }
-console.log(await promise);
+console.log(await promise)
 ```
 
 そこで「同時に実行される数を制限」する仕組みを作ることにする。以下の `PromisePool` を完成させなさい。

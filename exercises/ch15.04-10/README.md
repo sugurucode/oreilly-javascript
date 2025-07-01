@@ -91,20 +91,20 @@ Tailwind CSS を使う前提で HTML と JavaScript のコードを書き換え�
 3. 下記の例を参考にして目次を選択した時にスムーズに遷移するようにしなさい
 
 ```js
-let link = document.createElement('a');
-link.href = `#${fragmentName}`;
-link.innerHTML = heading.innerHTML;
+let link = document.createElement('a')
+link.href = `#${fragmentName}`
+link.innerHTML = heading.innerHTML
 
 /* 追加分 */
 link.addEventListener('click', (e) => {
-  e.preventDefault();
-  const target = document.querySelector(`a[name="${fragmentName}"]`);
+  e.preventDefault()
+  const target = document.querySelector(`a[name="${fragmentName}"]`)
   if (!target) {
-    return;
+    return
   }
 
   /* NOTE: scrollTo または scrollIntoView でスムーズにスクロールしなさい  */
-});
+})
 ```
 
 **参考**: 完成後のイメージは以下:
@@ -183,10 +183,10 @@ link.addEventListener('click', (e) => {
 
 ```js
 document.querySelector('#active').addEventListener('click', (e) => {
-  e.preventDefault();
-  window.history.pushState(null, '', '/ch15.04-10/ex12/active');
-  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
-});
+  e.preventDefault()
+  window.history.pushState(null, '', '/ch15.04-10/ex12/active')
+  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */)
+})
 ```
 
 - Active や Completed を選択後にブラウザのリロードを行うとどうなるだろうか。hashchange と pushState それぞれの実装について調べなさい
@@ -263,10 +263,10 @@ export default function Bar() {
 ```js
 window.history.pushState = new Proxy(window.history.pushState, {
   apply: (target, thisArg, argArray) => {
-    console.log('pushState is called:', argArray);
-    return target.apply(thisArg, argArray);
+    console.log('pushState is called:', argArray)
+    return target.apply(thisArg, argArray)
   },
-});
+})
 ```
 
 問題:

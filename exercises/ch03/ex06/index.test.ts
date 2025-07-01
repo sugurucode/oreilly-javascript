@@ -1,10 +1,14 @@
-import { slice } from "./index.ts"; // typescript で書く場合は "./index.ts"
+import { slice } from './index.ts' // typescript で書く場合は "./index.ts"
 
-function sliceTestCase(str:string, indexStart=0, indexEnd:number = str.length): [string, number, number, string] {
-  return [str, indexStart, indexEnd, str.slice(indexStart, indexEnd)];
+function sliceTestCase(
+  str: string,
+  indexStart = 0,
+  indexEnd: number = str.length,
+): [string, number, number, string] {
+  return [str, indexStart, indexEnd, str.slice(indexStart, indexEnd)]
 }
 
-const str = "Hello World!";
+const str = 'Hello World!'
 
 // tests for slice
 test.each([
@@ -26,6 +30,6 @@ test.each([
   sliceTestCase(str, NaN, 2),
   sliceTestCase(str, 2.3, 6.7),
   sliceTestCase(str, 2, Infinity),
-])("slice(%p, %p, %p) => %p", (str, indexStart, indexEnd, expected) => {
-  expect(slice(str, indexStart, indexEnd)).toBe(expected);
-});
+])('slice(%p, %p, %p) => %p', (str, indexStart, indexEnd, expected) => {
+  expect(slice(str, indexStart, indexEnd)).toBe(expected)
+})

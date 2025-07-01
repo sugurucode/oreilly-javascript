@@ -13,7 +13,7 @@ p.141 では、文字列から値へのマッピングの構造として、「�
     例えば、capacity が 3 のハッシュテーブルに `"key1": "value1"` , `"key2": "value2"` , `"key3": "value3"` という順にマッピングを追加し、key1 のハッシュ値を変換したインデックスが 0 、key2 と key3 のインデックスが 1 だった場合、entries の値は以下と等しくなる。
 
     ```js
-    [
+    ;[
       { key: 'key1', value: 'value1', next: undefined },
       {
         key: 'key2',
@@ -21,7 +21,7 @@ p.141 では、文字列から値へのマッピングの構造として、「�
         next: { key: 'key3', value: 'value3', next: undefined },
       },
       undefined,
-    ];
+    ]
     ```
 
 - リハッシュ/リサイズについては考慮しなくてよいものとする。
@@ -162,23 +162,23 @@ function substract(target, ...sources);
 以下のコードの `// ここに１行のコードを書く` の部分に１行だけコードを書いて、最後のマッチャーに成功するようなテストを作成しなさい。
 
 ```js
-const mock = jest.fn();
+const mock = jest.fn()
 
 const obj = {
   x: 0,
   y: 0,
   sum() {
-    mock();
-    return this.x + this.y;
+    mock()
+    return this.x + this.y
   },
-};
+}
 
 // ここに１行のコードを書く
 
-obj.x = 1;
-obj.y = 2;
-expect(JSON.stringify(obj)).toBe(`{"x":1,"y":2,"sum":3}`);
-expect(mock).toHaveBeenCalled();
+obj.x = 1
+obj.y = 2
+expect(JSON.stringify(obj)).toBe(`{"x":1,"y":2,"sum":3}`)
+expect(mock).toHaveBeenCalled()
 ```
 
 **出題範囲**: 6.9.4
@@ -191,23 +191,23 @@ expect(mock).toHaveBeenCalled();
 const obj1 = {
   foo: Math.random(),
   bar: Math.random(),
-};
+}
 
 const obj2 = {
   fizz: Math.random(),
   buzz: Math.random(),
-};
+}
 
 const obj3 = {
   bar: Math.random(),
   buzz: Math.random(),
-};
+}
 
-const num1 = Math.random();
-const num2 = Math.random();
+const num1 = Math.random()
+const num2 = Math.random()
 
-const arr1 = [Math.random(), Math.random(), Math.random()];
-const arr2 = [Math.random(), Math.random()];
+const arr1 = [Math.random(), Math.random(), Math.random()]
+const arr2 = [Math.random(), Math.random()]
 
 const obj = {
   num1: num1,
@@ -217,13 +217,13 @@ const obj = {
   fizz: obj2.fizz,
   buzz: obj2.buzz,
   arr: [arr1[0], arr1[1], arr1[2], num1, arr2[0], arr2[1]],
-};
+}
 
 const answer = {
   // ここにコードを書く
-};
+}
 
-expect(answer).toEqual(obj);
+expect(answer).toEqual(obj)
 ```
 
 **出題範囲**: 6.10.1, 6.10.4

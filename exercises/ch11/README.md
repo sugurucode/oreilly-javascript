@@ -7,14 +7,14 @@
 ```js
 class Foo {}
 
-const typeMap = new TypeMap();
-typeMap.set(String, 'string');
-typeMap.set(Number, 123);
-typeMap.set(Foo, new Foo());
-typeMap.set(Date, 'not a date'); // -> Error
+const typeMap = new TypeMap()
+typeMap.set(String, 'string')
+typeMap.set(Number, 123)
+typeMap.set(Foo, new Foo())
+typeMap.set(Date, 'not a date') // -> Error
 
-typeMap.get(String); // -> "string"
-typeMap.get(Number); // -> 123
+typeMap.get(String) // -> "string"
+typeMap.get(Number) // -> 123
 ```
 
 - `Map` と同様のインタフェース(`get`, `set`)を持つ。ただし、`key` はコンストラクタ関数に限定する
@@ -39,7 +39,7 @@ function slowFn(obj) {
 }
 
 // cachedSlowFnを同じ引数で複数回呼び出すと、2回目以降はキャッシュが返る
-const cachedSlowFn = cache(slowFn);
+const cachedSlowFn = cache(slowFn)
 ```
 
 **出題範囲**: 11.1
@@ -116,7 +116,7 @@ ch11/ex04/index.js の実装を完成させ型付き配列と通常の配列で�
 const p = seq(
   seq(charFrom('Jj'), quote('ava'), repeat(seq(charFrom('Ss'), quote('cript')), 0, 1)),
   quote(' is fun'),
-);
+)
 ```
 
 **出題範囲**: 11.3

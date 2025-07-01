@@ -14,34 +14,34 @@
 function fizzbuzz(n) {
   for (let i = 1; i <= n; i++) {
     if (i % 15 === 0) {
-      console.log('FizzBuzz');
+      console.log('FizzBuzz')
     } else if (i % 3 === 0) {
-      console.log('Fizz');
+      console.log('Fizz')
     } else if (i % 5 === 0) {
-      console.log('Buzz');
+      console.log('Buzz')
     } else {
-      console.log(i);
+      console.log(i)
     }
   }
 }
 
 function sumOfSquaredDifference(f, g) {
-  let result = 0;
+  let result = 0
   for (let i = 0; i < f.length; i++) {
-    result += (f[i] - g[i]) ** 2;
+    result += (f[i] - g[i]) ** 2
   }
-  return result;
+  return result
 }
 
 function sumOfEvensIsLargerThan42(array) {
-  let sum = 0;
+  let sum = 0
   for (let i = 0; i < array.length; i++) {
     if (array[i] % 2 !== 0) {
-      continue;
+      continue
     }
-    sum += array[i];
+    sum += array[i]
   }
-  return sum >= 42;
+  return sum >= 42
 }
 ```
 
@@ -69,7 +69,7 @@ const data = [
   { name: 'Isaac', class: 'C', math: 70, chemistry: 40, geography: 50 },
   { name: 'Justin', class: 'C', math: 80, chemistry: 40, geography: 30 },
   { name: 'Mallet', class: 'C', math: 60, chemistry: 70, geography: 90 },
-];
+]
 ```
 
 1. `math`の全員の合計点
@@ -89,18 +89,18 @@ const data = [
 
 ```js
 function displayUsers(users) {
-  const sorted = users.sort((a, b) => a.name.localeCompare(b.name));
+  const sorted = users.sort((a, b) => a.name.localeCompare(b.name))
   for (const u of sorted) {
-    console.log(`${u.name}`);
+    console.log(`${u.name}`)
   }
 }
 
-const users = [{ name: 'hoge' }, { name: 'fuga' }, { name: 'piyo' }];
-displayUsers(users);
+const users = [{ name: 'hoge' }, { name: 'fuga' }, { name: 'piyo' }]
+displayUsers(users)
 
 // 注意: 以下の行は hoge ではなく fuga を表示する！
 // (displayUsers 内の sort で引数の users が変更されるため)
-console.log(users[0].name);
+console.log(users[0].name)
 ```
 
 関数が引数に対して破壊的な操作を行う場合、上記のように関数の利用者が驚く結果になることがある。そのようなコードは当然避けるべきである。
@@ -110,32 +110,32 @@ console.log(users[0].name);
 
 ```js
 // users という状態を変更する処理を考える
-const [users, setUsers] = useState([]);
+const [users, setUsers] = useState([])
 
 const addNewUser = () => {
   // 以下は NG (値が変更されていないと React が判断してしまう)
-  users.push({ name: 'new user' });
-  setUsers(users);
+  users.push({ name: 'new user' })
+  setUsers(users)
 
   // 以下は OK
-  setUsers([...users, { name: 'new user' }]);
-};
+  setUsers([...users, { name: 'new user' }])
+}
 ```
 
 このように破壊的な操作を避けて配列の操作を行いたいシーンは多々考えられる。
 そこで以下のように push/pop/shift/unshift/sort の非破壊的版関数を書きなさい。各関数は返り値に変更後の新しい配列を返しなさい。
 
 ```js
-const seq = [1, 2, 3, 4, 5];
+const seq = [1, 2, 3, 4, 5]
 
-console.log(pop(seq)); // [1, 2, 3, 4]
-console.log(push(seq, 6)); // [1, 2, 3, 4, 5, 6]
-console.log(shift(seq)); // [2, 3, 4, 5]
-console.log(unshift(seq, 0)); // [0, 1, 2, 3, 4, 5]
-console.log(sort(seq, (a, b) => b - a)); // [5, 4, 3, 2, 1]
+console.log(pop(seq)) // [1, 2, 3, 4]
+console.log(push(seq, 6)) // [1, 2, 3, 4, 5, 6]
+console.log(shift(seq)) // [2, 3, 4, 5]
+console.log(unshift(seq, 0)) // [0, 1, 2, 3, 4, 5]
+console.log(sort(seq, (a, b) => b - a)) // [5, 4, 3, 2, 1]
 
 // 元の配列は変更されていない
-console.log(seq); // [1, 2, 3, 4, 5]
+console.log(seq) // [1, 2, 3, 4, 5]
 ```
 
 **出題範囲**: 7.8.4
@@ -156,17 +156,17 @@ function sort(array, compare = (lhs, rhs) => (lhs < rhs ? -1 : lhs > rhs ? +1 : 
   // array[0 ... i-1] が常にソート済みになるように処理を進める
   // (0 <= j < i-1 に対して compare(array[j], array[j + 1]) <= 0 が成り立つ)
   for (let i = 1; i < array.length; i++) {
-    const v = array[i];
+    const v = array[i]
 
     // array[i] を array[0 ... i] の適切な場所に挿入する
-    let j = i;
+    let j = i
     while (j > 0 && compare(array[j - 1], v) > 0) {
-      array[j] = array[j - 1];
-      j--;
+      array[j] = array[j - 1]
+      j--
     }
-    array[j] = v;
+    array[j] = v
   }
-  return array;
+  return array
 }
 ```
 
@@ -206,32 +206,32 @@ JavaScript の配列は動的配列である。一般的に動的配列は固定
 
 ```js
 function makeFixedSizeArray(size) {
-  const array = new Array(size);
+  const array = new Array(size)
   return {
     get(index) {
       if (index < 0 || array.length <= index) {
-        throw new Error(`Array index out of range: ${index}`);
+        throw new Error(`Array index out of range: ${index}`)
       }
-      return array[index];
+      return array[index]
     },
     set(index, value) {
       if (index < 0 || array.length <= index) {
-        throw new Error(`Array index out of range: ${index}`);
+        throw new Error(`Array index out of range: ${index}`)
       }
-      array[index] = value;
+      array[index] = value
     },
     length() {
-      return array.length;
+      return array.length
     },
-  };
+  }
 }
 
 class DynamicSizeArray {
-  static INITIAL_SIZE = 4; // 初期サイズ
+  static INITIAL_SIZE = 4 // 初期サイズ
 
   constructor() {
-    this.len = 0;
-    this.array = makeFixedSizeArray(DynamicSizeArray.INITIAL_SIZE);
+    this.len = 0
+    this.array = makeFixedSizeArray(DynamicSizeArray.INITIAL_SIZE)
   }
   get(index) {
     /* TODO */
@@ -254,8 +254,8 @@ class DynamicSizeArray {
 // this.array に空が無い場合は「再配置」を行う
 if (this.len >= this.array.length()) {
   // 新しい固定長配列を作成
-  const old = this.array;
-  this.array = makeFixedSizeArray(old.length() * 2);
+  const old = this.array
+  this.array = makeFixedSizeArray(old.length() * 2)
   // 古い配列 (old) の要素を新しい配列にコピー
   // ...
 }
@@ -268,20 +268,20 @@ if (this.len >= this.array.length()) {
 
 ```js
 function copyA(array) {
-  const result = Array(array.length);
+  const result = Array(array.length)
   for (let i = 0; i < array.length; i++) {
-    result[i] = array[i];
+    result[i] = array[i]
   }
-  return result;
+  return result
 }
 
 // NOTE: copyB よりも copyA の方が効率的に見えるが計算量の観点ではどうだろうか
 function copyB(array) {
-  const result = [];
+  const result = []
   for (const v of array) {
-    result.push(v);
+    result.push(v)
   }
-  return result;
+  return result
 }
 ```
 

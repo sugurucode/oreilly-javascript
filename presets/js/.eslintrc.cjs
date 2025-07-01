@@ -15,4 +15,4 @@ module.exports = {
     'prefer-const': 'warn',
   },
   root: true,
-};
+}

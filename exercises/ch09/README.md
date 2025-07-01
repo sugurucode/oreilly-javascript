@@ -5,16 +5,16 @@
 与えられたテストケースを満たすクラス C を作成しなさい。
 
 ```ts
-import { C } from './index.js'; // ts でも可
+import { C } from './index.js' // ts でも可
 
 test('class puzzle', () => {
-  expect(C.method()).toBe(1);
-  expect(new C().method()).toBe(2);
-  expect(C.C.method()).toBe(3);
-  expect(new C.C().method()).toBe(4);
-  expect(new C().C.method()).toBe(5);
-  expect(new new C().C().method()).toBe(6);
-});
+  expect(C.method()).toBe(1)
+  expect(new C().method()).toBe(2)
+  expect(C.C.method()).toBe(3)
+  expect(new C.C().method()).toBe(4)
+  expect(new C().C.method()).toBe(5)
+  expect(new new C().C().method()).toBe(6)
+})
 ```
 
 **出題範囲**: 9.3.1
@@ -25,14 +25,14 @@ test('class puzzle', () => {
 そのフィールドの初期値は 0 とします。
 
 ```ts
-import { C } from './index.js'; // ts でも可
+import { C } from './index.js' // ts でも可
 
 test('', () => {
-  const c = new C();
-  expect(c.x).toBe(0);
-  expect(c.x).toBe(1);
-  expect(c.x).toBe(2);
-});
+  const c = new C()
+  expect(c.x).toBe(0)
+  expect(c.x).toBe(1)
+  expect(c.x).toBe(2)
+})
 ```
 
 **出題範囲**: 9.3.2
@@ -43,10 +43,10 @@ test('', () => {
 
 ```ts
 class C {
-  x = 42;
+  x = 42
 
   getX() {
-    return this.x;
+    return this.x
   }
 }
 ```
@@ -163,30 +163,30 @@ type State =
   | 'normal' // 通常
   | 'alarmSet' // アラームセット中
   | 'alarmSounding' // アラーム鳴動中
-  | 'snoozing'; // スヌーズ中
+  | 'snoozing' // スヌーズ中
 
 // イベント時に発生するアクション
 type Action =
   | 'none' // 何もしない
   | 'soundAlarm' // アラームを鳴らす
-  | 'stopAlarm'; // アラームを止める
+  | 'stopAlarm' // アラームを止める
 
 // 目覚まし時計クラス
 class AlarmClock {
-  private state: State;
+  private state: State
 
   constructor() {
-    this.state = 'normal';
+    this.state = 'normal'
   }
 
   // アラーム設定イベント
   setAlarm(): Action {
     switch (this.state) {
       case 'normal':
-        this.state = 'alarmSet';
-        return 'none';
+        this.state = 'alarmSet'
+        return 'none'
       default:
-        return 'none';
+        return 'none'
     }
   }
 
@@ -194,16 +194,16 @@ class AlarmClock {
   cancelAlarm(): Action {
     switch (this.state) {
       case 'alarmSet':
-        this.state = 'normal';
-        return 'none';
+        this.state = 'normal'
+        return 'none'
       case 'alarmSounding':
-        this.state = 'normal';
-        return 'stopAlarm';
+        this.state = 'normal'
+        return 'stopAlarm'
       case 'snoozing':
-        this.state = 'normal';
-        return 'none';
+        this.state = 'normal'
+        return 'none'
       default:
-        return 'none';
+        return 'none'
     }
   }
 
@@ -211,10 +211,10 @@ class AlarmClock {
   reachedToAlarmTime(): Action {
     switch (this.state) {
       case 'alarmSet':
-        this.state = 'alarmSounding';
-        return 'soundAlarm';
+        this.state = 'alarmSounding'
+        return 'soundAlarm'
       default:
-        return 'none';
+        return 'none'
     }
   }
 
@@ -222,10 +222,10 @@ class AlarmClock {
   snooze(): Action {
     switch (this.state) {
       case 'alarmSounding':
-        this.state = 'snoozing';
-        return 'stopAlarm';
+        this.state = 'snoozing'
+        return 'stopAlarm'
       default:
-        return 'none';
+        return 'none'
     }
   }
 
@@ -233,10 +233,10 @@ class AlarmClock {
   elapseSnoozeTime(): Action {
     switch (this.state) {
       case 'snoozing':
-        this.state = 'alarmSounding';
-        return 'soundAlarm';
+        this.state = 'alarmSounding'
+        return 'soundAlarm'
       default:
-        return 'none';
+        return 'none'
     }
   }
 }

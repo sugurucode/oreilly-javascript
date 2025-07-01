@@ -1,5 +1,5 @@
 let a = 0,
-  b = 0;
+  b = 0
 
 // prettier-ignore
 const c
@@ -9,10 +9,10 @@ a
 ++
 b
 
-console.log(a, b, c);
+console.log(a, b, c)
 
 // prettier-ignore
 const e = a++
-b;
+b
 
-console.log(a, b, e);
+console.log(a, b, e)

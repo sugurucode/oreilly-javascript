@@ -13,12 +13,18 @@ https://x.gd/VYtYy
 <html>
   <body>
     <script>
-      let life = { answer: 42 };
+      let life = { answer: 42 }
       // オブジェクトの状態を文字列化
-      console.log(JSON.stringify(life));
-      life.answer = 0;
+      console.log(JSON.stringify(life))
+      // structuerd.clone()も使える。
+      console.log(structuredClone(life))
+
+      life.answer = 0
       // オブジェクトの現在の状態が文字列として保存されるため、後でオブジェクトが変更されてもログに出力された内容は変わりません
-      console.log(JSON.stringify(life));
+      console.log(JSON.stringify(life))
+
+      // let x = {answer:life.anser};
+      // ↑let c=`{...life}
     </script>
   </body>
 </html>

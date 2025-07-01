@@ -39,17 +39,17 @@ const obj = {
   om: function () {
     const nest = {
       nm: function () {
-        console.log(this === obj, this === nest);
+        console.log(this === obj, this === nest)
       },
       arrow: () => {
-        console.log(this === obj, this === nest);
+        console.log(this === obj, this === nest)
       },
-    };
-    nest.nm();
-    nest.arrow();
+    }
+    nest.nm()
+    nest.arrow()
   },
-};
-obj.om();
+}
+obj.om()
 ```
 
 **出題範囲**: 8.2.2
@@ -71,9 +71,9 @@ obj.om();
 
 ```js
 const m = function (arg) {
-  console.log(arg[1]);
-};
-m('a', 'b');
+  console.log(arg[1])
+}
+m('a', 'b')
 ```
 
 **出題範囲**: 8.3.2
@@ -144,15 +144,15 @@ withResource(new Resource(), resource => {
 例えば以下のような処理の場合、 `(a, b) => a + b` 相当の無名関数を、 Swift では `{ $0 + $1 }` 、 Elixir では `&(&1 + &2)` のように書ける。
 
 ```js
-console.log(arr.reduce((a, b) => a + b, 0));
-console.log(arr.sort((a, b) => a - b));
+console.log(arr.reduce((a, b) => a + b, 0))
+console.log(arr.sort((a, b) => a - b))
 ```
 
 JavaScript で同様の書き方ができるよう、 `Function` コンストラクタを用いて以下のコードが動作するような 関数 `f` を作成しなさい。
 
 ```js
-console.log(arr.reduce(f('$1 + $2'), 0));
-console.log(arr.sort(f('$1 - $2')));
+console.log(arr.reduce(f('$1 + $2'), 0))
+console.log(arr.sort(f('$1 - $2')))
 ```
 
 - `f` は引数に関数の本体を文字列として受け取る
@@ -166,8 +166,8 @@ console.log(arr.sort(f('$1 - $2')));
 
 ```js
 function f(input) {
-  const f = new Function(`return "Hello, " + ${input}`);
-  console.log(f());
+  const f = new Function(`return "Hello, " + ${input}`)
+  console.log(f())
 }
 ```
 
@@ -186,22 +186,22 @@ function f(input) {
 const isNonZero = any(
   (n) => n > 0,
   (n) => n < 0,
-);
+)
 
-console.log(isNonZero(0)); // => false
-console.log(isNonZero(42)); // => true
-console.log(isNonZero(-0.5)); // => true
+console.log(isNonZero(0)) // => false
+console.log(isNonZero(42)) // => true
+console.log(isNonZero(-0.5)) // => true
 ```
 
 2.  引数として 2 つの関数を受け取り、1 つ目の関数で発生した例外を 2 つ目の関数の引数として処理し結果を返す新たな関数を返す`catching` 関数
 
 ```js
 const safeJsonParse = catching(JSON.parse, (e) => {
-  return { error: e.toString() };
-});
+  return { error: e.toString() }
+})
 
-console.log(safeJsonParse('{"a": 1}')); // => {a: 1}
-console.log(safeJsonParse('{Invalid Json}')); // => {error: "SyntaxError: ..."}
+console.log(safeJsonParse('{"a": 1}')) // => {a: 1}
+console.log(safeJsonParse('{Invalid Json}')) // => {error: "SyntaxError: ..."}
 ```
 
 **出題範囲**: 8.8.2
