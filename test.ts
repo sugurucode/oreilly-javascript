@@ -25,7 +25,7 @@ console.log('エラー', success1); // false
 
 //-------------------------------------------------------------------------------------------------------------
 // 関数バージョン
-const sumArray = (arr: number[]): { sum: number; success: boolean } => {
+const validateAndSumArray = (arr: number[]): { sum: number; success: boolean } => {
   let sum = 0;
   if (!arr) return { sum, success: false };
   for (let i = 0; i < arr.length; i++) {
@@ -37,7 +37,7 @@ const sumArray = (arr: number[]): { sum: number; success: boolean } => {
 };
 
 let arr2 = getData();
-const { sum: sum2, success: success2 } = sumArray(arr2);
+const { sum: sum2, success: success2 } = validateAndSumArray(arr2);
 console.log('[関数] 合計:', sum2);
 console.log('[関数] 成功:', success2);
 
