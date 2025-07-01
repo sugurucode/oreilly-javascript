@@ -47,3 +47,17 @@ export const complexOperations: Record<
 };
 
 // complexOperationsの使い方
+const a = { real: 2, imaginary: 3 };
+const b = { real: 1, imaginary: 4 };
+
+// 加算
+const sum = complexOperations.add(a, b);
+console.log(sum);
+
+// { real: 3, imaginary: 7 }
+
+// 文字列で動的に呼び出すことも可能
+const result = complexOperations['mul'](a, b);
+console.log(result);
+
+// { real: -10, imaginary: 11 }
