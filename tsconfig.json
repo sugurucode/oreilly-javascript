@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     // package.jsonでtype: "module"を指定しているので、出力されるJSのモジュール形式がES Moduleになる
-    "module": "ESNext",
+    "module": "Node16",
     // Nodeがimportはimportのモジュール解決方式、requireはrequireのモジュール解決方式を使う
     "moduleResolution": "Node16",
     // 型チェックが厳密になる。JSのプロジェクトに徐々に導入するのではなく最初からTSで始める場合、基本有効にする
