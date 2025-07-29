@@ -1,5 +1,6 @@
 // ...existing code...
 // try-catch-finally の実行順序が確認できるサンプル
+// npx tsx exercises-public/exercises/ch05/ex06/index.ts
 const showTryCatchFinallyOrder = () => {
   console.log('1:tryの上');
   try {

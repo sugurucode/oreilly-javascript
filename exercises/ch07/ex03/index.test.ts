@@ -1,36 +1,36 @@
 /* eslint no-sparse-arrays: 0 */
 
-import { sum, join, reverse, every, some } from "./index.ts";
+import { sum, join, reverse, every, some } from './index.ts';
 
-test("sum", () => {
+test('sum', () => {
   expect(sum()).toStrictEqual(0);
   expect(sum([])).toStrictEqual(0);
   expect(sum([-1])).toStrictEqual(-1);
   expect(sum([1, 2, 3, 4, 5])).toStrictEqual(15);
 });
 
-test("join", () => {
-  expect(join([])).toStrictEqual("");
-  expect(join([1, null, 3])).toStrictEqual("1,,3");
-  expect(join([1, 2, 3], null)).toStrictEqual("1null2null3");
-  expect(join(["Hello", 2, 3], "")).toStrictEqual("Hello23");
-  expect(join(["", "", ""], "-")).toStrictEqual("--");
+test('join', () => {
+  expect(join([])).toStrictEqual('');
+  expect(join([1, null, 3])).toStrictEqual('1,,3');
+  expect(join([1, 2, 3], null)).toStrictEqual('1null2null3');
+  expect(join(['Hello', 2, 3], '')).toStrictEqual('Hello23');
+  expect(join(['', '', ''], '-')).toStrictEqual('--');
   expect(() => {
     join();
   }).toThrowError();
 });
 
-test("reverse", () => {
+test('reverse', () => {
   expect(reverse([])).toStrictEqual([]);
-  expect(reverse(["a"])).toStrictEqual(["a"]);
+  expect(reverse(['a'])).toStrictEqual(['a']);
   expect(reverse([1, 2, 3, 4, 5])).toStrictEqual([5, 4, 3, 2, 1]);
-  expect(reverse(["Hello", "World"])).toStrictEqual(["World", "Hello"]);
+  expect(reverse(['Hello', 'World'])).toStrictEqual(['World', 'Hello']);
   expect(() => {
     reverse();
   }).toThrowError();
 });
 
-test("every", () => {
+test('every', () => {
   const isBelowThreshold = (currentValue) => currentValue < 40;
   expect(every([1, 2, 3, 4, 5], isBelowThreshold)).toBeTruthy();
   expect(every([1, 2, 3, 45, 5], isBelowThreshold)).toBeFalsy();
@@ -49,7 +49,7 @@ test("every", () => {
   expect(original).toStrictEqual([1, 1, 2]);
 });
 
-test("some", () => {
+test('some', () => {
   const isBelowThreshold = (currentValue) => currentValue < 40;
   expect(some([41, 42, 3, 44, 45], isBelowThreshold)).toBeTruthy();
   expect(some([41, 42, 43, 44, 45], isBelowThreshold)).toBeFalsy();
