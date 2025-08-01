@@ -3,6 +3,8 @@ export const hashString = (str: string): number => {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     // charCodeAtを使って文字コードを取得。ハッシュ値を計算
+    // https://rainbow-engine.com/java-hashcode-multi31-reason/
+    // 衝突が少なく、計算が速い
     hash = hash * 31 + str.charCodeAt(i);
   }
   // Math.absで負の値を正に変換

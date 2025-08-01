@@ -15,6 +15,8 @@ describe('getAllPropertyKeys', () => {
     const proto = { x: 10 };
     const obj = Object.create(proto);
     obj.y = 20;
+    console.log(`obj: ${JSON.stringify(obj)}`);
+
     const keys = getAllPropertyKeysArry(obj);
     expect(keys).toEqual(expect.arrayContaining(['y', 'x']));
   });

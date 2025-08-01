@@ -40,6 +40,7 @@ export class DynamicSizeArray {
   }
   push(value: number): void {
     // this.arrayに空きがない場合は「再配置」を行う
+    // 実際の要素数が現在の配列の長さ以上になった場合
     if (this.len >= this.array.length()) {
       // 新しい固定長配列を作成
       const old = this.array;

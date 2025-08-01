@@ -42,22 +42,28 @@ try {
 console.log('\nyの初期値:', obj.y);
 obj.y = '変更された値';
 console.log('yの変更後の値:', obj.y);
+// yの変更後の値: 変更された値
 
 // プロパティの列挙テスト
 console.log('\n--- プロパティの列挙テスト ---');
 console.log('Object.keys(obj)の結果:', Object.keys(obj));
 console.log('for...inループの結果:');
 for (const key in obj) {
-  console.log(key);
+  console.log(key); //yだけないはず
+  // for...inループの結果:
+  // x
+  // z
 }
 
 // プロパティの確認テスト
 console.log('\n--- プロパティの確認テスト ---');
 console.log('hasOwnPropertyの結果:');
+// no-prototype-builtins
+// 全部独自プロパティのはず
 console.log('x:', Object.prototype.hasOwnProperty.call(obj, 'x'));
 console.log('y:', Object.prototype.hasOwnProperty.call(obj, 'y'));
 console.log('z:', Object.prototype.hasOwnProperty.call(obj, 'z'));
-
+// yだけfalseのはず
 console.log('\npropertyIsEnumerable results:');
 console.log('x:', Object.prototype.propertyIsEnumerable.call(obj, 'x'));
 console.log('y:', Object.prototype.propertyIsEnumerable.call(obj, 'y'));
@@ -69,6 +75,7 @@ console.log('プロパティの削除を試みます:');
 
 try {
   delete obj.x;
+  // hasOwnPropertyはあったらtrue→!で逆にして、削除成功してたらtrue
   console.log('xの削除結果:', !Object.prototype.hasOwnProperty.call(obj, 'x'));
 } catch (e) {
   console.log('xの削除エラー:', e.message);
@@ -86,6 +93,7 @@ try {
   console.log('zの削除結果:', !Object.prototype.hasOwnProperty.call(obj, 'z'));
 } catch (e) {
   console.log('zの削除エラー:', e.message);
+  // xの変更エラー: Cannot assign to read only property 'x' of object '#<Object>'
 }
 
 // suguru@A081003065:~/oreilly_javascript7$ npx tsc exercises-public/exercises/ch06/ex04/index.ts && node exercises-public/exercises/ch06/ex04/index.js

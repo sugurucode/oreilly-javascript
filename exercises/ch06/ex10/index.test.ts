@@ -32,8 +32,8 @@ describe('演習6.10', () => {
     };
 
     const answer = {
-      num1: num1,
-      num2: num2,
+      num1,
+      num2,
       foo: obj1.foo,
       bar: obj3.bar,
       ...obj2,
