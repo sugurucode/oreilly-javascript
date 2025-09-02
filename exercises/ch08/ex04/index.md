@@ -18,10 +18,8 @@ const obj = {
 obj.om();
 ```
 
-8.2.2参照してから↓
-
-nmの中のthisはnestを指すので
+nmは通常の関数なので、呼び出し元によって決まる。
 false,true
 
-arrowは外側のthisを使っていた気がするので
+arrowはアロー関数で、定義されたときの外側がthisになる
 ture,false

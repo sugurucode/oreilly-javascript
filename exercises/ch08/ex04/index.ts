@@ -1,5 +1,7 @@
 const obj = {
   om: function () {
+    console.log(this);
+
     const nest = {
       nm: function () {
         console.log(this === obj, this === nest);
