@@ -26,7 +26,7 @@ console.log(isNonZero(-0.5)); // => true
 
 // 2.  引数として 2 つの関数を受け取り、1 つ目の関数で発生した例外を 2 つ目の関数の引数として処理し結果を返す新たな関数を返す`catching` 関数
 // catching関数の実装
-export function catching<T, R>(tryFn: (arg: T) => R, catchFn: (e: unknown) => R) {
+export function catching(tryFn, catchFn) {
   return function (arg) {
     try {
       return tryFn(arg);
