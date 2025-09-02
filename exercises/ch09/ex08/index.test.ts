@@ -1,29 +1,49 @@
-// ...existing code...
-import { AlarmClock } from './index.ts';
+import {
+  AlarmClock,
+  NormalState,
+  AlarmSetState,
+  AlarmSoundingState,
+  SnoozingState,
+} from './index.ts';
 
-describe('AlarmClock アラームセット中の状態遷移', () => {
-  let clock: AlarmClock;
-
-  beforeEach(() => {
-    clock = new AlarmClock();
-    clock.setAlarm(); // 通常 → アラームセット中
+describe('AlarmClock State Transitions Improved - refined', () => {
+  test('NormalState - setAlarm', () => {
+    const clock = new AlarmClock(new NormalState());
+    expect(clock.setAlarm()).toBe('none');
   });
 
-  test('cancelAlarmで通常に戻る', () => {
+  test('NormalState - cancelAlarm', () => {
+    const clock = new AlarmClock(new NormalState());
     expect(clock.cancelAlarm()).toBe('none');
-    // 状態がnormalに戻ることも確認
-    expect(clock.setAlarm()).toBe('none'); // 再度セットできる
   });
 
-  test('reachedToAlarmTimeでアラーム鳴動中へ', () => {
+  test('AlarmSetState - reachedToAlarmTime', () => {
+    const clock = new AlarmClock(new AlarmSetState());
     expect(clock.reachedToAlarmTime()).toBe('soundAlarm');
   });
 
-  test('snoozeは何も起こらない', () => {
-    expect(clock.snooze()).toBe('none');
+  test('AlarmSetState - cancelAlarm', () => {
+    const clock = new AlarmClock(new AlarmSetState());
+    expect(clock.cancelAlarm()).toBe('none');
   });
 
-  test('elapseSnoozeTimeは何も起こらない', () => {
-    expect(clock.elapseSnoozeTime()).toBe('none');
+  test('AlarmSoundingState - snooze', () => {
+    const clock = new AlarmClock(new AlarmSoundingState());
+    expect(clock.snooze()).toBe('stopAlarm');
+  });
+
+  test('AlarmSoundingState - cancelAlarm', () => {
+    const clock = new AlarmClock(new AlarmSoundingState());
+    expect(clock.cancelAlarm()).toBe('stopAlarm');
+  });
+
+  test('SnoozingState - elapseSnoozeTime', () => {
+    const clock = new AlarmClock(new SnoozingState());
+    expect(clock.elapseSnoozeTime()).toBe('soundAlarm');
+  });
+
+  test('SnoozingState - cancelAlarm', () => {
+    const clock = new AlarmClock(new SnoozingState());
+    expect(clock.cancelAlarm()).toBe('none');
   });
 });

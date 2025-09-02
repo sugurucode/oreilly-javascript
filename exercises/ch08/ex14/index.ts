@@ -2,10 +2,17 @@
 // 残余パラメータ： ...args
 
 // 1. 残余パラメータとして任意の数の関数を受け取り、いずれかの関数が true を返せば true を返す新たな関数を返す`any` 関数
-export function any(...funcs) {
-  // some：配列の要素のうち、1つでも条件を満たすものがあれば true を返す
-  // 若干処理がわからない。。。
-  return (value) => funcs.some((fn) => fn(value));
+// any関数の実装
+export function any(...fns) {
+  return function (arg) {
+    for (const fn of fns) {
+      // いずれかの関数がtrueを返せばtrueを返す
+      if (fn(arg)) {
+        return true;
+      }
+    }
+    return false;
+  };
 }
 
 const isNonZero = any(
@@ -18,10 +25,11 @@ console.log(isNonZero(42)); // => true
 console.log(isNonZero(-0.5)); // => true
 
 // 2.  引数として 2 つの関数を受け取り、1 つ目の関数で発生した例外を 2 つ目の関数の引数として処理し結果を返す新たな関数を返す`catching` 関数
-export function catching(tryFn, catchFn) {
-  return (value) => {
+// catching関数の実装
+export function catching<T, R>(tryFn: (arg: T) => R, catchFn: (e: unknown) => R) {
+  return function (arg) {
     try {
-      return tryFn(value);
+      return tryFn(arg);
     } catch (e) {
       return catchFn(e);
     }

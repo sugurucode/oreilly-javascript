@@ -1,82 +1,128 @@
-// 目覚まし時計の状態
-type State =
-  | 'normal' // 通常
-  | 'alarmSet' // アラームセット中
-  | 'alarmSounding' // アラーム鳴動中
-  | 'snoozing'; // スヌーズ中
+type Action = 'none' | 'soundAlarm' | 'stopAlarm';
 
-// イベント時に発生するアクション
-type Action =
-  | 'none' // 何もしない
-  | 'soundAlarm' // アラームを鳴らす
-  | 'stopAlarm'; // アラームを止める
+interface State {
+  setAlarm(clock: AlarmClock): Action;
+  cancelAlarm(clock: AlarmClock): Action;
+  reachedToAlarmTime(clock: AlarmClock): Action;
+  snooze(clock: AlarmClock): Action;
+  elapseSnoozeTime(clock: AlarmClock): Action;
+}
 
-// 目覚まし時計クラス
 export class AlarmClock {
-  private state: State;
+  private state: State; // 初期状態を外部から受け取れるように（デフォルトは NormalState）
 
-  constructor() {
-    this.state = 'normal';
+  constructor(initialState?: State) {
+    this.state = initialState ?? new NormalState();
   }
 
-  // アラーム設定イベント
+  setState(state: State) {
+    this.state = state;
+  }
+
   setAlarm(): Action {
-    switch (this.state) {
-      case 'normal':
-        this.state = 'alarmSet';
-        return 'none';
-      default:
-        return 'none';
-    }
+    return this.state.setAlarm(this);
   }
 
-  // アラーム解除イベント
   cancelAlarm(): Action {
-    switch (this.state) {
-      case 'alarmSet':
-        this.state = 'normal';
-        return 'none';
-      case 'alarmSounding':
-        this.state = 'normal';
-        return 'stopAlarm';
-      case 'snoozing':
-        this.state = 'normal';
-        return 'none';
-      default:
-        return 'none';
-    }
+    return this.state.cancelAlarm(this);
   }
 
-  // アラーム設定時刻到達イベント
   reachedToAlarmTime(): Action {
-    switch (this.state) {
-      case 'alarmSet':
-        this.state = 'alarmSounding';
-        return 'soundAlarm';
-      default:
-        return 'none';
-    }
+    return this.state.reachedToAlarmTime(this);
   }
 
-  // スヌーズイベント
   snooze(): Action {
-    switch (this.state) {
-      case 'alarmSounding':
-        this.state = 'snoozing';
-        return 'stopAlarm';
-      default:
-        return 'none';
-    }
+    return this.state.snooze(this);
   }
 
-  // スヌーズ設定時間経過イベント
   elapseSnoozeTime(): Action {
-    switch (this.state) {
-      case 'snoozing':
-        this.state = 'alarmSounding';
-        return 'soundAlarm';
-      default:
-        return 'none';
-    }
+    return this.state.elapseSnoozeTime(this);
   }
 }
+
+class NormalState implements State {
+  setAlarm(clock: AlarmClock): Action {
+    clock.setState(new AlarmSetState());
+    return 'none';
+  }
+  cancelAlarm(): Action {
+    return 'none';
+  }
+  reachedToAlarmTime(): Action {
+    return 'none';
+  }
+  snooze(): Action {
+    return 'none';
+  }
+  elapseSnoozeTime(): Action {
+    return 'none';
+  }
+}
+// アラームセット中に
+class AlarmSetState implements State {
+  setAlarm(): Action {
+    return 'none';
+  }
+  // アラーム解除
+  cancelAlarm(clock: AlarmClock): Action {
+    clock.setState(new NormalState());
+    return 'none';
+  }
+  // アラーム設定時刻到達
+  reachedToAlarmTime(clock: AlarmClock): Action {
+    clock.setState(new AlarmSoundingState());
+    return 'soundAlarm';
+  }
+  // スヌーズ
+  snooze(): Action {
+    return 'none';
+  }
+
+  //
+  elapseSnoozeTime(): Action {
+    return 'none';
+  }
+}
+
+class AlarmSoundingState implements State {
+  setAlarm(): Action {
+    return 'none';
+  }
+  cancelAlarm(clock: AlarmClock): Action {
+    clock.setState(new NormalState());
+    return 'stopAlarm';
+  }
+  reachedToAlarmTime(): Action {
+    return 'none';
+  }
+  snooze(clock: AlarmClock): Action {
+    clock.setState(new SnoozingState());
+    return 'stopAlarm';
+  }
+  elapseSnoozeTime(): Action {
+    return 'none';
+  }
+}
+
+class SnoozingState implements State {
+  setAlarm(): Action {
+    return 'none';
+  }
+  cancelAlarm(clock: AlarmClock): Action {
+    clock.setState(new NormalState());
+    return 'none';
+  }
+  reachedToAlarmTime(): Action {
+    return 'none';
+  }
+  snooze(): Action {
+    return 'none';
+  }
+  elapseSnoozeTime(clock: AlarmClock): Action {
+    clock.setState(new AlarmSoundingState());
+    return 'soundAlarm';
+  }
+}
+
+// テストで便利なので状態クラスをエクスポートする場合はここでexportを追加しても良いです。
+export { NormalState, AlarmSetState, AlarmSoundingState, SnoozingState };
