@@ -1,17 +1,17 @@
-import { withResource } from "./index.js";
+const { withResource } = require('./index.js');
 
-describe("withResource", () => {
-  it("should do process and call close finally", () => {
+describe('withResource', () => {
+  it('should do process and call close finally', () => {
     const resource = {
       called: [],
       doA() {
-        this.called.push("doA");
+        this.called.push('doA');
       },
       doB() {
-        this.called.push("doB");
+        this.called.push('doB');
       },
       close() {
-        this.called.push("close");
+        this.called.push('close');
       },
     };
     withResource(resource, (res) => {
@@ -19,21 +19,21 @@ describe("withResource", () => {
       res.doB();
     });
 
-    expect(resource.called).toEqual(["doA", "doB", "close"]);
+    expect(resource.called).toEqual(['doA', 'doB', 'close']);
   });
 
-  it("should call close when an error occurs", () => {
+  it('should call close when an error occurs', () => {
     const resource = {
       called: [],
       doA() {
-        this.called.push("doA");
-        throw new Error("something wrong");
+        this.called.push('doA');
+        throw new Error('something wrong');
       },
       close() {
-        this.called.push("close");
+        this.called.push('close');
       },
     };
     expect(() => withResource(resource, (res) => res.doA())).toThrow(Error);
-    expect(resource.called).toEqual(["doA", "close"]);
+    expect(resource.called).toEqual(['doA', 'close']);
   });
 });
