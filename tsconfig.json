@@ -6,7 +6,7 @@
     "moduleResolution": "Node16",
     // 型チェックが厳密になる。JSのプロジェクトに徐々に導入するのではなく最初からTSで始める場合、基本有効にする
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     // JSファイルを出力しない
@@ -21,7 +21,8 @@
     "allowImportingTsExtensions": true,
     // デフォルトエクスポートが設定されていないモジュールに対して、
     // import React from "react"; のようなインポートを許可する
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
   },
   // package.jsonでtype: "module"を指定しているので、ts-nodeで実行する場合もesmである必要がある
   "ts-node": {
