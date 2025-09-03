@@ -2,6 +2,7 @@ const { withResource } = require('./index.js');
 
 describe('withResource', () => {
   it('should do process and call close finally', () => {
+    // 予測結果を準備しておく。
     const resource = {
       called: [],
       doA() {
@@ -14,11 +15,12 @@ describe('withResource', () => {
         this.called.push('close');
       },
     };
+    // resourceオブジェクトとそれを使う処理を渡す。
     withResource(resource, (res) => {
       res.doA();
       res.doB();
     });
-
+    // finallyでcloseが呼ばれていることを確認する。
     expect(resource.called).toEqual(['doA', 'doB', 'close']);
   });
 
