@@ -1,4 +1,4 @@
-import { stringifyJSON } from "./index.js";
+import { parseJSON } from "./index.js";
 
 const testdata = [
   // array
@@ -103,7 +103,6 @@ const testdata = [
   " [] ",
 ];
 
-test.each(testdata)("stringifyJSON(%s)", (s) => {
-  const json = JSON.parse(s);
-  expect(stringifyJSON(json)).toStrictEqual(JSON.stringify(json));
+test.each(testdata)("parseJSON(%s)", (s) => {
+  expect(parseJSON(s)).toStrictEqual(JSON.parse(s));
 });

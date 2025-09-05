@@ -1,0 +1,3 @@
+//https://tools.m-bsys.com/ex/unicode_table.php
+console.log('\u0048\u0065\u006C\u006C\u006F\u002C\u0057\u006F\u0072\u006C\u0064')
+// console.logもいける。_u0063\u006F\u0064\u0065\u0020\u0069\u0073\u0020\u0061\u0077\u0065\u0073\u006F\u006D\u0065
