@@ -3,6 +3,7 @@ export function counterGroup() {
   return {
     newCounter: function () {
       let n = 0;
+
       // 文中のcountとreset同等の機能を持つ
       const counter = {
         count: function () {

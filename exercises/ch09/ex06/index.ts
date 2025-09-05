@@ -1,7 +1,7 @@
 export class TypedMap {
   keyType: string | undefined;
   valueType: string | undefined;
-  _map: Map<any, any>;
+  _map: Map<any, any>; //内部で使うMap
 
   constructor(
     keyType: string | undefined,
@@ -10,16 +10,24 @@ export class TypedMap {
   ) {
     this.keyType = keyType;
     this.valueType = valueType;
+
+    // entriesがnullでない場合に型チェックを行う
     if (entries) {
       for (const [k, v] of entries) {
+        // keyTypeとvalueTypeが指定されている場合に型チェックを行う
+        // undefinedの場合はチェックしない
         if (keyType && typeof k !== keyType) {
           throw new TypeError(`${k} is not of type ${keyType}`);
         }
+        // valueTypeが指定されている場合に型チェックを行う
         if (valueType && typeof v !== valueType) {
           throw new TypeError(`${v} is not of type ${valueType}`);
         }
       }
     }
+
+    // super(entries)
+    // entriesがnullの場合はundefinedを渡す
     this._map = new Map(entries ?? undefined);
   }
   set(key: any, value: any) {

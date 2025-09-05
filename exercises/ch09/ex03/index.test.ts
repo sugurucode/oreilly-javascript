@@ -1,4 +1,4 @@
-import { C, ClosureC } from './index.ts';
+import { C, closureC } from './index.ts';
 
 test(`直接取得できる`, () => {
   const c = new C();

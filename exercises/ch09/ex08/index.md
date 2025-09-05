@@ -10,6 +10,7 @@ Stateパターンは、Gang of Four（GoF）が提唱した行動に関するデ
 ```ts
 // alarmSet状態テストのための前段階設定
 clock.setAlarm(); // normal->alarmSet
+//clock.reachedToAlarmTime() // アラーム鳴動中をテストする場合はこれも必要
 
 // alarmSet状態での動作テストを続ける...
 expect(clock.reachedToAlarmTime()).toBe('soundAlarm'); // alarmSoundingへ遷移

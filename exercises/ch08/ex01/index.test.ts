@@ -8,7 +8,7 @@ describe('stringDisplay', () => {
     // jest.spyOn(監視したいオブジェクト,そのオブジェクトのメソッド名)
     const consoleLogSpy = jest.spyOn(console, 'log');
     const result = stringDisplay(n, c);
-    // console.logがn階呼ばれたか
+    // console.logが3階呼ばれたか（監視開始）
     expect(consoleLogSpy).toHaveBeenCalledTimes(n);
     // 引数cを含んで一回以上呼ばれたか。
     expect(consoleLogSpy).toHaveBeenCalledWith(c);

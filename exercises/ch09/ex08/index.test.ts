@@ -8,6 +8,7 @@ import {
 
 describe('AlarmClock State Transitions Improved - refined', () => {
   test('NormalState - setAlarm', () => {
+    // インスタンス生成時に状態をセット
     const clock = new AlarmClock(new NormalState());
     expect(clock.setAlarm()).toBe('none');
   });

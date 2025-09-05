@@ -7,6 +7,10 @@ import { abs } from '../../ch01/ex05/index';
  */
 export function instanceOf(
   object: unknown,
+  // unknown型の配列を受け取って、その配列をnewで
+  //new constructor(args)でインスタンス化できる
+  //constructoeの引数は何個でもOK
+  //返り値は任意のオブジェクト
   constructor: new (...args: unknown[]) => unknown,
 ): boolean {
   // objectにプリミティブ型が入っている場合はfalseを返す
@@ -37,4 +41,8 @@ class B extends A {
 class C extends B {}
 const c = new C();
 // console.log(c); // B { name: 'B' }
+// オブジェクトcはAのインスタンスか？
 instanceOf(c, A); // true
+// B {}
+// A {}
+// {}
