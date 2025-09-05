@@ -34,9 +34,9 @@
 値が数値のプロパティを持つオブジェクトを引数に取り、偶数の値を持つプロパティだけを残した新しいオブジェクトを返す関数を作成しなさい。
 
 ```js
-const o = { x: 1, y: 2, z: 3 };
-console.log(f(o)); // { y: 2 }
-console.log(o); // { x: 1, y: 2, z: 3 } 元のオブジェクトは変更しない
+const o = { x: 1, y: 2, z: 3 }
+console.log(f(o)) // { y: 2 }
+console.log(o) // { x: 1, y: 2, z: 3 } 元のオブジェクトは変更しない
 ```
 
 **出題範囲**: 5.4.4, 5.4.5
@@ -103,42 +103,42 @@ console.log(x);
 
 ```js
 {
-  let a = 1;
-  let b = 2;
-  let obj = { a: 3, b: 4 };
+  let a = 1
+  let b = 2
+  let obj = { a: 3, b: 4 }
   with (obj) {
-    a = b;
+    a = b
   }
-  console.log({ a, b, obj });
+  console.log({ a, b, obj })
   // console.log の出力: { a: 1, b: 2, obj: { a: 4, b: 4 }}
   // with 文を使わずに同じ処理を書く場合: obj.a = obj.b
 }
 {
-  let a = 1;
-  let b = 2;
-  let obj = { b: 4 };
+  let a = 1
+  let b = 2
+  let obj = { b: 4 }
   with (obj) {
-    a = b;
+    a = b
   }
-  console.log({ a, b, obj });
+  console.log({ a, b, obj })
 }
 {
-  let a = 1;
-  let b = 2;
-  let obj = { a: 3 };
+  let a = 1
+  let b = 2
+  let obj = { a: 3 }
   with (obj) {
-    a = b;
+    a = b
   }
-  console.log({ a, b, obj });
+  console.log({ a, b, obj })
 }
 {
-  let a = 1;
-  let b = 2;
-  let obj = {};
+  let a = 1
+  let b = 2
+  let obj = {}
   with (obj) {
-    a = b;
+    a = b
   }
-  console.log({ a, b, obj });
+  console.log({ a, b, obj })
 }
 ```
 

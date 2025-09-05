@@ -96,13 +96,13 @@ test("テスト名を適切につけてなさい", () => {
 オブジェクトが可変であることと、オブジェクトが参照で比較されることを以下のコードを書いて確認しなさい:
 
 ```js
-const obj1 = {x: 1};
+const obj1 = { x: 1 }
 // 問題: ここに1行コードを書くことで以下の行で {x: 1, y: 2} が出力されること
-console.log(obj1);
+console.log(obj1)
 
-const obj2 = {x: 1, y: 2};
+const obj2 = { x: 1, y: 2 }
 // 問題: 以下の行では何が出力されるか、予想してから結果を確認しなさい
-console.log(obj1 === obj2);
+console.log(obj1 === obj2)
 ```
 
 次に引数で与えられた2つのオブジェクト `o1` と `o2` を比較する関数 `equals` を以下の仕様に従って作成しなさい:
@@ -116,20 +116,20 @@ console.log(obj1 === obj2);
 
 ```js
 // 厳密等価なら true
-equals(42, 42); // true
-equals(null, null); // true
+equals(42, 42) // true
+equals(null, null) // true
 
 // 厳密等価ではない場合オブジェクト以外が指定されれば false
-equals({x: 42}, 42); // false
-equals(null, {x: 42}); // false
+equals({ x: 42 }, 42) // false
+equals(null, { x: 42 }) // false
 
 // プロパティの数・名前が一致しなければ false
-equals({x: 1}, {y: 1}); // false
-equals({x: 1}, {x: 1, y: 1}); // false
+equals({ x: 1 }, { y: 1 }) // false
+equals({ x: 1 }, { x: 1, y: 1 }) // false
 
 // プロパティの各値を equals で再帰的に比較
-equals({x: {y: {z: 10}}}, {x: {y: {z: 10}}}); // true
-equals({x: {y: {z: 10}}}, {x: {y: {z: 10, w: 1}}}); // false
+equals({ x: { y: { z: 10 } } }, { x: { y: { z: 10 } } }) // true
+equals({ x: { y: { z: 10 } } }, { x: { y: { z: 10, w: 1 } } }) // false
 ```
 
 **出題範囲**: 3.8
@@ -152,7 +152,7 @@ class Example {
   }
 }
 
-let obj = new Example();
+let obj = new Example()
 ```
 
 **出題範囲**: 3.9.3.6
@@ -183,12 +183,12 @@ let obj = new Example();
 ```js
 /* eslint-disable */
 for (let i = 0; i < 10; i++) {
-  (function () {
-    let i = 100;
-  })();
-  console.log(i);
+  ;(function () {
+    let i = 100
+  })()
+  console.log(i)
 }
-console.log(i);
+console.log(i)
 ```
 
 **出題範囲**: 3.10.2

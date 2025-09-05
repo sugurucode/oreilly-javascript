@@ -7,14 +7,19 @@ p.141 では、文字列から値へのマッピングの構造として、「�
 
 - マッピングの追加、取得、削除を行うメソッドおよびマッピング数を示すプロパティをもつこと。
 - ハッシュテーブルは生成時に配列のサイズを受け取り、固定長の配列にマッピング情報を保持する
+
   - 配列のインデックスとして利用できるよう、ハッシュ値をサイズに合わせて変換すること（ハッシュ値に対して配列サイズの剰余を用いる）
   - 異なる key でハッシュ値を変換したインデックスが衝突した場合は、リンクリスト形式で複数のマッピングを保持すること。  
     例えば、capacity が 3 のハッシュテーブルに `"key1": "value1"` , `"key2": "value2"` , `"key3": "value3"` という順にマッピングを追加し、key1 のハッシュ値を変換したインデックスが 0 、key2 と key3 のインデックスが 1 だった場合、entries の値は以下と等しくなる。
 
     ```js
     [
-      { key: "key1", value: "value1", next: undefined },
-      { key: "key2", value: "value2", next: { key: "key3", value: "value3", next: undefined } },
+      { key: 'key1', value: 'value1', next: undefined },
+      {
+        key: 'key2',
+        value: 'value2',
+        next: { key: 'key3', value: 'value3', next: undefined },
+      },
       undefined,
     ];
     ```

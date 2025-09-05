@@ -14,11 +14,11 @@
 function fizzbuzz(n) {
   for (let i = 1; i <= n; i++) {
     if (i % 15 === 0) {
-      console.log("FizzBuzz");
+      console.log('FizzBuzz');
     } else if (i % 3 === 0) {
-      console.log("Fizz");
+      console.log('Fizz');
     } else if (i % 5 === 0) {
-      console.log("Buzz");
+      console.log('Buzz');
     } else {
       console.log(i);
     }
@@ -58,17 +58,17 @@ reduce を使って関数 (sum, join, reverse, every, some) を実装しなさ�
 以下のデータを使い、下記の各値を求めなさい。
 ただし、配列イテレータメソッドを利用し、ループ文(for, while)を使わないこと。
 
-``` ts
+```ts
 const data = [
-    { name: "Alice", class: "A", math: 10, chemistry: 30, geography: 20 },
-    { name: "Bob", class: "A", math: 50, chemistry: 50, geography: 60 },
-    { name: "Carol", class: "A", math: 70, chemistry: 55, geography: 30 },
-    { name: "Dave", class: "B", math: 40, chemistry: 20, geography: 60 },
-    { name: "Ellen", class: "B", math: 60, chemistry: 70, geography: 40 },
-    { name: "Frank", class: "B", math: 90, chemistry: 70, geography: 80 },
-    { name: "Isaac", class: "C", math: 70, chemistry: 40, geography: 50 },
-    { name: "Justin", class: "C", math: 80, chemistry: 40, geography: 30 },
-    { name: "Mallet", class: "C", math: 60, chemistry: 70, geography: 90 },
+  { name: 'Alice', class: 'A', math: 10, chemistry: 30, geography: 20 },
+  { name: 'Bob', class: 'A', math: 50, chemistry: 50, geography: 60 },
+  { name: 'Carol', class: 'A', math: 70, chemistry: 55, geography: 30 },
+  { name: 'Dave', class: 'B', math: 40, chemistry: 20, geography: 60 },
+  { name: 'Ellen', class: 'B', math: 60, chemistry: 70, geography: 40 },
+  { name: 'Frank', class: 'B', math: 90, chemistry: 70, geography: 80 },
+  { name: 'Isaac', class: 'C', math: 70, chemistry: 40, geography: 50 },
+  { name: 'Justin', class: 'C', math: 80, chemistry: 40, geography: 30 },
+  { name: 'Mallet', class: 'C', math: 60, chemistry: 70, geography: 90 },
 ];
 ```
 
@@ -77,7 +77,6 @@ const data = [
 3. 3科目合計点のクラスC内での平均点
 4. 3科目合計点が最も高い人の`name`
 5. 全体の`geography`の標準偏差
-
 
 **出題範囲**: 7.8.1
 
@@ -96,8 +95,8 @@ function displayUsers(users) {
   }
 }
 
-const users = [{ name: "hoge" }, { name: "fuga" }, { name: "piyo" }];
-displayUsers(users);
+const users = [{ name: 'hoge' }, { name: 'fuga' }, { name: 'piyo' }];
+displayUsers(users); //fuga hoge piyo
 
 // 注意: 以下の行は hoge ではなく fuga を表示する！
 // (displayUsers 内の sort で引数の users が変更されるため)
@@ -115,11 +114,11 @@ const [users, setUsers] = useState([]);
 
 const addNewUser = () => {
   // 以下は NG (値が変更されていないと React が判断してしまう)
-  users.push({ name: "new user" });
+  users.push({ name: 'new user' });
   setUsers(users);
 
   // 以下は OK
-  setUsers([...users, { name: "new user" }]);
+  setUsers([...users, { name: 'new user' }]); //新しい配列にしている→参照が変更されている。
 };
 ```
 
@@ -153,10 +152,7 @@ console.log(seq); // [1, 2, 3, 4, 5]
 本章で登場した sort 関数について考えてみよう。配列をソートする方法は色々なものが考えられる。例えば以下は「挿入ソート」と呼ばれるソートである。
 
 ```js
-function sort(
-  array,
-  compare = (lhs, rhs) => (lhs < rhs ? -1 : lhs > rhs ? +1 : 0)
-) {
+function sort(array, compare = (lhs, rhs) => (lhs < rhs ? -1 : lhs > rhs ? +1 : 0)) {
   // array[0 ... i-1] が常にソート済みになるように処理を進める
   // (0 <= j < i-1 に対して compare(array[j], array[j + 1]) <= 0 が成り立つ)
   for (let i = 1; i < array.length; i++) {
