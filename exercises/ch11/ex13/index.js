@@ -144,6 +144,8 @@ function map(parser, fn) {
   };
 }
 
+const $DIGIT = range(0x30, 0x39);
+
 // ここから JSON パーサー定義
 
 // 参考にある程度の実装 (配列、文字列、真偽値、null) は用意している。$TODO の箇所を修正しなさい。
@@ -153,68 +155,76 @@ function $json(input) {
   return alternate($object, $array)(input);
 }
 
-const $beginArray = concat($ws, string("["), $ws);
-const $beginObject = $TODO;
-const $endArray = concat($ws, string("]"), $ws);
-const $endObject = $TODO;
-const $nameSeparator = $TODO;
-const $valueSeparator = concat($ws, string(","), $ws);
+const $beginArray = concat($ws, string('['), $ws);
+const $beginObject = concat($ws, string('{'), $ws);
+const $endArray = concat($ws, string(']'), $ws);
+const $endObject = concat($ws, string('}'), $ws);
+const $nameSeparator = concat($ws, string(':'), $ws);
+const $valueSeparator = concat($ws, string(','), $ws);
 function $ws(input) {
-  return repeat(
-    alternate(string(" "), string("\t"), string("\n"), string("\r"))
-  )(input);
+  return repeat(alternate(string(' '), string('\t'), string('\n'), string('\r')))(input);
 }
 
 function $value(input) {
-  return alternate(
-    $false,
-    $null,
-    $true,
-    $object,
-    $array,
-    $number,
-    $string
-  )(input);
+  return alternate($false, $null, $true, $object, $array, $number, $string)(input);
 }
 
-const $false = map(string("false"), () => false);
-const $null = map(string("null"), () => null);
-const $true = map(string("true"), () => true);
+const $false = map(string('false'), () => false);
+const $null = map(string('null'), () => null);
+const $true = map(string('true'), () => true);
 
-const $object = $TODO;
-const $member = $TODO;
+const $member = map(concat($string, $nameSeparator, $value), ([key, _, value]) => [key, value]);
+const $object = map(
+  concat(
+    $beginObject,
+    option(concat($member, repeat(concat($valueSeparator, $member)))),
+    $endObject,
+  ),
+  ([, members]) => {
+    if (members === null) return {};
+    const obj = { [members[0][0]]: members[0][1] };
+    for (const [_, m] of members[1]) {
+      obj[m[0]] = m[1];
+    }
+    return obj;
+  },
+);
 
 function $array(input) {
   return map(
-    concat(
-      $beginArray,
-      option(concat($value, repeat(concat($valueSeparator, $value)))),
-      $endArray
-    ),
+    concat($beginArray, option(concat($value, repeat(concat($valueSeparator, $value)))), $endArray),
     ([_begin, values, _end]) => {
       if (values === null) {
         return [];
       }
       return [values[0], ...values[1].map(([_, v]) => v)];
-    }
+    },
   )(input);
 }
 
-const $number = $TODO;
-const $decimalPoint = $TODO;
-const $digit19 = $TODO;
-const $e = $TODO;
-const $exp = $TODO;
-const $frac = $TODO;
-const $int = $TODO;
-const $minus = $TODO;
-const $plus = $TODO;
-const $zero = $TODO;
+const $minus = string('-');
+const $plus = string('+');
+const $zero = string('0');
+const $digit19 = range(0x31, 0x39);
+const $int = alternate(
+  $zero,
+  map(concat($digit19, repeat($DIGIT)), ([d, ds]) => d + ds.join('')),
+);
+const $frac = map(concat(string('.'), repeat($DIGIT, 1)), ([dot, digits]) => dot + digits.join(''));
+const $e = alternate(string('e'), string('E'));
+const $exp = map(
+  concat($e, option(alternate($plus, $minus)), repeat($DIGIT, 1)),
+  ([e, sign, digits]) => e + (sign || '') + digits.join(''),
+);
+const $number = map(
+  concat(option($minus), $int, option($frac), option($exp)),
+  ([minus, int, frac, exp]) => Number((minus || '') + int + (frac || '') + (exp || '')),
+);
 
 function $string(input) {
-  return map(concat($quotationMark, repeat($char), $quotationMark), (result) =>
-    result[1].join("")
-  )(input);
+  return map(concat($quotationMark, repeat($char), $quotationMark), (result) => result[1].join(''))(
+    input,
+  );
 }
 
 function $char(input) {
@@ -225,27 +235,25 @@ function $char(input) {
         $escape,
         alternate(
           string('"'),
-          string("\\"),
-          string("/"),
-          map(string("b"), () => "\b"),
-          map(string("f"), () => "\f"),
-          map(string("n"), () => "\n"),
-          map(string("r"), () => "\r"),
-          map(string("t"), () => "\t"),
-          map(
-            concat(string("u"), $HEXDIG, $HEXDIG, $HEXDIG, $HEXDIG),
-            ([_, x1, x2, x3, x4]) =>
-              String.fromCharCode(parseInt(`${x1}${x2}${x3}${x4}`, 16))
-          )
-        )
+          string('\\'),
+          string('/'),
+          map(string('b'), () => '\b'),
+          map(string('f'), () => '\f'),
+          map(string('n'), () => '\n'),
+          map(string('r'), () => '\r'),
+          map(string('t'), () => '\t'),
+          map(concat(string('u'), $HEXDIG, $HEXDIG, $HEXDIG, $HEXDIG), ([_, x1, x2, x3, x4]) =>
+            String.fromCharCode(parseInt(`${x1}${x2}${x3}${x4}`, 16)),
+          ),
+        ),
       ),
-      ([_, c]) => c
-    )
+      ([_, c]) => c,
+    ),
   )(input);
 }
 
 function $escape(input) {
-  return string("\\")(input);
+  return string('\\')(input);
 }
 
 function $quotationMark(input) {
@@ -253,24 +261,62 @@ function $quotationMark(input) {
 }
 
 function $unescaped(input) {
-  return alternate(
-    range(0x20, 0x21),
-    range(0x23, 0x5b),
-    range(0x5d, 0x10ffff)
-  )(input);
+  return alternate(range(0x20, 0x21), range(0x23, 0x5b), range(0x5d, 0x10ffff))(input);
 }
 
 function $HEXDIG(input) {
   return alternate($DIGIT, range(0x41, 0x46), range(0x61, 0x66))(input);
 }
-const $DIGIT = range(0x30, 0x39);
 
-function parseJSON(s) {
+export function parseJSON(s) {
   const result = $json({ source: s, index: 0 });
   if (!result.ok || result.next.index !== s.length) {
-    throw new Error("Failed to parse");
+    throw new Error('Failed to parse');
   }
   return result.value;
+}
+
+// JSON.stringifyでjson文字列を生成する
+export function stringifyJSON(value) {
+  if (value === null) return 'null';
+  if (typeof value === 'boolean') return value ? 'true' : 'false';
+  if (typeof value === 'number') {
+    if (!isFinite(value)) return 'null'; // isFinite：有限の数かどうかをチェック
+    return String(value); // 数値を文字列に変換
+  }
+  if (typeof value === 'string') {
+    // JSONの文字列は特定の文字をエスケープする必要がある
+    // 必要なエスケープをcopilotで生成
+    return (
+      '"' +
+      value
+        .replace(/\\/g, '\\\\') // バックスラッシュをエスケープ
+        .replace(/"/g, '\\"') // ダブルクォートをエスケープ
+        .replace(/\b/g, '\\b') // バックスペースをエスケープ
+        .replace(/\f/g, '\\f') // フォームフィードをエスケープ\
+        .replace(/\n/g, '\\n') // 改行をエスケープ
+        .replace(/\r/g, '\\r')
+        .replace(/\t/g, '\\t')
+        .replace(/[\u0000-\u001F]/g, (c) => {
+          return '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0');
+        }) +
+      '"'
+    );
+  }
+  if (Array.isArray(value)) {
+    return '[' + value.map((v) => stringifyJSON(v) ?? 'null').join(',') + ']';
+  }
+  if (typeof value === 'object') {
+    const props = Object.keys(value)
+      .filter((k) => {
+        const v = value[k];
+        return typeof v !== 'undefined' && typeof v !== 'function' && typeof v !== 'symbol';
+      })
+      .map((k) => stringifyJSON(k) + ':' + stringifyJSON(value[k]));
+    return '{' + props.join(',') + '}';
+  }
+  // undefined, function, symbol
+  return undefined;
 }
 
 // 以下を実際に動かしてみると良い (ちゃんと動きます)

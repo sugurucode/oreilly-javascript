@@ -8,7 +8,7 @@ function costOfLoop(N) {
 
 // N 回 "Hello".length を実行 + N 回何もしないループの時間を返す
 function costOfLengthPlusLoop(N) {
-  const str = "Hello";
+  const str = 'Hello';
   let res = 0;
   const start = performance.now();
   for (let i = 0; i < N; i++) {
@@ -17,7 +17,7 @@ function costOfLengthPlusLoop(N) {
   const end = performance.now();
 
   if (res !== 5) {
-    throw new Error("something is wrong");
+    throw new Error('something is wrong');
   }
   return end - start;
 }
@@ -30,5 +30,5 @@ function costOfLength(N) {
 }
 
 // 以下を変更して実験しなさい
-console.log(costOfLength(10000));
+console.log(costOfLength(1));
 console.log(costOfLength(100000000));
