@@ -9,9 +9,9 @@
 
 最後にあなたのPCのCPUスペックを調査し、適切なスレッド数についての考察を記しなさい。
 
-*1 mFib.jsは第一引数で項数、第二引数でスレッド数を指定。コンソールには実行時間とフィボナッチ数が出力される。講師PCでは `node mFib.js 45 4` の実行に15秒程かかる。
+\*1 mFib.jsは第一引数で項数、第二引数でスレッド数を指定。コンソールには実行時間とフィボナッチ数が出力される。講師PCでは `node mFib.js 45 4` の実行に15秒程かかる。
 
-*2 OSがwindowsの場合"リソースモニター"（"`Winキー+r`"の後"`resmon`"で起動）で実行中プログラムのスレッド数を確認できる。
+\*2 OSがwindowsの場合"リソースモニター"（"`Winキー+r`"の後"`resmon`"で起動）で実行中プログラムのスレッド数を確認できる。
 
 **出題範囲 16.2**
 
@@ -124,7 +124,7 @@ Shift_JIS で保存されたテキストファイル hello.txt を読み込み�
 2. 以下のコードを `cat.mjs` というファイルに保存し、後述する実験の結果を予測し、実際に実験しなさい
 
 ```js
-import fs from "fs";
+import fs from 'fs';
 
 if (process.argv.length > 2) {
   // node cat.js foo.txt といった形式ならばファイルを読み込み標準出力に出力する
@@ -187,10 +187,10 @@ Express フレームワークを利用して P.672 のサンプルコードと�
 
 ```js
 // NOTE: file.txt の内容をアップロード
-fetch("http://localhost:8000/foo/bar/hello.txt", {
-  method: "PUT",
-  body: fs.createReadStream("file.txt"),
-  duplex: "half",
+fetch('http://localhost:8000/foo/bar/hello.txt', {
+  method: 'PUT',
+  body: fs.createReadStream('file.txt'),
+  duplex: 'half',
 });
 ```
 
@@ -203,29 +203,30 @@ fetch("http://localhost:8000/foo/bar/hello.txt", {
 ブラウザと以下の通信ができる HTTP サーバを net パッケージのみを用いて実装しなさい。
 
 1. "/"が GET されたとき以下の HTML を返却する
+
 ```html
-   <!doctype html>
-   <html lang="ja">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>Greeting Form</title>
-     </head>
-     <body>
-       <form action="/greeting" method="POST">
-         <label for="greeting">Name:</label>
-         <input type="text" id="name" name="name" />
-         <input type="text" id="greeting" name="greeting" />
-         <button type="submit">Submit</button>
-       </form>
-     </body>
-   </html>
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greeting Form</title>
+  </head>
+  <body>
+    <form action="/greeting" method="POST">
+      <label for="greeting">Name:</label>
+      <input type="text" id="name" name="name" />
+      <input type="text" id="greeting" name="greeting" />
+      <button type="submit">Submit</button>
+    </form>
+  </body>
+</html>
 ```
+
 2. 1.のフォームから`/greeting`に POST されたとき、nameとgreeting の内容をボディに含む HTML を返却する
 3. 1.2.3.で非対応のパスとメソッドの組み合わせでアクセスされた場合、HTTP のプロトコルにしたがい 404 または 405 を返す
 
 また、複数のTCPクライアント (net.Socket) でHTTPリクエストを送信せず同時に接続を維持した際、何接続で接続が確立できなくなるか確認し、確立できなかった理由を書きなさい。
-
 
 **出題範囲: 16.11.9**
 
