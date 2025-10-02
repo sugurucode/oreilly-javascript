@@ -1,13 +1,9 @@
-const sum = (x, y) => x + y;
-const square = (x) => x * x;
-exports.mean = (data) => data.reduce(sum) / data.length;
-exports.stddev = function (d) {
-  let m = exports.mean(d);
-  return Math.sqrt(
-    d
-      .map((x) => x - m)
-      .map(square)
-      .reduce(sum) /
-      (d.length - 1),
-  );
-};
+// 必要なモジュールへの参照を取得する。
+const stats = require('./stats.cjs');
+const BitSet = require('./sets.cjs').BitSet;
+// モジュールを使ってコードを記述する。
+let s = new BitSet(100);
+s.insert(10);
+s.insert(20);
+s.insert(30);
+let average = stats.mean([...s]); // average は20。

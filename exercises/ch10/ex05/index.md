@@ -1,45 +1,43 @@
-# 問題10.5 モジュールの名前変更とインポートの追随挙動
+## モジュールのリファクタ時の名前変更挙動まとめ
 
-## 1. Nodeのモジュール方式（問題10.3）
+- nodeのモジュール
 
-- `module.cjs` で `greet` 関数や `Person` クラスの名前を変更した場合、
-  - `main.cjs` の require で利用している名前は自動で追随されない。
-  - インポート側（main.cjs）で手動で新しい名前に修正する必要がある。
-  - 例: `greet` → `hello` に変更した場合、`main.cjs` の `greet` も `hello` に修正が必要。
+  module.js
+  　sumという関数名をsum_newに変更。
+  　module.exports = { sum: sum_new, Rectangle };
+  main.js
+  　特に何も変わらないがそのまま実行できる。
 
-## 2. ES6モジュール方式（問題10.4）
+- ES6のモジュール
+  module.js
+  　sumという関数名をsum_newに変更。
+  　export { sum_new as sum, Rectangle };
+  main.js
+  　特に何も変わらないがそのまま実行できる。
 
-- `module.ts` で `greet` 関数や `Person` クラスの名前を変更した場合、
-  - デフォルトエクスポート（`greet`）はインポート側で任意の名前で受け取るため、追随は不要。
-  - 名前付きエクスポート（`Person`）は、インポート側（util.ts, main.ts）で手動修正が必要。
-  - 名前変更を伴うインポート（`Person as Human`）や再エクスポート（`export { Human }`）も、元の名前が変わるとインポート側で修正が必要。
+- デフォルトエクスポート
 
-# メモ
+  module.js
+  　sumという関数名をsum_newに変更。
+  　export default sum_new;
+  main.js
+  　import 任意の名前 from './module.js';
+  　インポート側は任意の名前で受け取れるため、エクスポート元の名前変更はインポート側に影響しない。
 
-## デフォルトエクスポート
+- 再エクスポート
 
-- 書き方: `export default 関数名/クラス名/値;`
-- インポート時は任意の名前で受け取れる: `import 任意名 from './module.js';`
-- 特徴: モジュールごとに1つだけ指定可能。利用側で名前を自由に決められる。
+  module.js
+  　sumという関数名をsum_newに変更。
+  export { sum_new as sum, Rectangle };
+  reexport.js
+  　export { sum } from './module.js';
+  main.js
+  　import { sum } from './reexport.js';
+  　元の名前を変更すると、再エクスポート側・インポート側は特に変えずに実行できる。
 
-## 名前変更を伴うインポート
+- 名前変更を伴うインポート
+  module.js
+  import { sum as sum_new, Rectangle } from './module.js';
+  sumがsum_newに自動変更される。
 
-- 書き方: `import { 元名 as 新名 } from './module.js';`
-- 特徴: エクスポートされた名前を、インポート時に別名で利用できる。複数の同名を区別したい場合などに便利。
-
-## 再エクスポート
-
-- 書き方: `export { 名前 } from './module.js';`
-- 特徴: 他のモジュールからインポートした機能を、さらに自分のモジュールからエクスポートできる。APIの窓口統一や整理に役立つ。
-
-## 3. エディタのリファクタ機能
-
-- VSCode等のリファクタ機能で関数・クラス名を変更した場合、
-  - 同一プロジェクト内で参照箇所（インポート元・利用箇所）も自動で修正されることが多い。
-  - ただし、文字列で指定している場合や、動的require等は自動修正されない。
-
-## まとめ
-
-- Nodeのモジュール方式では、名前変更はインポート側で手動修正が必要。
-- ES6モジュール方式でも、デフォルトエクスポート以外はインポート側で手動修正が必要。
-- エディタのリファクタ機能を使うと、静的解析可能な範囲は自動で追随される。
+  他は特に変更することなく実行可能。

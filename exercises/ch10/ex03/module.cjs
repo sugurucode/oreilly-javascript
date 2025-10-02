@@ -1,14 +1,16 @@
-function greet(name) {
-  return `こんにちは、${name}さん!`;
+function sum_new(a, b) {
+  return a + b;
 }
 
-class Person {
-  constructor(name) {
-    this.name = name;
+class Rectangle {
+  constructor(width, height) {
+    this.width = width;
+    this.height = height;
   }
-  sayHello() {
-    return greet(this.name);
+
+  area() {
+    return this.width * this.height;
   }
 }
 
-module.exports = { greet, Person };
+module.exports = { sum: sum_new, Rectangle };

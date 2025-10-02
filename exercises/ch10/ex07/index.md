@@ -1,13 +1,9 @@
 - date-fns
   date-fnsは日付操作ごとにフォルダが分かれている。
-  例えば「addDays」「format」などの機能単位でフォルダにまとめられindexファイルからエクスポートされている。
+  例えば「addDays」「formatDistance」などの機能単位でフォルダにまとめられindexファイルからエクスポートされている。
 
 - Luxon
-  Luxonは「DateTime」「Duration」「Interval」といった型ごとにコードがまとまる。
-  それぞれの型がクラスとして機能し、日時の操作や期間の計算がわかりやすい。
-  国際化やタイムゾーンもサポート
+  Luxonは「dateTime.js」「duration.js」「interval.js」といった型ごとにファイルやクラスが分かれている。ロジックはimpleにまとまっていて、外部からimportして使っている。
 
 - Day.js
-  index.jsにDayjsクラスのメソッドとして操作（diff,add,format）
-  プラグインごとに別々のフォルダに分かれている。
-  共通処理はutilsにまとめられ、ロケール（言語）対応はlocaleフォルダで管理されています。
+  dayjsのフォルダ構成は、日付処理のコア部分（constant.js、index.js、utils.js）がsrc直下にまとめられており、機能追加用のpluginディレクトリ、ローカライズ用のlocaleディレクトリが整理されている。
