@@ -136,8 +136,8 @@ node ex01/server.js
   // CORS のヘッダを返すミドルウェア
   function corsMiddleware(_url, _req, res) {
     // TODO: CORS に必要なヘッダを複数設定する
-    res.setHeader("TODO", "TODO");
-    return true;
+    res.setHeader('TODO', 'TODO')
+    return true
   }
   ```
 
@@ -147,14 +147,14 @@ node ex01/server.js
       await routes(
         // TODO: この行のコメントを外す
         // ["OPTIONS", "/api/*", nopHandler, cors],
-        ["GET", "/api/tasks", listTasksHandler, authz, cors],
-        ["GET", "/api/tasks/{id}", getTaskHandler, authz, cors],
-        ["POST", "/api/tasks", createTaskHandler, authz, cors],
-        ["PATCH", "/api/tasks/{id}", patchTaskHandler, authz, cors],
-        ["DELETE", "/api/tasks/{id}", deleteTaskHandler, authz, cors],
-      )(req, res);
+        ['GET', '/api/tasks', listTasksHandler, authz, cors],
+        ['GET', '/api/tasks/{id}', getTaskHandler, authz, cors],
+        ['POST', '/api/tasks', createTaskHandler, authz, cors],
+        ['PATCH', '/api/tasks/{id}', patchTaskHandler, authz, cors],
+        ['DELETE', '/api/tasks/{id}', deleteTaskHandler, authz, cors],
+      )(req, res)
     })
-    .listen(3001);
+    .listen(3001)
   ```
 
 **出題範囲: 15.1.8.2, 15.11.1.8**
@@ -204,7 +204,7 @@ CSP には様々なディレクティブが存在するが、その中の `scrip
 function cspMiddleware(_url, req, res) {
   // TODO: CSP ヘッダを設定する
   // res.setHeader("Content-Security-Policy", "TODO");
-  return true;
+  return true
 }
 ```
 
@@ -234,8 +234,8 @@ node ex08/server.js
    例
 
    ```js
-   const response = await sendRequest("World");
-   console.log(response); // -> "Hello, World"
+   const response = await sendRequest('World')
+   console.log(response) // -> "Hello, World"
    ```
 
 2. 1.とは別の WebSocket 接続で、WebSocket サーバから転送されたリクエストメッセージを受信してレスポンスを返す実装をしなさい。

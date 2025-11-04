@@ -91,20 +91,20 @@ Tailwind CSS を使う前提で HTML と JavaScript のコードを書き換え�
 3. 下記の例を参考にして目次を選択した時にスムーズに遷移するようにしなさい
 
 ```js
-let link = document.createElement("a");
-link.href = `#${fragmentName}`;
-link.innerHTML = heading.innerHTML;
+let link = document.createElement('a')
+link.href = `#${fragmentName}`
+link.innerHTML = heading.innerHTML
 
 /* 追加分 */
-link.addEventListener("click", (e) => {
-  e.preventDefault();
-  const target = document.querySelector(`a[name="${fragmentName}"]`);
+link.addEventListener('click', (e) => {
+  e.preventDefault()
+  const target = document.querySelector(`a[name="${fragmentName}"]`)
   if (!target) {
-    return;
+    return
   }
 
   /* NOTE: scrollTo または scrollIntoView でスムーズにスクロールしなさい  */
-});
+})
 ```
 
 **参考**: 完成後のイメージは以下:
@@ -150,7 +150,6 @@ link.addEventListener("click", (e) => {
 ## 問題 15.4-10.10 💻
 
 [ex10](ex10) の続きを実装し [ライフゲーム](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) のプログラムを完成させなさい。
-また、コード中の TODO の修正を実装し、表示の更新頻度が常に一定となるように修正しなさい。
 
 **参考**: 完成後のイメージは以下:
 
@@ -183,11 +182,11 @@ link.addEventListener("click", (e) => {
 ```
 
 ```js
-document.querySelector("#active").addEventListener("click", (e) => {
-  e.preventDefault();
-  window.history.pushState(null, "", "/ch15.04-10/ex12/active");
-  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
-});
+document.querySelector('#active').addEventListener('click', (e) => {
+  e.preventDefault()
+  window.history.pushState(null, '', '/ch15.04-10/ex12/active')
+  renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */)
+})
 ```
 
 - Active や Completed を選択後にブラウザのリロードを行うとどうなるだろうか。hashchange と pushState それぞれの実装について調べなさい
@@ -264,20 +263,17 @@ export default function Bar() {
 ```js
 window.history.pushState = new Proxy(window.history.pushState, {
   apply: (target, thisArg, argArray) => {
-    console.log("pushState is called:", argArray);
-    return target.apply(thisArg, argArray);
+    console.log('pushState is called:', argArray)
+    return target.apply(thisArg, argArray)
   },
-});
+})
 ```
 
 問題:
 
-1. 以下の動作を確認しなさい
-    - ブラウザの開発者ツールの「ネットワーク」タブを確認してみよう。リンクをクリックしたときに通信は発生しているだろうか？
-    - pushState はいつ実行されているだろうか？
-    - リロード時に画面の表示はどうなるだろうか？
-
-2. 1 で確認した動作と 15.4-10.12 で確認した動作を比較し、next.js の `Link` でどういった処理が行われているかをまとめなさい。
+- ブラウザの開発者ツールの「ネットワーク」タブを確認してみよう。リンクをクリックしたときに通信は発生しているだろうか？
+- pushState はいつ実行されているだろうか？
+- 15.4-10.12 では pushState を使った実装でページのリロード時に正しく動作しなかったが、この問題ではどうだろうか？
 
 この問題を通して「昨今のフレームワークはリンク (通常は `<a>` タグを利用) ですら内部で複雑なことを実施している」ことが伝われば幸いである (もしかしたらトラブル時に知っておくと助けになるかもしれない)。余談だが [Next.js App Router と控えめにお付き合いして普通の Web アプリを配信する](https://zenn.dev/overflow_offers/articles/20240112-using-nextjs-app-router-sparingly) のように `<Link>` を使わないスタイルも存在する。
 
