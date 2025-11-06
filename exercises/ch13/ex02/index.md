@@ -28,7 +28,7 @@ gantt
 
 ### 結果
 
-try の中の `wait(0).then(logA).then(errX);`では、3つの Pending 状態のPromiseが生成され、末尾の`errX`のPromiseが返却された時点で tryブロック内の同期処理は完了。なのでfinallyに処理が移動する。
+try の中の `wait(0).then(logA).then(errX);`では、3つの Pending 状態のPromiseが生成され、末尾の`errX`のPromiseが返却された時点で tryブロック内の同期処理は完了。なのでfinallyに処理が移動する。その後tryの中が順次解決される。
 
 ```mermaid
 gantt
@@ -66,8 +66,6 @@ function logC(value) {
 
 function errX() {
   console.log('errX: throw new Error()');
-  // ここで投げられた例外は非同期のコンテキストで発生するため、
-  // f3内の同期的なtry/catchではキャッチされない
   throw new Error('X Error');
 }
 
@@ -78,7 +76,7 @@ function f3() {
     // wait(0) はPromiseを返し、then() のコールバック（logAとerrX）は
     // 非同期に（次のイベントループのティックで）実行される
     wait(0).then(logA).then(errX);
-    // try/catchブロックは、wait(0)の呼び出しと、それに続く.then()の**スケジューリング**が
+    // try/catchブロックは、wait(0)の呼び出しと、それに続く.then()のスケジューリングが
     // 完了した時点で同期的に終了する。
   } catch (e) {
     // 非同期で発生した例外は、ここのcatchブロックでは捕捉されない
@@ -107,103 +105,6 @@ wait(0)
   });
 ```
 
-はい、承知いたしました。
-f3からf12までのすべての内容を、単一のマークダウンコードブロックにまとめます。
-
-````markdown
-## f3
-
-```ts
-function f3() {
-  // NOTE: then のコールバック内の例外は try/catch でキャッチできるだろうか
-  try {
-    wait(0).then(logA).then(errX);
-  } catch (e) {
-    logB();
-  } finally {
-    logC();
-  }
-}
-```
-````
-
-### 予想
-
-```mermaid
-gantt
-  title f3 (予想)
-  dateFormat  s
-  axisFormat |
-    wait3 :w3, 0, 0s
-    logA  :l1, after w3, 0.1s
-    logB  :l2, after l1, 0.1s
-    logC  :l3, after l2, 0.1s
-```
-
-### 結果
-
-try の中の `wait(0).then(logA).then(errX);`では、3つの Pending 状態のPromiseが生成され、末尾の`errX`のPromiseが返却された時点で tryブロック内の同期処理は完了。なのでfinallyに処理が移動する。
-
-```mermaid
-gantt
-  title f3 (結果)
-  dateFormat  s
-  axisFormat |
-    logC :lC, 0, 0.1s
-    wait(0) :w0, 0, 0s
-    logA    :lA, after w0, 0.1s
-    errX (Uncaught) :eX, after lA, 0.1s
-```
-
-### 確認コード
-
-```ts
-function wait(ms) {
-  // 0msで解決するPromiseを返す。
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-function logA(value) {
-  console.log('A');
-  return value;
-}
-function logB(value) {
-  console.log('B');
-  return value;
-}
-function logC(value) {
-  console.log('C');
-  return value;
-}
-function errX() {
-  console.log('errX: throw new Error()');
-  // ここで投げられた例外は非同期のコンテキストで発生するため、
-  // f3内の同期的なtry/catchではキャッチされない
-  throw new Error('X');
-}
-
-function f3() {
-  // NOTE: then のコールバック内の例外は try/catch でキャッチできるだろうか
-  try {
-    // wait(0) はPromiseを返し、then() のコールバック（logAとerrX）は
-    // 非同期に（次のイベントループのティックで）実行される
-    wait(0).then(logA).then(errX);
-    // try/catchブロックは、wait(0)の呼び出しと、それに続く.then()の**スケジューリング**が
-    // 完了した時点で同期的に終了する。
-  } catch (e) {
-    // 非同期で発生した例外は、ここのcatchブロックでは捕捉されない
-    logB();
-  } finally {
-    // finallyブロックは、tryブロックが完了した直後に、同期的に実行される
-    logC();
-  }
-}
-f3();
-```
-
-### 補足
-
-`try...catch` は、その場で（同期的に）実行されるエラーしか捕まえられません。`.then` の中の処理（非同期）で起きたエラーは、Promise専用の `.catch` で捕まえる必要があります。
-
 ---
 
 ## f4
@@ -228,20 +129,7 @@ function f4() {
 
 ### 予想
 
-```mermaid
-gantt
-  title f4 (予想)
-  dateFormat  s
-  axisFormat |
-    wait2 :w2, 0, 2s
-    logA  :lA, after w2, 0.1s
-    logB  :lB, after lA, 0.1s
-    log(100) :l100, after lB, 0.1s
-```
-
-### 結果
-
-2秒待って「A」が出力されます。次の `.then` は「1秒待つ」という処理（Promise）を**返している**ので、チェーンは1秒待ちます。その後「B」が出力され、最後に「100」が出力されます。
+あってた
 
 ```mermaid
 gantt
@@ -250,7 +138,23 @@ gantt
   axisFormat |
     wait2 :w2, 0, 2s
     logA  :lA, after w2, 0.1s
-    wait1 (in then) :w1, after lA, 1s
+    wait1 :w1, after lA, 1s
+    logB  :lB, after w1, 0.1s
+    log(100) :l100, after lB, 0.1s
+```
+
+### 結果
+
+2秒待って「A」が出力。次の `.then` は「1秒待つ」という処理（Promise）を返しているので、チェーンは1秒待つ。その後「B」が出力され、最後に「100」が出力されます。
+
+```mermaid
+gantt
+  title f4 (結果)
+  dateFormat  s
+  axisFormat |
+    wait2 :w2, 0, 2s
+    logA  :lA, after w2, 0.1s
+    wait1 :w1, after lA, 1s
     logB  :lB, after w1, 0.1s
     log(100) :l100, after lB, 0.1s
 ```
@@ -315,7 +219,7 @@ f4();
 
 ### 補足
 
-`.then` の中で新しいPromise（`wait(1000)` など）を `return` すると、チェーン全体がそのPromiseが終わるまで待ってくれます。
+`.then` の中で新しいPromise（`wait(1000)` など）を `return` すると、チェーン全体がそのPromiseが終わるまで待ってくれる。
 
 ---
 
@@ -355,8 +259,10 @@ gantt
 
 ### 結果
 
-`wait2()`（Aのため）と `wait1()`（Bのため）が**ほぼ同時**にスタートします。`.then` の中身は**関数**でなければならず、Promiseが直接置かれていると無視されます。
+`wait2()`（Aのため）と `wait1()`（Bのため）がほぼ同時にスタート`then` の中身は関数でなければならず、Promiseが直接置かれていると無視される。
 1秒後に「B」が、2秒後に「A」が、その直後に「40」が出力されます。
+
+（関数だったらA→B→100）
 
 ```mermaid
 gantt
@@ -429,10 +335,6 @@ function f5() {
 f5();
 ```
 
-### 補足
-
-`.then(非関数)` は無視され、前の値がそのまま次に渡ります。f4の `.then(() => wait1()...)` と f5の `.then(wait1()...)` の違いに注意してください。
-
 ---
 
 ## f6
@@ -463,8 +365,8 @@ gantt
 
 ### 結果
 
-1秒待って「A」が出力されます。その後、`p` から分岐した2つの処理（Bのための1秒待ち、Cのための2秒待ち）が**並行して**スタートします。
-「A」の1秒後に「B」が、その1秒後（「A」からは2秒後）に「C」が出力されます。
+1秒待って「A」が出力。その後、`p` から分岐した2つの処理（Bのための1秒待ち、Cのための2秒待ち）が並行してスタート。
+「A」の1秒後に「B」が、その1秒後（「A」からは2秒後）に「C」が出力。
 
 ```mermaid
 gantt
@@ -533,7 +435,7 @@ f6();
 
 ### 補足
 
-1つのPromiseから `.then` で分岐させると、分岐先の処理は並行して（同時に）動き出します。
+1つのPromiseから `.then` で分岐させると、分岐先の処理は並行して（同時に）動き出す。
 
 ---
 
@@ -568,8 +470,8 @@ gantt
 
 ### 結果
 
-`p`（1秒でA）と `wait2()`（2秒待ち）が同時にスタートします。
-1秒後に「A」が出力されます。2秒後に `wait2()` が終わり、`p.then(logB)` が呼ばれます。この時 `p` は**既に完了している**ため、`logB` は待たずに即実行され「B」が、その直後に「C」が出力されます。
+`p`（1秒でA）と `wait2()`（2秒待ち）が同時にスタート。
+1秒後に「A」が出力。2秒後に `wait2()` が終わり、`p.then(logB)` が呼ばれる。この時 `p` は**既に完了している**ため、`logB` は待たずに即実行され「B」が、その直後に「C」が出力。
 
 ```mermaid
 gantt
@@ -660,20 +562,19 @@ function f8() {
 
 ```mermaid
 gantt
-  title f8 (予想)
+  title f8 (結果)
   dateFormat  s
   axisFormat |
     wait1 :w1, 0, 1s
-    errX  :eX, after w1, 0.1s
-    errY  :eY, after eX, 0.1s
-    catch :cC, after eY, 0.1s
-    finally :fA, after cC, 0.1s
+    errX (Error) :eX, after w1, 0.1s
+    catch(X) :cX, after eX, 0.1s
+    finally(A) :fA, after cX, 0.1s
 ```
 
 ### 結果
 
-1秒待った後、`errX` でエラーが発生します。エラーが起きると、次の `.then(errY)` は**スキップ**され、一番近い `.catch` に飛びます。
-`.catch` で「X」が出力され、`.finally` はエラーがあってもなくても実行されるので、最後に「A」が出力されます。
+1秒待った後、`errX` でエラーが発生。エラーが起きると、次の `.then(errY)` はスキップされ、一番近い `.catch` を実行。
+`.catch` で「X」が出力され、`.finally` はエラーがあってもなくても実行されるので、最後に「A」が出力。
 
 ```mermaid
 gantt
@@ -763,15 +664,15 @@ gantt
   axisFormat |
     wait1 :w1, 0, 1s
     then(42) :t42, after w1, 0.1s
-    errY  :eY, after t42, 0.1s
-    catch :cC, after eY, 0.1s
-    finally :fA, after cC, 0.1s
+    errY (Error) :eY, after t42, 0.1s
+    catch(Y) :cY, after eY, 0.1s
+    finally(A) :fA, after cY, 0.1s
 ```
 
 ### 結果
 
-1秒待った後、最初の `.then` は成功します。しかし、次の `.then(errY)` でエラーが発生します。
-f8と同じく `.catch` にジャンプし、「Y」が出力され、最後に `.finally` で「A」が出力されます。
+1秒待った後、最初の `.then` は成功。しかし、次の `.then(errY)` でエラー。
+f8と同じく `.catch` にジャンプし、「Y」が出力され、最後に `.finally` で「A」が出力。
 
 ```mermaid
 gantt
@@ -867,8 +768,8 @@ gantt
 
 ### 結果
 
-1秒待った後、`.then(errY, ...)` が呼ばれます。前の処理は成功したので、1番目の引数 `errY` が実行され、エラーが発生します。
-`then` の2番目の引数は、**前の処理が**失敗した時用です。`errY` が起こしたエラーは捕まえられず、`.catch` もないため、`finally` の「A」が出た後に「Uncaught Error (キャッチされないエラー)」になります。
+1秒待った後、`.then(errY, ...)` 実行。前の処理は成功したので、1番目の引数 `errY` が実行されエラー。
+`then` の2番目の引数は、前の処理が失敗した時用です。`errY` が起こしたエラーは捕まえられず、`.catch` もないため、`finally` の「A」が出た後に「Uncaught Error」。
 
 ```mermaid
 gantt
@@ -877,8 +778,7 @@ gantt
   axisFormat |
     wait1 :w1, 0, 1s
     then(42) :t42, after w1, 0.1s
-    errY (Error) :eY, after t42, 0.1s
-    finally(A) :fA, after eY, 0.1s
+    finally(A) :fA, after t42, 0.1s
     (Uncaught Error Y) :crit, after fA, 0s
 ```
 
@@ -962,8 +862,8 @@ gantt
 
 ### 結果
 
-`new Promise` の中の処理が**すぐに**（同期的に）エラー `errX()` を起こしました。
-このエラーは自動的に「失敗(reject)」として扱われるため、後ろの `.catch` で正しくキャッチされ、「X」が出力されます。
+`new Promise` の中の処理が同期的にエラー `errX()` 。
+このエラーは自動的に「失敗(reject)」として扱われるため、後ろの `.catch` で正しくキャッチされ、「X」が出力。
 
 ```mermaid
 gantt
@@ -1052,9 +952,9 @@ gantt
 
 ### 結果
 
-`new Promise` の中の `setTimeout` がスケジュールされます。Promiseの処理はエラーなく完了します。
-その直後、`setTimeout` の中の `errX()` が実行されエラーが起きますが、これはPromiseの `.catch` が監視している「外」で起きたエラーになります。
-そのため、`.catch` では捕まえられず、「Uncaught Error (キャッチされないエラー)」になります。
+`new Promise` の中の `setTimeout` がスケジュール。Promiseの処理はエラーなく完了(スケジュールのみなので)。
+その直後、`setTimeout` の中の `errX()` が実行されエラーが起きますが、これはPromiseの `.catch` が監視している「外」で起きたエラー。
+そのため、`.catch` では捕まえられず、「Uncaught Error」。
 
 ```mermaid
 gantt
@@ -1116,7 +1016,7 @@ f12();
 
 ### 補足
 
-`setTimeout` や `setInterval` の中で起きたエラーは、Promiseの `.catch` ではキャッチできません。f11との違いが重要です。
+`setTimeout` や `setInterval` の中で起きたエラーは、Promiseの `.catch` ではキャッチできません。f11との違いが重要。
 
 ```
 
