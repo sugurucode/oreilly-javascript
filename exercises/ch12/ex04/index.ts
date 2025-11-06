@@ -15,6 +15,8 @@ function filter(iterable, predicate) {
     next() {
       for (;;) {
         let v = iterator.next();
+        // 終了状態 (done: true) または predicate が true の場合に返す
+        //predicateは関数
         if (v.done || predicate(v.value)) {
           return v;
         }
@@ -43,7 +45,7 @@ export function* primes() {
     yield p; //{value: p, done: false};
 
     // ある数字nが、それより小さい素数で割り切れない場合、nは素数である。
-    // したがって素数pで割り切れる数を取り除く。
+    // したがって素数pで割り切れる数を取り除く。(再起)
     numbers = filter(numbers, (n) => n % p !== 0);
   }
 }
