@@ -9,7 +9,7 @@ export async function* walk(rootPath) {
   let stats;
   try {
     // lstat を使い、シンボリックリンク(ショートカット)をたどらない (非同期)
-    stats = await fs.lstat(rootPath);
+    stats = await fs.lstat(rootPath); // awaitでPromiseの完了を待つ。
   } catch (e) {
     // 存在しないパスや権限エラーの場合は何もしない
     console.error(`Error stating path ${rootPath}: ${e.message}`);
@@ -48,7 +48,6 @@ export async function* walk(rootPath) {
   // 3. シンボリックリンクやその他の場合は無視する
 }
 
-// --- 利用例 (コメントアウト解除して実行可能) ---
 /*
 (async () => {
   // カレントディレクトリ (.) のファイル・フォルダを再帰的に取得し表示する

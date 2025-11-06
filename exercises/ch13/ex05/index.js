@@ -1,11 +1,9 @@
-function wait(duration) {
-  return new Promise((resolve) => {
-    // duration ミリ秒後に resolve() を呼び出す
-    setTimeout(resolve, duration);
-  });
+function wait(msec) {
+  return new Promise((resolve) => setTimeout(resolve, msec));
 }
 
 // TODO: then のネストを無くしなさい
+// コールバック地獄を避けることができる
 export function g1() {
   return wait(1000)
     .then(() => {
@@ -16,6 +14,7 @@ export function g1() {
     })
     .then(() => {
       console.log('B');
+      // 同様に次の非同期処理を return する
       return wait(3000);
     })
     .then(() => {
@@ -25,7 +24,7 @@ export function g1() {
 
 // TODO: new Promise を使わないように書き換えなさい
 export function g2() {
-  // Promise チェーン自体が Promise を返すので、そのまま return する
+  // Promise チェーン自体がPromiseを返すので、new Promise は不要
   return wait(1000)
     .then(() => console.log('A'))
     .then(() => wait(2000))
@@ -36,10 +35,9 @@ export function g2() {
   // new Promise のコンストラクタに渡すためにあったものなので不要
 }
 
-// (fetchUser, fetchUserFriends は省略)
-
-// TODO: var, let, const による変数宣言を無くしなさい。async/awaitは使用しないこと。
+// Primiseチェーンはデータを次に渡すこともできる
 export function g3() {
+  // 以下2つの関数が存在するとします (中身は適当)
   function fetchUser() {
     return Promise.resolve({ id: 42, name: 'John' });
   }
@@ -52,10 +50,12 @@ export function g3() {
 
   return fetchUser()
     .then((user) => {
+      // userにはfetchUser()の結果が入る
       // user と fetchUserFriends(user) の結果 (friends) を両方次に渡す
       return fetchUserFriends(user).then((friends) => {
+        // friendsにはfetchUserFriends(user)の結果が入る
         // [user, friends] という配列で両方の値を次の .then に渡す
-        return [user, friends];
+        return [user, friends]; // 配列を返す
       });
     })
     .then(([user, friends]) => {

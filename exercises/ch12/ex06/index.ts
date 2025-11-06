@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+// 指定されたパス以下のファイルとディレクトリを再帰的に表示するジェネレータ関数
 export function* walk(rootPath) {
   let stats;
   try {
@@ -17,7 +18,7 @@ export function* walk(rootPath) {
     // まず自分自身（ディレクトリ）を yield する
     yield { path: rootPath, isDirectory: true };
 
-    // 次に、中身を読み取って再帰処理する
+    // 呼び出し元がforなどの場合２回目以降はここから再開
     let entries;
     try {
       // readDirSyncでディレクトリ内のエントリ名一覧を取得

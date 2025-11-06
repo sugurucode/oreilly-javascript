@@ -1,52 +1,80 @@
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 
-/**
- * ディレクトリ内の最初のファイルのサイズを取得する (Promise 版)
- * @param {string} dirPath ディレクトリのパス
- * @returns {Promise<number | null>} ファイルサイズ (ファイルがない場合は null)
- */
+// コールバック関数を引数で渡す必要はなく、Promiseを返すので async/await で扱える
 export async function fetchFirstFileSize(dirPath) {
-  // 1. ディレクトリを読み取る
   const files = await fs.readdir(dirPath);
-
-  // 2. ファイルがなければ null を返す
   if (files.length === 0) {
     return null;
   }
 
-  // 3. 最初のファイルのパスを構築
+  // 最初のファイルのパスを構築
   const firstFilePath = path.join(dirPath, files[0]);
 
-  // 4. ファイルの統計情報 (stat) を取得
-  const stats = await fs.stat(firstFilePath);
+  // ファイル情報取得
+  const stats = await fs.stat(firstFilePath); //promisesのstatを使用
 
-  // 5. ファイルサイズを返す
+  //ファイルサイズを返す
   return stats.size;
 }
 
-/**
- * ディレクトリ内の全ファイルの合計サイズを取得する (Promise 版)
- * @param {string} dirPath ディレクトリのパス
- * @returns {Promise<number>} 合計ファイルサイズ
- */
 export async function fetchSumOfFileSizes(dirPath) {
-  // 1. ディレクトリを読み取る
-  const files = await fs.readdir(dirPath);
+  // fs.readdir を await で呼び出す (コールバックが不要になる)
+  // エラーが発生した場合、この関数が Promise.reject(err) を返す
+  const files = await fs.readdir(dirPath); //[ 'file1.txt', 'file2.txt', ... ]
 
-  // 2. 各ファイルの stat 取得処理 (Promise) の配列を作成
-  const statPromises = files.map((file) => {
-    const filePath = path.join(dirPath, file);
-    return fs.stat(filePath);
-  });
+  let total = 0;
+  const rest = [...files];
 
-  // 3. すべての stat 取得処理を並行して実行
-  const statsArray = await Promise.all(statPromises);
+  async function iter() {
+    // callback(null, total) の代わりに結果を return する
+    if (rest.length === 0) {
+      return total;
+    }
 
-  // 4. 全てのファイルサイズを合計する
-  const totalSize = statsArray.reduce((total, stats) => {
-    return total + stats.size;
-  }, 0); // 初期値 0
+    const next = rest.pop(); // [ 'file1.txt', 'file2.txt'] -> [ 'file1.txt' ]  next='file2.txt'
 
-  return totalSize;
+    // fs.stat を await で呼び出す (コールバックが不要になる)
+    const stats = await fs.stat(path.join(dirPath, next));
+
+    total += stats.size;
+
+    // 次の iter() を await して呼び出し、その結果を return する
+    // awaitが無いと、Promiseオブジェクトが返されてしまう
+    return await iter(); // 最終的にここで total が return される
+  }
+
+  // 最初の iter() を呼び出し、最終的な合計値 (total) を return する
+  return await iter();
 }
+
+// function fetchFirstFileSize(path, callback) {
+//   fs.readdir(path, (err, files) => {
+//     if (err) {
+//       callback(err);
+//       return;
+//     }
+//     if (files.length === 0) {
+//       callback(null, null);
+//       return;
+//     }
+
+//     fs.stat(join(path, files[0]), (err, stats) => {
+//       if (err) {
+//         callback(err);
+//         return;
+//       }
+//       callback(null, stats.size);
+//     });
+//   });
+// }
+
+// // 元の関数は以下のように、pathとcallbackを渡して使用する
+// // callbackはエラーと結果を受け取る関数
+// fetchFirstFileSize('./exercises/ch13/ex04/directory', (err, size) => {
+//   if (err) {
+//     console.error(err);
+//     return;
+//   }
+//   console.log(size); // 最初のファイルのサイズを表示
+// });

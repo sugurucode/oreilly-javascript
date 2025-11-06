@@ -1,9 +1,5 @@
 ## 実行結果の予想と確認
 
-(注: `wait1`, `wait2`, `wait3` はそれぞれ 1, 2, 3 秒待つ Promise を返し、`log`, `logA`, `logB`, `logC` はコンソールに引数や対応する文字を出力し、`errX`, `errY` は "X", "Y" というメッセージのエラーを発生させる関数と仮定する。)
-
----
-
 ### `async function h1()`
 
 ```javascript
@@ -21,8 +17,8 @@ async function h1() {
 }
 ```
 
-**初心者が間違えそうな予想:**
-`await` がたくさんあるが、`try` の中は上から順に実行されるはずだ。A, B, C が一気に出力される。
+**予想:**
+上から順に実行されて。A,B,C
 
 **実際の出力 (コンソール):**
 (3秒待った後)
@@ -45,15 +41,6 @@ C
 
 **理由:**
 `async` 関数内の `await` は、その処理 (Promise) が完了するまで、関数の実行を一時停止させる。
-
-1.  `try` ブロックが始まる。
-2.  `await wait3()`: 3秒待つ処理が終わるまで `h1` の実行が止まる。
-3.  3秒後、`logA()` が実行され "A" が出力される。
-4.  `await wait2()`: 2秒待つ処理が終わるまで実行が止まる。
-5.  2秒後、`logB()` が実行され "B" が出力される。
-6.  `await wait1()`: 1秒待つ処理が終わるまで実行が止まる。
-7.  1秒後、`logC()` が実行され "C" が出力される。
-8.  エラーは発生しなかったので `catch` ブロックは実行されない。
 
 **図 (タイムライン):**
 
@@ -84,8 +71,8 @@ function h2() {
 }
 ```
 
-**初心者が間違えそうな予想:**
-`new Promise` の中でエラーが起きているが、`resolve` や `reject` が呼ばれていないので、何も起こらない。`.catch` も実行されない。
+**予想:**
+`new Promise` の中でエラーが起きているので、.catchでエラーメッセージ`X`が表示される。
 
 **実際の出力 (コンソール):**
 
@@ -94,24 +81,7 @@ X
 ```
 
 **理由:**
-`new Promise` の ( ) の中に渡す関数（executor と呼ぶ）の中で、**すぐに**エラーが発生すると、その Promise は自動的に**エラー状態 (Rejected)** になる。
-
-1.  `new Promise` が実行され、中の `() => { errX(); }` がすぐに呼び出される。
-2.  `errX()` が実行され、"X" というエラーが発生する。
-3.  このエラーにより、`new Promise` が作った Promise はエラー状態になる。
-4.  続く `.catch(...)` が、そのエラーを捕まえる。
-5.  `catch` の処理が実行され、エラーメッセージ "X" が出力される。
-
-**図 (処理の流れ):**
-
-```mermaid
-graph TD
-    A[new Promise 実行] --> B{中の処理 ( ) => {...} を実行};
-    B --> C[errX() がエラーを投げる];
-    C --> D[Promise がエラー状態(X)になる];
-    D --> E[.catch(e) が実行される];
-    E --> F[log("X") が実行され "X" が出力];
-```
+`new Promise` の中で、すぐにエラーが発生すると、その Promise は自動的にエラー状態 **(Rejected)** になる。
 
 ---
 
@@ -126,44 +96,38 @@ function h3() {
 }
 ```
 
-**初心者が間違えそうな予想:**
+**予想:**
 `h2` と同じで、`async` が付いていても中の処理で `errX()` が実行されるので、エラーが `.catch` されて "X" が出力される。
 
 **実際の出力 (コンソール):**
-( `log` による出力は **なし** )
 
-(環境によっては「Uncaught (in promise) Error: X」のような、捕まえられなかったエラーの警告がコンソールに出る)
+```
+suguru@A081003065:~/oreilly_javascript7_fix/exercises-public$ npm run tsrun exercises/ch13/ex07/index.ts
+
+> preset-ts@1.0.0 tsrun
+> tsx exercises/ch13/ex07/index.ts
+
+/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:28
+  throw new Error('X');
+        ^
+
+
+Error: X
+    at errX (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:28:9)
+    at <anonymous> (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:39:5)
+    at new Promise (<anonymous>)
+    at h3 (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:38:3)
+    at <anonymous> (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:43:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.14.0
+```
 
 **理由:**
-`new Promise` の中の処理が `async` 関数だと、`h2` とは全く違う動きになる。
-
-1.  `async` 関数は、それ自体が **Promise を返す** という性質がある。
-2.  `new Promise` の中の `async () => { ... }` が実行される。
-3.  中で `errX()` がエラーを発生させると、それは `async` 関数が**返すべき Promise** をエラー状態にする。
-4.  **重要:** `new Promise` 自体は、中の `async` 関数が返した Promise のことを**知らない（無視する）**。
-5.  `new Promise` が作った Promise は、`resolve` や `reject` が呼ばれない限り、ずっと**待機状態 (Pending)** のままである。
-6.  したがって、`new Promise` に続く `.catch` は**実行されない**。
-7.  一方、`async` 関数が返したエラー状態の Promise は、誰も `catch` していないので「未処理のエラー」として警告が出る。
-
-**図 (2つの異なる Promise):**
-
-```mermaid
-graph TD
-    subgraph P1 [new Promise が作る Promise]
-        A[状態: 待機 のまま]
-        B[.catch は実行されない]
-        A --> B;
-    end
-
-    subgraph P2 [async な中の処理が作る Promise]
-        C[async () => {...} 実行] --> D[errX() がエラーを投げる];
-        D --> E[P2 がエラー状態(X)になる];
-        E --> F[未処理のエラー (Uncaught Error)];
-    end
-
-    G[new Promise 実行] --> P1;
-    G -- "中の処理として" --> C;
-```
+`new promise`で`promise`オブジェクトが作成される。その中の`async`関数でも`promise`オブジェクトが作成される。
+外側の`promise`オブジェクトは中の`async`関数が成功するか失敗するか見ている。しかし、`async`関数の返り値も`promise`なので見ることが出来ない？
 
 ---
 
@@ -187,16 +151,26 @@ async function h4() {
 }
 ```
 
-**初心者が間違えそうな予想:**
-`p1` (2秒後エラー) と `p2` (1秒後エラー) の両方でエラーが起きる。`p2` の方が先にエラーになるから、`catch` されるのは "Y" だろう。あるいは、両方 `await` しているから "X" と "Y" の両方が出力される。
+**予想:**
+`await`があるからcatchできそう。。。`X`のエラーがキャッチされそう。
 
 **実際の出力 (コンソール):**
 
 ```
-X
-```
+> preset-ts@1.0.0 tsrun
+> tsx exercises/ch13/ex07/index.ts
 
-( `h3` と同様に、`p2` の捕まえられなかったエラー "Y" が "Uncaught (in promise) Error: Y" としてコンソールに出る可能性がある)
+/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:31
+  throw new Error('Y');
+        ^
+
+
+Error: Y
+    at errY (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:31:9)
+    at <anonymous> (/home/suguru/oreilly_javascript7_fix/exercises-public/exercises/ch13/ex07/index.ts:10:7)
+
+Node.js v22.14.0
+```
 
 **理由:**
 `try...catch` の中で `await` を使うと、`await` した Promise がエラー状態になった**瞬間**に、`catch` ブロックへ移動する。
