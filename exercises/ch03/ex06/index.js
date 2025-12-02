@@ -1,0 +1,35 @@
+// export function slice(str, indexStart, indexEnd) {
+//   // TODO: ここを実装しなさい
+//   return "TODO";
+// }
+export const slice = (str, indexStart = 0, indexEnd = str.length) => {
+    // NaNの処理
+    // slice("Hello World!", NaN, 2) => "He"
+    indexStart = Math.floor(isNaN(indexStart) ? 0 : indexStart);
+    // slice("Hello World!", 2, NaN) => ""
+    indexEnd = Math.floor(isNaN(indexEnd) ? indexStart : indexEnd);
+    // 負→正に変換。
+    if (indexStart < 0) {
+        indexStart = str.length + indexStart;
+    }
+    if (indexEnd < 0) {
+        indexEnd = str.length + indexEnd;
+    }
+    // 範囲外のインデックスを調整
+    // slice("Hello World!", 100, 2) => ""
+    // indexStartにindex.length採用
+    indexStart = Math.max(0, Math.min(indexStart, str.length));
+    // slice("Hello World!", 2, 100) => "llo World!"
+    indexEnd = Math.max(0, Math.min(indexEnd, str.length));
+    // slice("Hello World!", 7, 2) => ""
+    // 開始インデックスが終了インデックス以上の場合は空文字列を返す
+    if (indexStart >= indexEnd) {
+        return '';
+    }
+    let slice_str = '';
+    for (let i = indexStart; i < indexEnd; i++) {
+        slice_str += str[i];
+    }
+    return slice_str;
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxxREFBcUQ7QUFDckQsdUJBQXVCO0FBQ3ZCLG1CQUFtQjtBQUNuQixJQUFJO0FBRUosTUFBTSxDQUFDLE1BQU0sS0FBSyxHQUFHLENBQ25CLEdBQVcsRUFDWCxhQUFxQixDQUFDLEVBQ3RCLFdBQW1CLEdBQUcsQ0FBQyxNQUFNLEVBQ3JCLEVBQUU7SUFDVixTQUFTO0lBQ1Qsd0NBQXdDO0lBQ3hDLFVBQVUsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQTtJQUMzRCxzQ0FBc0M7SUFDdEMsUUFBUSxHQUFHLElBQUksQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUFDLFFBQVEsQ0FBQyxDQUFDLENBQUMsQ0FBQyxVQUFVLENBQUMsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxDQUFBO0lBRTlELFVBQVU7SUFDVixJQUFJLFVBQVUsR0FBRyxDQUFDLEVBQUUsQ0FBQztRQUNuQixVQUFVLEdBQUcsR0FBRyxDQUFDLE1BQU0sR0FBRyxVQUFVLENBQUE7SUFDdEMsQ0FBQztJQUNELElBQUksUUFBUSxHQUFHLENBQUMsRUFBRSxDQUFDO1FBQ2pCLFFBQVEsR0FBRyxHQUFHLENBQUMsTUFBTSxHQUFHLFFBQVEsQ0FBQTtJQUNsQyxDQUFDO0lBRUQsZ0JBQWdCO0lBQ2hCLHNDQUFzQztJQUN0Qyw0QkFBNEI7SUFDNUIsVUFBVSxHQUFHLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQyxFQUFFLElBQUksQ0FBQyxHQUFHLENBQUMsVUFBVSxFQUFFLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQyxDQUFBO0lBQzFELGdEQUFnRDtJQUNoRCxRQUFRLEdBQUcsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDLEVBQUUsSUFBSSxDQUFDLEdBQUcsQ0FBQyxRQUFRLEVBQUUsR0FBRyxDQUFDLE1BQU0sQ0FBQyxDQUFDLENBQUE7SUFDdEQsb0NBQW9DO0lBQ3BDLGlDQUFpQztJQUNqQyxJQUFJLFVBQVUsSUFBSSxRQUFRLEVBQUUsQ0FBQztRQUMzQixPQUFPLEVBQUUsQ0FBQTtJQUNYLENBQUM7SUFDRCxJQUFJLFNBQVMsR0FBRyxFQUFFLENBQUE7SUFDbEIsS0FBSyxJQUFJLENBQUMsR0FBRyxVQUFVLEVBQUUsQ0FBQyxHQUFHLFFBQVEsRUFBRSxDQUFDLEVBQUUsRUFBRSxDQUFDO1FBQzNDLFNBQVMsSUFBSSxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUE7SUFDckIsQ0FBQztJQUNELE9BQU8sU0FBUyxDQUFBO0FBQ2xCLENBQUMsQ0FBQSJ9

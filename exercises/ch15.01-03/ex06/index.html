@@ -1,0 +1,65 @@
+<!-- copilotに画像投げて生成 -->
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ご登録ありがとうございます</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="sidebar">
+        <h2>MAIN MENU</h2>
+        <ul>
+          <li><a href="#">入会案内</a></li>
+          <li><a href="#">会員入口</a></li>
+          <li><a href="#">利用規約</a></li>
+        </ul>
+      </div>
+
+      <div class="content">
+        <h1>ご登録ありがとうございます</h1>
+
+        <div class="payment-info">
+          <p class="amount">登録料金87.000円が起算されました。</p>
+          <p class="deadline">ご登録日より2日以内にお支払い下さい。</p>
+          <div class="payment-box">
+            <p>登録料金 8.7000円</p>
+            <p class="small-text">お客様の入会手続きが無事完了致しました。番組をお楽しみ下さい。</p>
+          </div>
+        </div>
+
+        <table class="user-info">
+          <tr>
+            <th>ご登録日</th>
+            <td><span id="current-date"></span></td>
+          </tr>
+          <tr>
+            <th>あなたのIPアドレス</th>
+            <td><span id="ip-address"></span></td>
+          </tr>
+          <tr>
+            <th>あなたのリモートホスト</th>
+            <td><span id="remote-host"></span></td>
+          </tr>
+          <tr>
+            <th>あなたのプロバイダ</th>
+            <td><span id="provider"></span></td>
+          </tr>
+          <tr>
+            <th>あなたのネットワーク</th>
+            <td class="network-details">
+              Network Information: [ネットワーク情報]<br />
+              a. [IPネットワークアドレス] <span id="net-address"></span><br />
+              b. [ネットワーク名] <span id="net-name"></span><br />
+              f. [組織名] <span id="org-name"></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

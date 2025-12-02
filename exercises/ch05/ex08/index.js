@@ -1,0 +1,17 @@
+"use strict";
+let x = 0;
+for (let i = 1; i <= 5; i++) {
+    x = i;
+    try {
+        throw Error();
+    }
+    catch {
+        break;
+    }
+    finally {
+        // eslint-disable-next-line no-unsafe-finally
+        continue;
+    }
+}
+console.log(x);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsSUFBSSxDQUFDLEdBQUcsQ0FBQyxDQUFDO0FBQ1YsS0FBSyxJQUFJLENBQUMsR0FBRyxDQUFDLEVBQUUsQ0FBQyxJQUFJLENBQUMsRUFBRSxDQUFDLEVBQUUsRUFBRSxDQUFDO0lBQzVCLENBQUMsR0FBRyxDQUFDLENBQUM7SUFDTixJQUFJLENBQUM7UUFDSCxNQUFNLEtBQUssRUFBRSxDQUFDO0lBQ2hCLENBQUM7SUFBQyxNQUFNLENBQUM7UUFDUCxNQUFNO0lBQ1IsQ0FBQztZQUFTLENBQUM7UUFDVCw2Q0FBNkM7UUFDN0MsU0FBUztJQUNYLENBQUM7QUFDSCxDQUFDO0FBRUQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyJ9

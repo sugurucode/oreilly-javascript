@@ -1,0 +1,89 @@
+"use strict";
+// 動作をクラス化
+class Eater {
+    eat() {
+        console.log('Eating...');
+    }
+}
+class SoundMaker {
+    makeSound() {
+        console.log('Making sound...');
+    }
+}
+class Biter {
+    bite() {
+        console.log('Biting...');
+    }
+}
+class Scratcher {
+    scratch() {
+        console.log('Scratching...');
+    }
+}
+class Flyer {
+    fly() {
+        console.log('Flying...');
+    }
+}
+class Swimmer {
+    swim() {
+        console.log('Swimming...');
+    }
+}
+// 動物クラスは必要な振る舞いを合成して持つ
+class Animal {
+    eater = new Eater();
+    eat() {
+        this.eater.eat();
+    }
+}
+// 犬クラスはEaterとBiterとSoundMakerを持つ
+class Dog extends Animal {
+    biter = new Biter();
+    soundMaker = new SoundMaker();
+    bite() {
+        this.biter.bite();
+    }
+    makeSound() {
+        this.soundMaker.makeSound();
+    }
+}
+// 猫クラスはEaterとScratcherとSoundMakerを持つ
+class Cat extends Animal {
+    scratcher = new Scratcher();
+    soundMaker = new SoundMaker();
+    scratch() {
+        this.scratcher.scratch();
+    }
+    makeSound() {
+        this.soundMaker.makeSound();
+    }
+}
+// 鳥クラスはEaterとFlyerとSoundMakerを持つ
+class Bird extends Animal {
+    flyer = new Flyer();
+    soundMaker = new SoundMaker();
+    fly() {
+        this.flyer.fly();
+    }
+    makeSound() {
+        this.soundMaker.makeSound();
+    }
+}
+// 魚クラスはEaterとSwimmerを持つ（鳴く振る舞いがない）
+class Fish extends Animal {
+    swimmer = new Swimmer();
+    swim() {
+        this.swimmer.swim();
+    }
+}
+// 使用例
+const dog = new Dog();
+dog.eat(); // Eating...
+dog.bite(); // Biting...
+dog.makeSound(); // Making sound...
+const fish = new Fish();
+fish.eat(); // Eating...
+fish.swim(); // Swimming...
+// fish.makeSound() は持たないので呼べない
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsVUFBVTtBQUNWLE1BQU0sS0FBSztJQUNULEdBQUc7UUFDRCxPQUFPLENBQUMsR0FBRyxDQUFDLFdBQVcsQ0FBQyxDQUFDO0lBQzNCLENBQUM7Q0FDRjtBQUVELE1BQU0sVUFBVTtJQUNkLFNBQVM7UUFDUCxPQUFPLENBQUMsR0FBRyxDQUFDLGlCQUFpQixDQUFDLENBQUM7SUFDakMsQ0FBQztDQUNGO0FBRUQsTUFBTSxLQUFLO0lBQ1QsSUFBSTtRQUNGLE9BQU8sQ0FBQyxHQUFHLENBQUMsV0FBVyxDQUFDLENBQUM7SUFDM0IsQ0FBQztDQUNGO0FBRUQsTUFBTSxTQUFTO0lBQ2IsT0FBTztRQUNMLE9BQU8sQ0FBQyxHQUFHLENBQUMsZUFBZSxDQUFDLENBQUM7SUFDL0IsQ0FBQztDQUNGO0FBRUQsTUFBTSxLQUFLO0lBQ1QsR0FBRztRQUNELE9BQU8sQ0FBQyxHQUFHLENBQUMsV0FBVyxDQUFDLENBQUM7SUFDM0IsQ0FBQztDQUNGO0FBRUQsTUFBTSxPQUFPO0lBQ1gsSUFBSTtRQUNGLE9BQU8sQ0FBQyxHQUFHLENBQUMsYUFBYSxDQUFDLENBQUM7SUFDN0IsQ0FBQztDQUNGO0FBRUQsdUJBQXVCO0FBQ3ZCLE1BQU0sTUFBTTtJQUNGLEtBQUssR0FBRyxJQUFJLEtBQUssRUFBRSxDQUFDO0lBRTVCLEdBQUc7UUFDRCxJQUFJLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxDQUFDO0lBQ25CLENBQUM7Q0FDRjtBQUVELGlDQUFpQztBQUNqQyxNQUFNLEdBQUksU0FBUSxNQUFNO0lBQ2QsS0FBSyxHQUFHLElBQUksS0FBSyxFQUFFLENBQUM7SUFDcEIsVUFBVSxHQUFHLElBQUksVUFBVSxFQUFFLENBQUM7SUFFdEMsSUFBSTtRQUNGLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxFQUFFLENBQUM7SUFDcEIsQ0FBQztJQUVELFNBQVM7UUFDUCxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQzlCLENBQUM7Q0FDRjtBQUVELHFDQUFxQztBQUNyQyxNQUFNLEdBQUksU0FBUSxNQUFNO0lBQ2QsU0FBUyxHQUFHLElBQUksU0FBUyxFQUFFLENBQUM7SUFDNUIsVUFBVSxHQUFHLElBQUksVUFBVSxFQUFFLENBQUM7SUFFdEMsT0FBTztRQUNMLElBQUksQ0FBQyxTQUFTLENBQUMsT0FBTyxFQUFFLENBQUM7SUFDM0IsQ0FBQztJQUVELFNBQVM7UUFDUCxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQzlCLENBQUM7Q0FDRjtBQUVELGlDQUFpQztBQUNqQyxNQUFNLElBQUssU0FBUSxNQUFNO0lBQ2YsS0FBSyxHQUFHLElBQUksS0FBSyxFQUFFLENBQUM7SUFDcEIsVUFBVSxHQUFHLElBQUksVUFBVSxFQUFFLENBQUM7SUFFdEMsR0FBRztRQUNELElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLENBQUM7SUFDbkIsQ0FBQztJQUVELFNBQVM7UUFDUCxJQUFJLENBQUMsVUFBVSxDQUFDLFNBQVMsRUFBRSxDQUFDO0lBQzlCLENBQUM7Q0FDRjtBQUVELG1DQUFtQztBQUNuQyxNQUFNLElBQUssU0FBUSxNQUFNO0lBQ2YsT0FBTyxHQUFHLElBQUksT0FBTyxFQUFFLENBQUM7SUFFaEMsSUFBSTtRQUNGLElBQUksQ0FBQyxPQUFPLENBQUMsSUFBSSxFQUFFLENBQUM7SUFDdEIsQ0FBQztDQUNGO0FBRUQsTUFBTTtBQUNOLE1BQU0sR0FBRyxHQUFHLElBQUksR0FBRyxFQUFFLENBQUM7QUFDdEIsR0FBRyxDQUFDLEdBQUcsRUFBRSxDQUFDLENBQUMsWUFBWTtBQUN2QixHQUFHLENBQUMsSUFBSSxFQUFFLENBQUMsQ0FBQyxZQUFZO0FBQ3hCLEdBQUcsQ0FBQyxTQUFTLEVBQUUsQ0FBQyxDQUFDLGtCQUFrQjtBQUVuQyxNQUFNLElBQUksR0FBRyxJQUFJLElBQUksRUFBRSxDQUFDO0FBQ3hCLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQyxDQUFDLFlBQVk7QUFDeEIsSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDLENBQUMsY0FBYztBQUMzQiwrQkFBK0IifQ==

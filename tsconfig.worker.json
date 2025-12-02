@@ -8,6 +8,6 @@
     "composite": true
   },
   // TODO: 適宜Web Worker用にビルドするTSファイルを追加していく
-  "include": ["ch00.1/**/*.worker.ts"],
+  "include": ["exercises/ch01/**/*.worker.ts"],
   "exclude": []
 }

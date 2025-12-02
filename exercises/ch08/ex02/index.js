@@ -1,0 +1,30 @@
+export const powerOptimizedRecursive = (x, n) => {
+    // 0の0乗は1として扱う
+    if (x === 0 && n === 0) {
+        return 1;
+    }
+    // 指数が0の場合
+    if (n === 0) {
+        return 1;
+    }
+    // 負の指数の場合。正の指数に変換
+    if (n < 0) {
+        return 1 / powerOptimizedRecursive(x, -n);
+    }
+    // 指数が1の場合
+    if (n === 1) {
+        return x;
+    }
+    // 再帰ステップ (繰り返し二乗法)
+    // Math.floorで整数のみ取得
+    const halfPower = powerOptimizedRecursive(x, Math.floor(n / 2));
+    if (n % 2 === 0) {
+        // n が偶数の場合
+        return halfPower * halfPower;
+    }
+    else {
+        // n が奇数の場合(５ならx^2を二回掛けてxを1階掛ける)
+        return x * halfPower * halfPower;
+    }
+};
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsTUFBTSx1QkFBdUIsR0FBRyxDQUFDLENBQUMsRUFBRSxDQUFDLEVBQUUsRUFBRTtJQUM5QyxjQUFjO0lBQ2QsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQztRQUN2QixPQUFPLENBQUMsQ0FBQztJQUNYLENBQUM7SUFDRCxVQUFVO0lBQ1YsSUFBSSxDQUFDLEtBQUssQ0FBQyxFQUFFLENBQUM7UUFDWixPQUFPLENBQUMsQ0FBQztJQUNYLENBQUM7SUFDRCxrQkFBa0I7SUFDbEIsSUFBSSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUM7UUFDVixPQUFPLENBQUMsR0FBRyx1QkFBdUIsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUM1QyxDQUFDO0lBQ0QsVUFBVTtJQUNWLElBQUksQ0FBQyxLQUFLLENBQUMsRUFBRSxDQUFDO1FBQ1osT0FBTyxDQUFDLENBQUM7SUFDWCxDQUFDO0lBRUQsbUJBQW1CO0lBQ25CLG9CQUFvQjtJQUNwQixNQUFNLFNBQVMsR0FBRyx1QkFBdUIsQ0FBQyxDQUFDLEVBQUUsSUFBSSxDQUFDLEtBQUssQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQztJQUNoRSxJQUFJLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxFQUFFLENBQUM7UUFDaEIsV0FBVztRQUNYLE9BQU8sU0FBUyxHQUFHLFNBQVMsQ0FBQztJQUMvQixDQUFDO1NBQU0sQ0FBQztRQUNOLGdDQUFnQztRQUNoQyxPQUFPLENBQUMsR0FBRyxTQUFTLEdBQUcsU0FBUyxDQUFDO0lBQ25DLENBQUM7QUFDSCxDQUFDLENBQUMifQ==

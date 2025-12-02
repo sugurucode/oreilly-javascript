@@ -1,0 +1,16 @@
+import { parse } from 'acorn';
+import { writeFileSync } from 'fs';
+// JavaScript code to parse
+const code1 = `let a;\na = 3;\nconsole.log(a);`;
+const code2 = `let a; a = 3; console.log(a);`;
+const code3 = `1+1`;
+// Parse the code into AST
+const ast1 = parse(code1, { ecmaVersion: 2020 });
+const ast2 = parse(code2, { ecmaVersion: 2020 });
+const example = parse(code3, { ecmaVersion: 2020 });
+// Save ASTs as JSON files
+writeFileSync('exercises-public/exercises/ch02/ex08/ast1.json', JSON.stringify(ast1, null, 2)); // `ast1`をJSON形式で保存
+writeFileSync('exercises-public/exercises/ch02/ex08/ast2.json', JSON.stringify(ast2, null, 2)); // `ast2`をJSON形式で保存
+writeFileSync('exercises-public/exercises/ch02/ex08/example3.json', JSON.stringify(example, null, 2)); // `ast2`をJSON形式で保存
+console.log('ASTs have been generated and saved as ast1.json and ast2.json.');
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2VuZXJhdGVfYXN0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZ2VuZXJhdGVfYXN0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxLQUFLLEVBQUUsTUFBTSxPQUFPLENBQUE7QUFDN0IsT0FBTyxFQUFFLGFBQWEsRUFBRSxNQUFNLElBQUksQ0FBQTtBQUVsQywyQkFBMkI7QUFDM0IsTUFBTSxLQUFLLEdBQUcsaUNBQWlDLENBQUE7QUFDL0MsTUFBTSxLQUFLLEdBQUcsK0JBQStCLENBQUE7QUFDN0MsTUFBTSxLQUFLLEdBQUcsS0FBSyxDQUFBO0FBRW5CLDBCQUEwQjtBQUMxQixNQUFNLElBQUksR0FBRyxLQUFLLENBQUMsS0FBSyxFQUFFLEVBQUUsV0FBVyxFQUFFLElBQUksRUFBRSxDQUFDLENBQUE7QUFDaEQsTUFBTSxJQUFJLEdBQUcsS0FBSyxDQUFDLEtBQUssRUFBRSxFQUFFLFdBQVcsRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFBO0FBQ2hELE1BQU0sT0FBTyxHQUFHLEtBQUssQ0FBQyxLQUFLLEVBQUUsRUFBRSxXQUFXLEVBQUUsSUFBSSxFQUFFLENBQUMsQ0FBQTtBQUVuRCwwQkFBMEI7QUFDMUIsYUFBYSxDQUFDLGdEQUFnRCxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxFQUFFLElBQUksRUFBRSxDQUFDLENBQUMsQ0FBQyxDQUFBLENBQUMsbUJBQW1CO0FBQ2xILGFBQWEsQ0FBQyxnREFBZ0QsRUFBRSxJQUFJLENBQUMsU0FBUyxDQUFDLElBQUksRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQSxDQUFDLG1CQUFtQjtBQUNsSCxhQUFhLENBQ1gsb0RBQW9ELEVBQ3BELElBQUksQ0FBQyxTQUFTLENBQUMsT0FBTyxFQUFFLElBQUksRUFBRSxDQUFDLENBQUMsQ0FDakMsQ0FBQSxDQUFDLG1CQUFtQjtBQUVyQixPQUFPLENBQUMsR0FBRyxDQUFDLGdFQUFnRSxDQUFDLENBQUEifQ==

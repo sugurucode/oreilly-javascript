@@ -69,8 +69,21 @@ export function g4() {
   function someFunction() {
     return 42;
   }
-  // NOTE: (中略)
 
   // 同期的な値を Promise に変換するには Promise.resolve() を使う
   return Promise.resolve(someFunction());
+}
+
+function g4() {
+  function someFunction() {
+    return 42;
+  }
+
+  // NOTE: この関数 g4 は Promise を返す必要があるものとする
+  // (利用しているフレームワークはライブラリがそういう関数を要求するとでも思って下さい)
+  // TODO: new Promise を使わないように書き換えなさい。async/awaitは使用しないこと。
+  return new Promise((resolve) => {
+    let value = someFunction();
+    return value;
+  });
 }

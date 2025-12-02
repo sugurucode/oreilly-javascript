@@ -1,0 +1,23 @@
+"use strict";
+// ifを使わない。&&と||を使う
+const resize1 = (params) => {
+    // paramsが存在→params.maxWidthを評価
+    // paramsが存在しない→falsy→600を評価
+    const maxWidth = (params && params.maxWidth) || 600;
+    const maxHeight = (params && params.maxHeight) || 480;
+    console.log({ maxWidth, maxHeight });
+};
+// ifを使わず ? や ?? を使う
+const resize2 = (params) => {
+    // Null合体演算子。左がnullまたはundefinedなら右を評価
+    const maxWidth = params?.maxWidth ?? 600;
+    const maxHeight = params?.maxHeight ?? 480;
+    console.log({ maxWidth, maxHeight });
+};
+const params = {
+    maxWidth: 800,
+    // maxHeight: 600
+};
+resize1(params); // { maxWidth: 800, maxHeight: 480 }
+resize2(params); // { maxWidth: 800, maxHeight: 480 }
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBTUEsbUJBQW1CO0FBQ25CLE1BQU0sT0FBTyxHQUFHLENBQUMsTUFBYyxFQUFFLEVBQUU7SUFDakMsK0JBQStCO0lBQy9CLDRCQUE0QjtJQUM1QixNQUFNLFFBQVEsR0FBRyxDQUFDLE1BQU0sSUFBSSxNQUFNLENBQUMsUUFBUSxDQUFDLElBQUksR0FBRyxDQUFBO0lBQ25ELE1BQU0sU0FBUyxHQUFHLENBQUMsTUFBTSxJQUFJLE1BQU0sQ0FBQyxTQUFTLENBQUMsSUFBSSxHQUFHLENBQUE7SUFDckQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxFQUFFLFFBQVEsRUFBRSxTQUFTLEVBQUUsQ0FBQyxDQUFBO0FBQ3RDLENBQUMsQ0FBQTtBQUVELG9CQUFvQjtBQUNwQixNQUFNLE9BQU8sR0FBRyxDQUFDLE1BQWMsRUFBRSxFQUFFO0lBQ2pDLHFDQUFxQztJQUNyQyxNQUFNLFFBQVEsR0FBRyxNQUFNLEVBQUUsUUFBUSxJQUFJLEdBQUcsQ0FBQTtJQUN4QyxNQUFNLFNBQVMsR0FBRyxNQUFNLEVBQUUsU0FBUyxJQUFJLEdBQUcsQ0FBQTtJQUMxQyxPQUFPLENBQUMsR0FBRyxDQUFDLEVBQUUsUUFBUSxFQUFFLFNBQVMsRUFBRSxDQUFDLENBQUE7QUFDdEMsQ0FBQyxDQUFBO0FBRUQsTUFBTSxNQUFNLEdBQUc7SUFDYixRQUFRLEVBQUUsR0FBRztJQUNiLGlCQUFpQjtDQUNsQixDQUFBO0FBRUQsT0FBTyxDQUFDLE1BQU0sQ0FBQyxDQUFBLENBQUMsb0NBQW9DO0FBQ3BELE9BQU8sQ0FBQyxNQUFNLENBQUMsQ0FBQSxDQUFDLG9DQUFvQyJ9

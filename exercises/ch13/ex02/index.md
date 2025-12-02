@@ -235,6 +235,7 @@ function f5() {
     })
     .then(
       wait1().then(() => {
+        // 本来thenには関数を渡すのにpromise渡している
         logB();
         return 100;
       }),

@@ -2,16 +2,16 @@ import {
   nestedUnwritableObj,
   unwritableAndUnconfigurableObj,
   writableAndUnconfigurableObj,
-} from "./index.js";
+} from './index.js';
 
-test("Unwritable and unconfigurable object", () => {
+test('Unwritable and unconfigurable object', () => {
   const a = unwritableAndUnconfigurableObj();
   expect(a).toStrictEqual({ a: 1 });
-  expect(() => (a.a = 3)).toThrow();
-  expect(() => delete a.a).toThrow();
+  expect(() => (a.a = 3)).toThrow(); // 書き換えるとエラーになること
+  expect(() => delete a.a).toThrow(); // 削除するとエラーになること
 });
 
-test("Writable and unconfigurable object", () => {
+test('Writable and unconfigurable object', () => {
   const b = writableAndUnconfigurableObj();
   expect(b).toStrictEqual({ b: 2 });
   b.b = 3;
@@ -19,9 +19,10 @@ test("Writable and unconfigurable object", () => {
   expect(() => delete b.b).toThrow();
 });
 
-test("Nested unwritable object", () => {
+// ここ後で
+test('Nested unwritable object', () => {
   const c = nestedUnwritableObj();
-  expect(c).toStrictEqual({ c: { d: { e: 3 } } });
+  expect(c).toStrictEqual({ c: { d: { e: 3 } } }); //
   expect(() => (c.f = 1)).toThrow();
   expect(() => (c.c.f = 1)).toThrow();
   expect(() => (c.c.d.f = 1)).toThrow();

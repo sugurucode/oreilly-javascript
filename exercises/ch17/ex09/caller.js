@@ -1,44 +1,33 @@
-import {
-  TaskManager,
-  isLowOrCompletedTask,
-  not,
-} from "./task.flow.js";
-
-const user1 = { id: 1, name: "Alice" };
-const user2 = { id: 2, name: "Bob" };
-
+import { TaskManager, isLowOrCompletedTask, not } from './task.ts';
+const user1 = { id: 1, name: 'Alice' };
+const user2 = { id: 2, name: 'Bob' };
 const taskManager = new TaskManager();
-
 taskManager.add({
-  title: "テキストを読む",
-  completed: false,
-  user: user1,
-  priority: "high",
+    title: 'テキストを読む',
+    completed: false,
+    user: user1,
+    priority: 'high',
 });
-
 taskManager.add({
-  title: "質問表を書く",
-  completed: false,
-  user: user1,
-  priority: "middle",
+    title: '質問表を書く',
+    completed: false,
+    user: user1,
+    priority: 'middle',
 });
-
 taskManager.add({
-  title: "質問表を確認する",
-  completed: false,
-  user: user2,
-  priority: "low",
+    title: '質問表を確認する',
+    completed: false,
+    user: user2,
+    priority: 'low',
 });
-
 taskManager.add({
-  title: "問題を作成する",
-  completed: false,
-  user: user2,
-  priority: "middle",
+    title: '問題を作成する',
+    completed: false,
+    user: user2,
+    priority: 'middle',
 });
-
 taskManager.completeTask(user1);
-taskManager.completeTask("質問表を確認する");
-
+taskManager.completeTask('質問表を確認する');
 console.log(taskManager.getTasks());
 console.log(taskManager.getTasks(not(isLowOrCompletedTask)));
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2FsbGVyLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiY2FsbGVyLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBZ0IsV0FBVyxFQUFFLG9CQUFvQixFQUFFLEdBQUcsRUFBRSxNQUFNLFdBQVcsQ0FBQTtBQUVoRixNQUFNLEtBQUssR0FBRyxFQUFFLEVBQUUsRUFBRSxDQUFDLEVBQUUsSUFBSSxFQUFFLE9BQU8sRUFBRSxDQUFBO0FBQ3RDLE1BQU0sS0FBSyxHQUFHLEVBQUUsRUFBRSxFQUFFLENBQUMsRUFBRSxJQUFJLEVBQUUsS0FBSyxFQUFFLENBQUE7QUFFcEMsTUFBTSxXQUFXLEdBQUcsSUFBSSxXQUFXLEVBQWdCLENBQUE7QUFFbkQsV0FBVyxDQUFDLEdBQUcsQ0FBQztJQUNkLEtBQUssRUFBRSxTQUFTO0lBQ2hCLFNBQVMsRUFBRSxLQUFLO0lBQ2hCLElBQUksRUFBRSxLQUFLO0lBQ1gsUUFBUSxFQUFFLE1BQU07Q0FDakIsQ0FBQyxDQUFBO0FBRUYsV0FBVyxDQUFDLEdBQUcsQ0FBQztJQUNkLEtBQUssRUFBRSxRQUFRO0lBQ2YsU0FBUyxFQUFFLEtBQUs7SUFDaEIsSUFBSSxFQUFFLEtBQUs7SUFDWCxRQUFRLEVBQUUsUUFBUTtDQUNuQixDQUFDLENBQUE7QUFFRixXQUFXLENBQUMsR0FBRyxDQUFDO0lBQ2QsS0FBSyxFQUFFLFVBQVU7SUFDakIsU0FBUyxFQUFFLEtBQUs7SUFDaEIsSUFBSSxFQUFFLEtBQUs7SUFDWCxRQUFRLEVBQUUsS0FBSztDQUNoQixDQUFDLENBQUE7QUFFRixXQUFXLENBQUMsR0FBRyxDQUFDO0lBQ2QsS0FBSyxFQUFFLFNBQVM7SUFDaEIsU0FBUyxFQUFFLEtBQUs7SUFDaEIsSUFBSSxFQUFFLEtBQUs7SUFDWCxRQUFRLEVBQUUsUUFBUTtDQUNuQixDQUFDLENBQUE7QUFFRixXQUFXLENBQUMsWUFBWSxDQUFDLEtBQUssQ0FBQyxDQUFBO0FBQy9CLFdBQVcsQ0FBQyxZQUFZLENBQUMsVUFBVSxDQUFDLENBQUE7QUFFcEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxXQUFXLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQTtBQUNuQyxPQUFPLENBQUMsR0FBRyxDQUFDLFdBQVcsQ0FBQyxRQUFRLENBQUMsR0FBRyxDQUFDLG9CQUFvQixDQUFDLENBQUMsQ0FBQyxDQUFBIn0=

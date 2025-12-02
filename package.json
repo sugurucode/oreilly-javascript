@@ -5,7 +5,8 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "test:browser": "playwright test",
-    "server": "tsc -b tsconfig.front.json && serve",
+    "test:demo": "playwright test --headed",
+    "server": "tsc -b tsconfig.front.json && serve exercises -l 3000",
     "lint": "eslint . --max-warnings=0",
     "format": "prettier --write .",
     "tsrun": "tsx"

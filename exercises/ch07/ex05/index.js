@@ -1,28 +1,20 @@
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 // 配列にはnumberしか入らないものとする。
 // slice(0,-1)で最後の要素を取り除くpop、
-export var pop = function (arr) { return arr.slice(0, -1); };
-export var push = function (arr, num) { return __spreadArray(__spreadArray([], arr, true), [num], false); };
-export var shift = function (arr) { return arr.slice(1); };
-export var unshift = function (arr, num) { return __spreadArray([num], arr, true); };
-export var sort = function (arr, compareFn) {
+export const pop = (arr) => arr.slice(0, -1);
+export const push = (arr, num) => [...arr, num];
+export const shift = (arr) => arr.slice(1);
+export const unshift = (arr, num) => [num, ...arr];
+export const sort = (arr, compareFn) => {
     // 新しい配列にコピーしてからソート
-    var sortedArr = __spreadArray([], arr, true);
+    const sortedArr = [...arr];
     return sortedArr.sort(compareFn);
 };
-var seq = [1, 2, 3, 4, 5];
+const seq = [1, 2, 3, 4, 5];
 console.log(pop(seq)); // [1, 2, 3, 4]
 console.log(push(seq, 6)); // [1, 2, 3, 4, 5, 6]
 console.log(shift(seq)); // [2, 3, 4, 5]
 console.log(unshift(seq, 0)); // [0, 1, 2, 3, 4, 5]
-console.log(sort(seq, function (a, b) { return b - a; })); // [5, 4, 3, 2, 1]
+console.log(sort(seq, (a, b) => b - a)); // [5, 4, 3, 2, 1]
 // 元の配列は変更されていません
 console.log(seq); // [1, 2, 3, 4, 5]
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSx5QkFBeUI7QUFDekIsNkJBQTZCO0FBQzdCLE1BQU0sQ0FBQyxNQUFNLEdBQUcsR0FBRyxDQUFDLEdBQWEsRUFBWSxFQUFFLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQztBQUVqRSxNQUFNLENBQUMsTUFBTSxJQUFJLEdBQUcsQ0FBQyxHQUFhLEVBQUUsR0FBVyxFQUFZLEVBQUUsQ0FBQyxDQUFDLEdBQUcsR0FBRyxFQUFFLEdBQUcsQ0FBQyxDQUFDO0FBRTVFLE1BQU0sQ0FBQyxNQUFNLEtBQUssR0FBRyxDQUFDLEdBQWEsRUFBWSxFQUFFLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFDLENBQUMsQ0FBQztBQUUvRCxNQUFNLENBQUMsTUFBTSxPQUFPLEdBQUcsQ0FBQyxHQUFhLEVBQUUsR0FBVyxFQUFZLEVBQUUsQ0FBQyxDQUFDLEdBQUcsRUFBRSxHQUFHLEdBQUcsQ0FBQyxDQUFDO0FBRS9FLE1BQU0sQ0FBQyxNQUFNLElBQUksR0FBRyxDQUFDLEdBQWEsRUFBRSxTQUE0QyxFQUFZLEVBQUU7SUFDNUYsbUJBQW1CO0lBQ25CLE1BQU0sU0FBUyxHQUFHLENBQUMsR0FBRyxHQUFHLENBQUMsQ0FBQztJQUMzQixPQUFPLFNBQVMsQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLENBQUM7QUFDbkMsQ0FBQyxDQUFDO0FBRUYsTUFBTSxHQUFHLEdBQUcsQ0FBQyxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUM7QUFFNUIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDLGVBQWU7QUFDdEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxxQkFBcUI7QUFDaEQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxLQUFLLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxDQUFDLGVBQWU7QUFDeEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxPQUFPLENBQUMsR0FBRyxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxxQkFBcUI7QUFDbkQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLENBQUMsR0FBRyxFQUFFLENBQUMsQ0FBQyxFQUFFLENBQUMsRUFBRSxFQUFFLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQyxDQUFDLENBQUMsQ0FBQyxrQkFBa0I7QUFFM0QsaUJBQWlCO0FBQ2pCLE9BQU8sQ0FBQyxHQUFHLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQyxrQkFBa0IifQ==

@@ -1,19 +1,20 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Point = /** @class */ (function () {
-    function Point(x, y) {
+class Point {
+    x;
+    y;
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
     // 引数 point の座標を自分に加算する
-    Point.prototype.add = function (point) {
+    add(point) {
         this.x += point.x;
         this.y += point.y;
-    };
-    return Point;
-}());
-var obj1 = new Point(2, 3);
-var obj2 = new Point(2, 3);
+    }
+}
+let obj1 = new Point(2, 3);
+let obj2 = new Point(2, 3);
 console.log(obj1);
 obj1.add(obj2);
-console.log(obj2); // (4,6)
+console.log(obj1); // (4,6)
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicG9pbnQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJwb2ludC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsTUFBTSxLQUFLO0lBQ1QsQ0FBQyxDQUFRO0lBQ1QsQ0FBQyxDQUFRO0lBRVQsWUFBWSxDQUFTLEVBQUUsQ0FBUztRQUM5QixJQUFJLENBQUMsQ0FBQyxHQUFHLENBQUMsQ0FBQTtRQUNWLElBQUksQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFBO0lBQ1osQ0FBQztJQUVELHVCQUF1QjtJQUN2QixHQUFHLENBQUMsS0FBWTtRQUNkLElBQUksQ0FBQyxDQUFDLElBQUksS0FBSyxDQUFDLENBQUMsQ0FBQTtRQUNqQixJQUFJLENBQUMsQ0FBQyxJQUFJLEtBQUssQ0FBQyxDQUFDLENBQUE7SUFDbkIsQ0FBQztDQUNGO0FBRUQsSUFBSSxJQUFJLEdBQUcsSUFBSSxLQUFLLENBQUMsQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFBO0FBQzFCLElBQUksSUFBSSxHQUFHLElBQUksS0FBSyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQTtBQUUxQixPQUFPLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFBO0FBQ2pCLElBQUksQ0FBQyxHQUFHLENBQUMsSUFBSSxDQUFDLENBQUE7QUFDZCxPQUFPLENBQUMsR0FBRyxDQUFDLElBQUksQ0FBQyxDQUFBLENBQUMsUUFBUSJ9

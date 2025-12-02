@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 // 指定されたパス以下のファイルとディレクトリを再帰的に表示するジェネレータ関数
+// walkの出力例:
 export function* walk(rootPath) {
   let stats;
   try {
@@ -34,6 +35,8 @@ export function* walk(rootPath) {
       const fullPath = path.join(rootPath, entry);
       // yield* を使って、再帰呼び出し先のジェネレータが返す値を
       // すべてこのジェネレータから yield する
+      // ＊がないと、ジェネレータオブジェクト自体を yield してしまう
+      // 出力例:
       yield* walk(fullPath);
     }
   }

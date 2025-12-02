@@ -1,0 +1,14 @@
+import { transport_lf, transport_crlf } from './index.ts';
+describe('改行コードテスト', () => {
+    it('LF => CR+LFに変換', () => {
+        const input = 'Hello\nWorld';
+        const expected = 'Hello\r\nWorld';
+        expect(transport_crlf(input)).toBe(expected);
+    });
+    it('CR+LF => LFに変換', () => {
+        const input = 'Hello\r\nWorld';
+        const expected = 'Hello\nWorld';
+        expect(transport_lf(input)).toBe(expected);
+    });
+});
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXgudGVzdC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImluZGV4LnRlc3QudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLFlBQVksRUFBRSxjQUFjLEVBQUUsTUFBTSxZQUFZLENBQUE7QUFDekQsUUFBUSxDQUFDLFVBQVUsRUFBRSxHQUFHLEVBQUU7SUFDeEIsRUFBRSxDQUFDLGdCQUFnQixFQUFFLEdBQUcsRUFBRTtRQUN4QixNQUFNLEtBQUssR0FBVyxjQUFjLENBQUE7UUFDcEMsTUFBTSxRQUFRLEdBQVcsZ0JBQWdCLENBQUE7UUFDekMsTUFBTSxDQUFDLGNBQWMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQTtJQUM5QyxDQUFDLENBQUMsQ0FBQTtJQUNGLEVBQUUsQ0FBQyxnQkFBZ0IsRUFBRSxHQUFHLEVBQUU7UUFDeEIsTUFBTSxLQUFLLEdBQVcsZ0JBQWdCLENBQUE7UUFDdEMsTUFBTSxRQUFRLEdBQVcsY0FBYyxDQUFBO1FBQ3ZDLE1BQU0sQ0FBQyxZQUFZLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUE7SUFDNUMsQ0FBQyxDQUFDLENBQUE7QUFDSixDQUFDLENBQUMsQ0FBQSJ9

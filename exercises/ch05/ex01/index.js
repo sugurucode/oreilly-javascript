@@ -1,0 +1,17 @@
+"use strict";
+// 実際に使う事あるかな？可読性が悪くなる気がする
+const sample = () => {
+    {
+        const x = 1;
+        console.log('1つ目のx:', x);
+    }
+    {
+        const x = 2;
+        console.log('2つ目のx:', x);
+    }
+};
+sample();
+// 出力:
+// 1つ目のx: 1
+// 2つ目のx: 2
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsMEJBQTBCO0FBQzFCLE1BQU0sTUFBTSxHQUFHLEdBQUcsRUFBRTtJQUNsQixDQUFDO1FBQ0MsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFBO1FBQ1gsT0FBTyxDQUFDLEdBQUcsQ0FBQyxRQUFRLEVBQUUsQ0FBQyxDQUFDLENBQUE7SUFDMUIsQ0FBQztJQUNELENBQUM7UUFDQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUE7UUFDWCxPQUFPLENBQUMsR0FBRyxDQUFDLFFBQVEsRUFBRSxDQUFDLENBQUMsQ0FBQTtJQUMxQixDQUFDO0FBQ0gsQ0FBQyxDQUFBO0FBQ0QsTUFBTSxFQUFFLENBQUE7QUFDUixNQUFNO0FBQ04sV0FBVztBQUNYLFdBQVcifQ==

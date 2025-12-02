@@ -1,0 +1,14 @@
+"use strict";
+const ricoh = ['r', 'i', 'c', 'o', 'h'];
+delete ricoh[3];
+console.log(ricoh); // ['r', 'i', 'c', <1 empty item>, 'h']
+console.log(ricoh.length); //5
+// deleteは要素を削除するが、lengthは変わらない
+//--------------------------------------------------------
+// 要素を削除してlengthを変えたい場合は、spliceを使う
+const ricoh2 = ['r', 'i', 'c', 'o', 'h'];
+// 3番目から1つ削除
+ricoh2.splice(3, 1);
+console.log(ricoh2);
+console.log(ricoh2.length); //4
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsTUFBTSxLQUFLLEdBQUcsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLEdBQUcsRUFBRSxHQUFHLEVBQUUsR0FBRyxDQUFDLENBQUE7QUFFdkMsT0FBTyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUE7QUFFZixPQUFPLENBQUMsR0FBRyxDQUFDLEtBQUssQ0FBQyxDQUFBLENBQUMsdUNBQXVDO0FBRTFELE9BQU8sQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxDQUFBLENBQUMsR0FBRztBQUU3QiwrQkFBK0I7QUFFL0IsMERBQTBEO0FBRTFELGtDQUFrQztBQUNsQyxNQUFNLE1BQU0sR0FBRyxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsR0FBRyxFQUFFLEdBQUcsRUFBRSxHQUFHLENBQUMsQ0FBQTtBQUN4QyxZQUFZO0FBQ1osTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUE7QUFDbkIsT0FBTyxDQUFDLEdBQUcsQ0FBQyxNQUFNLENBQUMsQ0FBQTtBQUNuQixPQUFPLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsQ0FBQSxDQUFDLEdBQUcifQ==

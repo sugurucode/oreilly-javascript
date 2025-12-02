@@ -1,23 +1,12 @@
-var reverse = function (arr) {
-    try {
-        var Segmenter = Intl.Segmenter;
-        var segmenter = new Segmenter('ja-JP', { granularity: 'grapheme' });
-        // 文字列を分割
-        var iterator = segmenter.segment(arr);
-        // 全要素を配列化して値を確認
-        var segments = [];
-        for (var _i = 0, iterator_1 = iterator; _i < iterator_1.length; _i++) {
-            var seg = iterator_1[_i];
-            console.log(seg); // 各segmentオブジェクトを確認
-            segments.push(seg.segment);
-        }
-        console.log('segments:', segments); // 配列全体を確認
-        return segments.reverse().join('');
-    }
-    catch (e) {
-        console.error('Error:', e);
-        return '';
-    }
+export const reverse = (arr) => {
+    // graphemeで絵文字や複合文字も一文字として扱う
+    const segmenter = new Intl.Segmenter('ja-JP', { granularity: 'grapheme' });
+    // Segmenterを使って文字列を分割
+    const iterator = segmenter.segment(arr);
+    // 各segmentオブジェクトから文字列を抽出
+    const segments = [...iterator].map((seg) => seg.segment);
+    console.log('segments:', segments); // segments: [ '𠮷', '野', '家' ]
+    // 文字列を逆順にして結合
+    return segments.reverse().join('');
 };
-// 例: reverse("家族 👨‍👨‍👧‍👧") → "👨‍👨‍👧‍👧 族家"
-console.log(reverse('家族 👨‍👨‍👧‍👧')); // ["👨‍👨‍👧‍👧", "族家"]
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLENBQUMsTUFBTSxPQUFPLEdBQUcsQ0FBQyxHQUFXLEVBQVUsRUFBRTtJQUM3Qyw2QkFBNkI7SUFDN0IsTUFBTSxTQUFTLEdBQUcsSUFBSSxJQUFJLENBQUMsU0FBUyxDQUFDLE9BQU8sRUFBRSxFQUFFLFdBQVcsRUFBRSxVQUFVLEVBQUUsQ0FBQyxDQUFDO0lBQzNFLHNCQUFzQjtJQUN0QixNQUFNLFFBQVEsR0FBRyxTQUFTLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDO0lBQ3hDLHlCQUF5QjtJQUN6QixNQUFNLFFBQVEsR0FBRyxDQUFDLEdBQUcsUUFBUSxDQUFDLENBQUMsR0FBRyxDQUFDLENBQUMsR0FBRyxFQUFFLEVBQUUsQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDekQsT0FBTyxDQUFDLEdBQUcsQ0FBQyxXQUFXLEVBQUUsUUFBUSxDQUFDLENBQUMsQ0FBQywrQkFBK0I7SUFDbkUsY0FBYztJQUNkLE9BQU8sUUFBUSxDQUFDLE9BQU8sRUFBRSxDQUFDLElBQUksQ0FBQyxFQUFFLENBQUMsQ0FBQztBQUNyQyxDQUFDLENBQUMifQ==

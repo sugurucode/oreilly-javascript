@@ -65,6 +65,8 @@ counterIter: return: undefined
 error message: test error in for-of
 ```
 
+---
+
 6. 明示的にnext()
 
 ```ts

@@ -1,7 +1,9 @@
+"use strict";
 // 独自プロパティを持つオブジェクトを定義
-var proto = { name: 'aa', age: 20 };
+const proto = { name: 'aa', age: 20 };
 // そのオブジェクトをプロトタイプとして持つ新しいオブジェクト生成しなさい
-var newObj = Object.create(proto);
+const newObj = Object.create(proto);
 // プロトタイプがprotoであることを確認
 console.log(Object.getPrototypeOf(newObj) === proto);
-// trueが出力されるはず
+// true
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJpbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsc0JBQXNCO0FBQ3RCLE1BQU0sS0FBSyxHQUFHLEVBQUUsSUFBSSxFQUFFLElBQUksRUFBRSxHQUFHLEVBQUUsRUFBRSxFQUFFLENBQUM7QUFFdEMsc0NBQXNDO0FBQ3RDLE1BQU0sTUFBTSxHQUFHLE1BQU0sQ0FBQyxNQUFNLENBQUMsS0FBSyxDQUFDLENBQUM7QUFFcEMsdUJBQXVCO0FBQ3ZCLE9BQU8sQ0FBQyxHQUFHLENBQUMsTUFBTSxDQUFDLGNBQWMsQ0FBQyxNQUFNLENBQUMsS0FBSyxLQUFLLENBQUMsQ0FBQztBQUNyRCxPQUFPIn0=
