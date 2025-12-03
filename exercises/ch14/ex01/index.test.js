@@ -19,7 +19,7 @@ test('Writable and unconfigurable object', () => {
   expect(() => delete b.b).toThrow();
 });
 
-// ここ後で
+// ここ後で再帰にする。
 test('Nested unwritable object', () => {
   const c = nestedUnwritableObj();
   expect(c).toStrictEqual({ c: { d: { e: 3 } } }); //

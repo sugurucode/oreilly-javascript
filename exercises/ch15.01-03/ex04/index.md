@@ -1,52 +1,96 @@
-1. グローバルオブジェクトを参照する3つの方法
-   環境に応じて以下のキーワードを使用します。
+### グローバルオブジェクト (Global Object)
 
-ブラウザ内: window (または self, frames)
+コード全体からアクセス可能な、実行環境が提供するプロパティとメソッドを持つ単一のオブジェクト。グローバル変数のコンテナ（グローバル変数がいっぱい入ってる入れ物）となる。
 
-Node.js 内: global
+---
 
-環境問わず (モダン): globalThis (ES2020より導入された標準規格)
+了解した。前の回答から、グローバルオブジェクトの**参照方法**に関する部分を、見出しとサンプルコードを用いたMarkdown形式で再構成する。
 
-2. ブラウザ独自のグローバルプロパティ・メソッド (10選)
-   ブラウザと Node.js の大きな違いは、ブラウザが BOM (Browser Object Model) と DOM (Document Object Model) を持っている点です。以下は Node.js のグローバルには標準で存在しない、ブラウザ特有のプロパティの例です。
+---
 
-Shutterstock
+## グローバルオブジェクトを参照する方法
 
-document: DOMツリーへのエントリーポイント。
+### 1. ブラウザ環境内での参照: `window`
 
-location: 現在のURL情報の取得や操作。
+ブラウザ環境（メインスレッド）でのみ利用可能な、伝統的な参照方法。
 
-navigator: ブラウザやOSの情報（User Agentなど）。
+```javascript
+// ブラウザ環境でのみ利用可能
+console.log(window === globalThis); // true
 
-history: ブラウザの履歴操作。
+// window プロパティを使った例
+window.alert('Hello Browser!');
+```
 
-localStorage: ローカルストレージへのアクセス。
+### 2 Node.js環境内での参照: `global`
 
-sessionStorage: セッションストレージへのアクセス。
+Node.js環境でのみ利用可能な参照方法。
 
-alert(): 警告ダイアログの表示。
+```javascript
+// Node.js環境でのみ利用可能
+console.log(global === globalThis); // true
 
-confirm(): 確認ダイアログの表示。
+// globalオブジェクトにプロパティ追加してglobalthis経由で表示
+global.customProperty = 'Node Global';
+console.log(globalThis.customProperty);
+```
 
-prompt(): 入力ダイアログの表示。
+### 3 ブラウザ node 問わず: `globalThis`
 
-screen: ユーザーの画面解像度などの情報。
+ES2020で標準化された、ブラウザ、Node.js、Web Workerなど、**全ての環境でグローバルオブジェクトを指す**ためのプロパティ。
 
-Note: console や setTimeout は両方の環境に共通して存在しますが、内部の実装は異なります。
+```javascript
+// どの環境でもグローバルオブジェクトを参照
+console.log(typeof globalThis); // 'object'
 
-3. グローバルオブジェクトの undefined と過去の問題
-   グローバルオブジェクトには undefined というプロパティが定義されており、プリミティブ値の undefined を保持しています。
+// 環境に依存しないタイマー設定
+globalThis.setTimeout(() => {
+  console.log('This runs universally.');
+}, 0);
+```
 
-過去のES仕様（ES3以前）での問題
-かつて undefined は書き換え可能なプロパティ (writable) でした。
+---
 
-JavaScript
+### ブラウザ独自のプロパティ・メソッド (10種)
 
-// 昔の危険なコード例 (ES3)
-undefined = "値が入ってしまった";
+Node.jsにはなく、ブラウザ環境に固有の主要なプロパティとメソッド
 
-if (someVar === undefined) {
-// undefinedが書き換えられているため、この判定が正しく機能しなくなる
+1.  `document`
+2.  `location`
+3.  `history`
+4.  `localStorage`
+5.  `sessionStorage`
+6.  `fetch()`
+7.  `alert()`
+8.  `requestAnimationFrame()`
+9.  `screen`
+10. `navigator`
+
+---
+
+### `undefined` の定義と過去の問題
+
+**確認:**
+グローバルオブジェクトには `undefined` がプロパティとして定義されている(index.tsで確認)
+
+**過去の問題 (ES3まで):**
+グローバルオブジェクトの `undefined` プロパティが**書き換え可能 (writable)** だった。これにより、コードによって `undefined` が上書きされる可能性があり、予期せぬバグに繋がる可能性があった。
+
+```javascript
+// 仮想的な危険なコード
+undefined = '何か別の値';
+
+var foo = undefined; // このとき、fooには "何か別の値" が入ってしまう
+if (foo === undefined) {
+  // この比較も、意図した「未定義」との比較にならない
+  // ...
 }
-現在（ES5以降）
-この問題を防ぐため、現在の仕様ではグローバルオブジェクトの undefined は Read-only (書き込み不可) かつ Non-configurable に設定されています。 ただし、関数スコープ内では現在でも undefined という変数名を宣言できてしまうため、より安全に undefined 値を参照するために void 0 が使われることがあります。
+```
+
+**解決:**
+
+- CMAScript 5 (ES5) 以降、`undefined` プロパティは**読み取り専用 (readonly)** となり、上書きが不可能になった。
+
+- ESlintのルールを使う
+  https://eslint.org/docs/latest/rules/no-undefined
+  ここにも同様の問題が書いてある。

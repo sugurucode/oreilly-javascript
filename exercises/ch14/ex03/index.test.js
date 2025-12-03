@@ -5,6 +5,7 @@ describe('IgnoreAccentPattern', () => {
     test('found test', () => {
       expect('Coffee Café'.search(new IgnoreAccentPattern('Cafe'))).toBe(7);
       expect('Coffee Café'.search(new IgnoreAccentPattern('Café'))).toBe(7);
+      // 正規表現リテラル:実行時にRegExpクラスのインスタンスとして生成される
       expect('Coffee Café'.search(new IgnoreAccentPattern(/Cafe/))).toBe(7);
       expect('Coffee Café'.search(new IgnoreAccentPattern(/Café/))).toBe(7);
     });
