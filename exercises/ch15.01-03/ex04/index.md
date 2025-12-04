@@ -89,7 +89,7 @@ if (foo === undefined) {
 
 **解決:**
 
-- CMAScript 5 (ES5) 以降、`undefined` プロパティは**読み取り専用 (readonly)** となり、上書きが不可能になった。
+- ECMAScript 5 (ES5) 以降、`undefined` プロパティは**読み取り専用 (readonly)** となり、上書きが不可能になった。
 
 - ESlintのルールを使う
   https://eslint.org/docs/latest/rules/no-undefined

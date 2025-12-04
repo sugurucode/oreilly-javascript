@@ -1,4 +1,4 @@
 {
-  "name": "Taro",
+  "name": "XSS Success! <script>alert('この脆弱性を利用してセッション情報を盗んだり、ページを改ざんできます。');</script>",
   "age": 50
 }
