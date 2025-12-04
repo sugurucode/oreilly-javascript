@@ -1,15 +1,19 @@
 <!doctype html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <title>integrityについて</title>
-    <!-- intedrityはどういうときに使うのか？ -->
-    <div>外部のサーバーからリソースを読み込む時に使う。</div>
-    <div>CDN(Content Delivery Network)から取得したファイルが改ざん
-      されていないことを確認できる。</div>
-    </div>
+    <title>SRI動作確認</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
   </head>
   <body>
-    <script src="./index.js"></script>
+    <h1>SRIの動作確認</h1>
+    <!-- integrity属性が正しい場合、以下のメッセージが表示される。 -->
+    <p id="result">スクリプトの読み込みを待っています...</p>
+
+    <script
+      src="index.js"
+      integrity="sha384-GsC7rPMz7Pt3qGUa8ax6EixuYzl5ZkM2kCtP1TUwdXpS8pJIdlm0mnJbA/3qqmZm"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
