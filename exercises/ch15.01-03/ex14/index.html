@@ -10,10 +10,14 @@
         const products = document.querySelectorAll('#productList li');
         products.forEach((product) => {
           // ここにコードを書いて完成させる
+          // data-category 属性の値を取得
           const productCategory = product.dataset.category;
+          // 選択されたカテゴリーと商品のカテゴリーを比較して表示・非表示を切り替え
           if (selectedCategory === 'all' || selectedCategory === productCategory) {
+            // 表示する（''はdisplayを指定しない表示）
             product.style.display = '';
           } else {
+            // 非表示にする
             product.style.display = 'none';
           }
         });
