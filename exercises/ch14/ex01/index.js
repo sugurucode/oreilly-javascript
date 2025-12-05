@@ -3,7 +3,7 @@ export const unwritableAndUnconfigurableObj = () => {
   const obj = { a: 1 };
   Object.defineProperty(obj, 'a', {
     writable: false,
-    configurable: false,
+    configurable: false, //configurableも
   });
   return obj;
 };
