@@ -326,7 +326,7 @@ fsPromises
   .then(() => fsPromises.mkdir("C"));
 ```
 
-それでは以下の 2 つの関数を `node:fs/promises` を利用し Promise を返す関数に書き換えなさい:
+それでは以下の 2 つの関数を `node:fs/promises` を利用し Promise を返す関数に書き換えなさい。async/await を使わずに回答すること。
 
 ```js
 function fetchFirstFileSize(path, callback) {
