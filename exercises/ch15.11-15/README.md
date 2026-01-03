@@ -146,7 +146,7 @@ node ex01/server.js
   // CORS のヘッダを返すミドルウェア
   function corsMiddleware(_url, _req, res) {
     // TODO: CORS に必要なヘッダを複数設定する
-    res.setHeader('TODO', 'TODO');
+    res.setHeader("TODO", "TODO");
     return true;
   }
   ```
@@ -157,11 +157,11 @@ node ex01/server.js
       await routes(
         // TODO: この行のコメントを外す
         // ["OPTIONS", "/api/*", nopHandler, cors],
-        ['GET', '/api/tasks', listTasksHandler, authz, cors],
-        ['GET', '/api/tasks/{id}', getTaskHandler, authz, cors],
-        ['POST', '/api/tasks', createTaskHandler, authz, cors],
-        ['PATCH', '/api/tasks/{id}', patchTaskHandler, authz, cors],
-        ['DELETE', '/api/tasks/{id}', deleteTaskHandler, authz, cors],
+        ["GET", "/api/tasks", listTasksHandler, authz, cors],
+        ["GET", "/api/tasks/{id}", getTaskHandler, authz, cors],
+        ["POST", "/api/tasks", createTaskHandler, authz, cors],
+        ["PATCH", "/api/tasks/{id}", patchTaskHandler, authz, cors],
+        ["DELETE", "/api/tasks/{id}", deleteTaskHandler, authz, cors],
       )(req, res);
     })
     .listen(3001);
