@@ -5,4 +5,3 @@
 ```
 
 HTML または JavaScript を変更した後は上記のコマンドを必ず実行し style.css を更新すること。
-

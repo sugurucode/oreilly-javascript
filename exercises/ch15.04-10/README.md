@@ -91,12 +91,12 @@ Tailwind CSS を使う前提で HTML と JavaScript のコードを書き換え�
 3. 下記の例を参考にして目次を選択した時にスムーズに遷移するようにしなさい
 
 ```js
-let link = document.createElement("a");
+let link = document.createElement('a');
 link.href = `#${fragmentName}`;
 link.innerHTML = heading.innerHTML;
 
 /* 追加分 */
-link.addEventListener("click", (e) => {
+link.addEventListener('click', (e) => {
   e.preventDefault();
   const target = document.querySelector(`a[name="${fragmentName}"]`);
   if (!target) {
@@ -183,9 +183,9 @@ link.addEventListener("click", (e) => {
 ```
 
 ```js
-document.querySelector("#active").addEventListener("click", (e) => {
+document.querySelector('#active').addEventListener('click', (e) => {
   e.preventDefault();
-  window.history.pushState(null, "", "/ch15.04-10/ex12/active");
+  window.history.pushState(null, '', '/ch15.04-10/ex12/active');
   renderTodos(/* TODO: ここは自分で考えてみて下さい (ex11 の答えに近いので) */);
 });
 ```
@@ -264,7 +264,7 @@ export default function Bar() {
 ```js
 window.history.pushState = new Proxy(window.history.pushState, {
   apply: (target, thisArg, argArray) => {
-    console.log("pushState is called:", argArray);
+    console.log('pushState is called:', argArray);
     return target.apply(thisArg, argArray);
   },
 });
@@ -273,9 +273,10 @@ window.history.pushState = new Proxy(window.history.pushState, {
 問題:
 
 1. 以下の動作を確認しなさい
-    - ブラウザの開発者ツールの「ネットワーク」タブを確認してみよう。リンクをクリックしたときに通信は発生しているだろうか？
-    - pushState はいつ実行されているだろうか？
-    - リロード時に画面の表示はどうなるだろうか？
+
+   - ブラウザの開発者ツールの「ネットワーク」タブを確認してみよう。リンクをクリックしたときに通信は発生しているだろうか？
+   - pushState はいつ実行されているだろうか？
+   - リロード時に画面の表示はどうなるだろうか？
 
 2. 1 で確認した動作と 15.4-10.12 で確認した動作を比較し、next.js の `Link` でどういった処理が行われているかをまとめなさい。
 

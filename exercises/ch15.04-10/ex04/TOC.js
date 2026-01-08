@@ -2,18 +2,18 @@
 /* // から始まるコメントはブックマークレット内で正しく動作しないことがあるため注意 */
 (() => {
   /* NOTE: ブックマークレットによって実行する想定のため DOMContentLoaded のイベントで実行しない */
-  let toc = document.querySelector("#TOC");
+  let toc = document.querySelector('#TOC');
   if (!toc) {
-    toc = document.createElement("div");
-    toc.id = "TOC";
+    toc = document.createElement('div');
+    toc.id = 'TOC';
     document.body.prepend(toc);
   }
 
   /* NOTE: スタイルを設定 */
-  let style = document.querySelector("#TOC-style");
+  let style = document.querySelector('#TOC-style');
   if (!style) {
-    style = document.createElement("style");
-    style.id = "TOC-style";
+    style = document.createElement('style');
+    style.id = 'TOC-style';
     document.body.prepend(style);
   }
   style.textContent = `
@@ -43,7 +43,7 @@
       `;
 
   /* NOTE: 以下は書籍のサンプルと同じ */
-  let headings = document.querySelectorAll("h2,h3,h4,h5,h6");
+  let headings = document.querySelectorAll('h2,h3,h4,h5,h6');
   let sectionNumbers = [0, 0, 0, 0, 0];
   for (let heading of headings) {
     if (heading.parentNode === toc) {
@@ -54,24 +54,40 @@
     for (let i = level; i < sectionNumbers.length; i++) {
       sectionNumbers[i] = 0;
     }
-    let sectionNumber = sectionNumbers.slice(0, level).join(".");
-    let span = document.createElement("span");
-    span.className = "TOCSectNum";
+    let sectionNumber = sectionNumbers.slice(0, level).join('.');
+    let span = document.createElement('span');
+    span.className = 'TOCSectNum';
     span.textContent = sectionNumber;
     heading.prepend(span);
-
-    let anchor = document.createElement("a");
+    // anchorを作成してheadingの前に挿入することでeventListenerがなくても動作する
+    let anchor = document.createElement('a');
     let fragmentName = `TOC${sectionNumber}`;
     anchor.name = fragmentName;
     heading.before(anchor);
     anchor.append(heading);
 
-    let link = document.createElement("a");
+    let link = document.createElement('a');
     link.href = `#${fragmentName}`;
     link.innerHTML = heading.innerHTML;
 
-    let entry = document.createElement("div");
-    entry.classList.add("TOCEntry", `TOCLevel${level}`);
+    /* 追加分 */
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(`a[name="${fragmentName}"]`);
+      if (!target) {
+        return;
+      }
+      // scrollIntoView を使ってスムーズにスクロール()
+      target.scrollIntoView({
+        behavior: 'smooth', // アニメーションを滑らかにする
+        block: 'start', // 要素の先頭までスクロール
+      });
+
+      /* NOTE: scrollTo または scrollIntoView でスムーズにスクロールしなさい  */
+    });
+
+    let entry = document.createElement('div');
+    entry.classList.add('TOCEntry', `TOCLevel${level}`);
     entry.append(link);
     toc.append(entry);
   }

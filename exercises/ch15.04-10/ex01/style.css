@@ -1,3 +1,213 @@
+/* 打ち消し線スタイル
 .completed {
   text-decoration: line-through;
+} */
+
+/* =========================================
+   基本設定・フォント読み込み
+   ========================================= */
+/* ドット絵風の日本語フォントをGoogle Fontsから読み込み */
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
+/* rootはHTML全体で使う変数を定義する場所 */
+:root {
+  --bg-color: #000000; /* 背景：黒 */
+  --text-color: #ffffff; /* 文字：白 */
+  --border-color: #ffffff; /* 枠線：白 */
+  --highlight-color: #ffa500; /* 強調色（装備Eマークなど）：オレンジ */
+}
+
+/* 全体の基本スタイル */
+body {
+  background-color: var(--bg-color); /* 背景色 */
+  color: var(--text-color); /* 文字色 */
+  font-family: 'DotGothic16', monospace; /* ドットフォント適用 */
+  font-size: 16px; /* 基本フォントサイズ */
+  line-height: 1.5; /* 行間 */
+  padding: 40px 20px; /* 画面上を40px、左右を20px開ける */
+  display: flex; /* 子要素（new-todo-formとtodo-list）を自在に並べられるモードに */
+  flex-direction: column; /* 縦方向に並べる */
+  align-items: center; /* 横方向中央揃え */
+  min-height: 100vh; /* 画面全体の最低の高さを確保 */
+}
+
+/* =========================================
+   ウィンドウ（枠）のデザイン
+   ========================================= */
+/* 入力フォームとリストをゲームのウィンドウ風にする */
+#new-todo-form,
+#todo-list {
+  background-color: var(--bg-color); /* 背景色 */
+  border: 2px solid var(--border-color); /* 枠線(ドラクエ特有の2本線枠の1本目) */
+  border-radius: 4px; /* 顔を少し丸くする */
+  padding: 20px; /* 内側の余白 */
+  width: 100%; /* 横幅いっぱいに広げる */
+  max-width: 600px; /* 横に広がりすぎないように最大値を設定 */
+  box-sizing: border-box; /* paddingとborderを横幅600pxに含めて計算（レイアウト崩れ防止）*/
+  margin-bottom: 24px; /* 下にある要素との間に余白を作る */
+
+  /* 2重線風の枠線演出 (box-shadowで外側にもう一本線を描く) */
+  box-shadow:
+    0 0 0 2px #000,
+    /* borderの外側に2px黒い線を出す */ 0 0 0 4px var(--border-color); /* さらにその外側に2pxの白い線を出す */
+}
+
+/* =========================================
+   入力フォーム (#new-todo-form)
+   ========================================= */
+#new-todo-form {
+  display: flex;
+  gap: 12px; /* 入力欄とボタンの間に余白 */
+  align-items: center;
+}
+
+/* 
+　テキスト入力欄の設定。通常の枠消して、下線付ける。
+*/
+#new-todo {
+  background-color: transparent; /* 背景透明 */
+  color: var(--text-color); /* 文字色 */
+  font-family: inherit; /* 親要素と同じフォント */
+  font-size: 1.2rem; /* 少し大きめの文字 */
+  border: none; /* 通常の枠線は消す */
+  border-bottom: 2px solid var(--border-color); /* 下線のみ */
+  padding: 4px 8px; /* 縦が4px、横が8pxの内側余白 */
+  flex-grow: 1; /* 右側のボタン以外の余白を全部（1）使う */
+  outline: none; /* 入力欄をクリックしたときの青い枠線を消す */
+}
+/* テキストボックス内のプレースホルダーの色 */
+#new-todo::placeholder {
+  color: #888;
+}
+
+/* Addボタンの設定 */
+#new-todo-form button {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 4px 16px;
+  cursor: pointer; /* ホバー時にカーソルが変わるように👆👆 */
+  border-radius: 4px;
+}
+
+/* ボタンホバー時（白黒反転）
+CSSセレクタで「id="new-todo-form"を持つ要素内のボタンに対して
+マウスがホバー（乗った）したときのスタイルを指定
+*/
+#new-todo-form button:hover {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+/* =========================================
+   ToDoリスト (#todo-list)
+   ========================================= */
+#todo-list {
+  list-style: none; /* デフォルトの・を消す */
+  min-height: 150px;
+}
+
+/* 各タスク項目のスタイル */
+#todo-list li {
+  border-bottom: 1px dashed #666; /* 各タスクの区切り線 */
+  padding: 8px 0;
+}
+
+/* 最後のタスク項目(last-child)の下線を消す */
+#todo-list li:last-child {
+  border-bottom: none;
+}
+
+/* 各行のレイアウト */
+.view {
+  display: flex;
+  align-items: center; /* 縦方向中央揃え */
+  gap: 12px; /* 各要素の間に余白 */
+  position: relative; /* 選択カーソル用に相対位置指定 */
+  padding-left: 20px; /* カーソル表示用の左余白 */
+  transition: background 0.2s;
+}
+
+/* --- 選択カーソル（▶）の演出 --- */
+.view:hover::before {
+  content: '▶';
+  position: absolute;
+  left: -5px;
+  color: var(--text-color);
+  animation: blink 0.8s step-end infinite;
+}
+
+/* 点滅アニメーションの定義 */
+/* 行にマウスを乗せると左端に点滅する▶が出る */
+@keyframes blink {
+  0%,
+  100% {
+    /* ここでいうパーセントはアニメーションの進行度合い */
+    opacity: 1; /* 表示 */
+  }
+  50% {
+    opacity: 0; /* 非表示 */
+  }
+}
+
+/* --- チェックボックス (.toggle) --- */
+.toggle {
+  appearance: none; /* デフォルトの見た目をリセット */
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+/* チェックされた時のカラー変更とEマーク表示 */
+.toggle:checked {
+  background-color: var(--highlight-color);
+  border-color: var(--highlight-color);
+}
+/* チェックされた時にEマークを表示 */
+.toggle:checked::after {
+  content: 'E'; /* EquipのE */
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* --- タスクの内容 (.content) --- */
+.content {
+  flex-grow: 1; /* 右側の削除ボタン以外の余白を全部（1）使う */
+  font-size: 1.1rem;
+  word-break: break-all; /* 長い単語も折り返す */
+  cursor: default; /* テキスト選択カーソルにする */
+}
+
+/* 完了済み（checked）のタスクのスタイル */
+/* 打ち消し線ではなく、色を変えて「済」感を出す */
+li.completed .content {
+  color: #ffff00; /* 黄色文字に変更 */
+  opacity: 0.7;
+}
+
+/* --- 削除ボタン (.destroy) --- */
+.destroy {
+  background: none;
+  border: none;
+  color: #ff5555; /* 赤色 */
+  font-size: 1.2rem;
+  font-family: inherit; /* 絵文字もドットフォント内で処理 */
+  cursor: pointer;
+  opacity: 0; /* 通常時は隠す */
+  transition: opacity 0.2s;
+}
+
+/* ホバー時に削除ボタンを表示 */
+.view:hover .destroy {
+  opacity: 1;
 }
