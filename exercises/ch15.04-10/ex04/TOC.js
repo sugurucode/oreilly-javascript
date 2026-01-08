@@ -61,6 +61,7 @@
     heading.prepend(span);
     // anchorを作成してheadingの前に挿入することでeventListenerがなくても動作する
     let anchor = document.createElement('a');
+    // TOC+セクション番号をフラグメント名にする
     let fragmentName = `TOC${sectionNumber}`;
     anchor.name = fragmentName;
     heading.before(anchor);
@@ -73,17 +74,18 @@
     /* 追加分 */
     link.addEventListener('click', (e) => {
       e.preventDefault();
+      // [name="fragmentName"] で対象要素を取得
+      // id属性でも良い
       const target = document.querySelector(`a[name="${fragmentName}"]`);
       if (!target) {
         return;
       }
       // scrollIntoView を使ってスムーズにスクロール()
+      /* NOTE: scrollTo または scrollIntoView でスムーズにスクロールしなさい  */
       target.scrollIntoView({
         behavior: 'smooth', // アニメーションを滑らかにする
         block: 'start', // 要素の先頭までスクロール
       });
-
-      /* NOTE: scrollTo または scrollIntoView でスムーズにスクロールしなさい  */
     });
 
     let entry = document.createElement('div');

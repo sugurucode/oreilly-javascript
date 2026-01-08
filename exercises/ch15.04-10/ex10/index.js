@@ -15,10 +15,6 @@ canvas.height = COLS * RESOLUTION;
 // https://developer.mozilla.org/ja/docs/Web/API/Window/requestAnimationFrame が返す ID
 let animationId = null;
 
-// 更新頻度を一定にするための変数
-let lastUpdateTime = 0;
-const UPDATE_INTERVAL = 100; // ミリ秒（10回/秒）
-
 // NOTE: download from https://soundeffect-lab.info/sound/button/mp3/decision1.mp3
 const sound = new Audio('/ch15.04-10/ex10/decision1.mp3');
 
@@ -49,33 +45,38 @@ function updateGrid(grid) {
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       // 周囲のセルの生存数を数えて nextGrid[row][col] に true or false を設定する (実装してね)
-      let aliveNeighbors = 0;
+      // 周囲の生存セル数
+      let neighbors = 0;
 
-      // 8つの隣接セルをチェック
+      // 自分の周囲 3x3 の範囲をループしてneighborsを数える
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
-          if (i === 0 && j === 0) continue; // 自分自身はスキップ
+          // i=0, j=0 の時は自分自身なのでスキップ
+          if (i === 0 && j === 0) continue;
 
-          const newRow = row + i;
-          const newCol = col + j;
+          const x = row + i;
+          const y = col + j;
 
-          // 境界チェック（トーラス型：端が繋がっている）
-          if (newRow >= 0 && newRow < ROWS && newCol >= 0 && newCol < COLS) {
-            if (grid[newRow][newCol]) {
-              aliveNeighbors++;
+          // 盤面の範囲内かどうかをチェック（インデックスが 0以上 かつ 最大値未満か）
+          if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
+            // 生きていれば (true) 1増やす
+            if (grid[x][y]) {
+              neighbors++;
             }
           }
         }
       }
+      // neighbors の値に基づいてrow,colに対してライフゲームのルールを適用
+      const currentState = grid[row][col];
 
-      // Conway's Game of Life のルール
-      if (grid[row][col]) {
-        // 生きているセル
-        nextGrid[row][col] = aliveNeighbors === 2 || aliveNeighbors === 3;
-      } else {
-        // 死んでいるセル
-        nextGrid[row][col] = aliveNeighbors === 3;
+      if (currentState && (neighbors < 2 || neighbors > 3)) {
+        // 【死滅】過疎(1以下)または過密(4以上)
+        nextGrid[row][col] = false;
+      } else if (!currentState && neighbors === 3) {
+        // 【誕生】死んでいるセルに隣接する生きたセルがちょうど3つ
+        nextGrid[row][col] = true;
       }
+      // それ以外（生存している状態で隣接が2か3）は、元の状態を維持
     }
   }
   return nextGrid;
@@ -94,15 +95,32 @@ canvas.addEventListener('click', function (evt) {
 });
 
 // requestAnimationFrame によって一定間隔で更新・描画を行う
-// リフレッシュレートの高い画面でも更新頻度が常に一定となるように修正
+// TODO: リフレッシュレートの高い画面では速く実行されてしまうため、以下を参考に更新頻度が常に一定となるようにしなさい
 // https://developer.mozilla.org/ja/docs/Web/API/Window/requestAnimationFrame
-function update(timestamp) {
-  // 前回の更新からの経過時間をチェック
-  if (timestamp - lastUpdateTime >= UPDATE_INTERVAL) {
-    grid = updateGrid(grid);
-    renderGrid(grid);
-    lastUpdateTime = timestamp;
+let previousTimeStamp = 0; // 前回の描画時刻を記録
+const INTERVAL = 100; // 100ミリ秒（0.1秒）ごとに更新したい
+
+// timeStampはrequestAnimationFrameから渡される
+function update(timeStamp) {
+  // previousTimeStamp が未定義の場合はtimeStampを設定
+
+  if (previousTimeStamp === undefined) {
+    previousTimeStamp = timeStamp;
   }
+
+  // 前回のrenderGridからの経過時間を計算
+  const elapsed = timeStamp - previousTimeStamp;
+
+  if (elapsed >= INTERVAL) {
+    // updateGrid で grid を更新
+    grid = updateGrid(grid);
+    // renderGrid で grid を描画
+    renderGrid(grid);
+    // previousTimeStampを現在のtimeStampに更新
+    previousTimeStamp = timeStamp;
+  }
+  // 100ms経っていなければスキップして次のフレームへ
+  // requestAnimationFrame で次のフレームを予約
   animationId = requestAnimationFrame(update);
 }
 
@@ -111,8 +129,7 @@ startButton.addEventListener('click', () => {
   if (animationId) {
     return;
   }
-  lastUpdateTime = 0; // タイムスタンプをリセット
-  update(0);
+  update();
 });
 
 pauseButton.addEventListener('click', () => {
