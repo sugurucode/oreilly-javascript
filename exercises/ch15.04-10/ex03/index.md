@@ -32,8 +32,9 @@
 3. 15.4-10.2 のアプリの `body` 要素に対し、元々 HTML および JS 内で利用していなかった Tailwind CSS のクラス (`bg-rose-600` など何でも良い) を開発者ツールから追加すると変更が反映されないが、これは何故か調べなさい
 
 - やったこと
-  htmlのbodyのclassに`bg-rose-600`を追加しても変わらない
-  ![alt text](image-8.png)
+
+htmlのbodyのclassに`bg-rose-600`を追加しても変わらない
+![alt text](image-8.png)
 
 「スタイル」からbodyにあらたに`bg-rose-600`を追加しようとしたが出来ない。「ユーザーエージェントスタイルシート」になっている？
 

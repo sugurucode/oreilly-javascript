@@ -8,7 +8,7 @@ let todos = []; // 動かなかったのでletに変更
 
 function renderTodos(todos) {
   list.innerHTML = '';
-  todos.forEach((todo, index) => {
+  todos.forEach((todo) => {
     const clone = template.content.cloneNode(true);
     const li = clone.querySelector('li');
     const toggle = clone.querySelector('input');
@@ -28,9 +28,8 @@ function renderTodos(todos) {
     toggle.checked = todo.completed;
     // 削除ボタンがクリックされたときの処理
     destroy.addEventListener('click', () => {
-      todos.splice(index, 1);
-      deleteTodo(todo.content);
-      window.dispatchEvent(new Event('hashchange'));
+      deleteTodo(todo.content); // todo.contentには選択したTODOの内容が入っている
+      window.dispatchEvent(new Event('hashchange')); // 画面更新
     });
     list.appendChild(li);
   });
@@ -48,12 +47,14 @@ form.addEventListener('submit', (e) => {
   window.dispatchEvent(new Event('hashchange'));
 });
 
+// ハッシュが変わったときの処理
 window.addEventListener('hashchange', () => {
   // ここを実装してね
   // URLのハッシュ部分を取得
   // ハッシュとは、URLの「#」以降の部分のことで、ページ内リンクや状態管理に使用。
-  const hash = window.location.hash;
+  const hash = window.location.hash; // 例: '#/completed', '#/active', ''
   if (hash === '#/completed') {
+    //
     renderTodos(todos.filter((t) => t.completed));
   } else if (hash === '#/active') {
     renderTodos(todos.filter((t) => !t.completed));
@@ -63,6 +64,7 @@ window.addEventListener('hashchange', () => {
 });
 
 function deleteTodo(content) {
+  // filtrを使って、選択されたcontentと異なるものだけを残す
   todos = todos.filter((t) => t.content !== content);
 }
 

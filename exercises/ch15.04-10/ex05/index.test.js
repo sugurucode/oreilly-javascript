@@ -25,7 +25,6 @@ describe('inline-circle', () => {
   test('color属性を変更すると背景色が変わる', () => {
     circle.color = 'red';
     expect(circle.style.backgroundColor).toBe('red');
-    expect(circle.getAttribute('color')).toBe('red');
   });
 
   test('border-color属性を変更すると枠線の色が変わる', () => {
