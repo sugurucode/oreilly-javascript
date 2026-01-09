@@ -19,9 +19,12 @@ form.addEventListener('submit', (e) => {
 
   toggle.addEventListener('change', () => {
     // チェック時にテキストをグレーにし、打ち消し線を引くクラスを追加
+    // labelのclassListを操作する
     if (toggle.checked) {
+      // line-throughで打ち消し線、text-gray-400でテキストをグレーにする
       label.classList.add('line-through', 'text-gray-400');
     } else {
+      // 解除時にクラスを削除
       label.classList.remove('line-through', 'text-gray-400');
     }
   });

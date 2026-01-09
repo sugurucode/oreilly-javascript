@@ -6,7 +6,11 @@ customElements.define(
       // 円の作成に必要なスタイルを設定する。
       this.style.display = 'inline-block';
       this.style.borderRadius = '50%';
-      this.style.border = 'solid black 1px';
+      // border-style,border-color,border-widthをまとめて指定
+      // まとめて設定せず、個別に設定する
+      this.style.borderStyle = 'solid';
+      this.style.borderWidth = '1px';
+
       this.style.transform = 'translateY(10%)';
       // 大きさがまだ設定されていない場合、現在のフォントサイズを基に
       // デフォルトの大きさを設定する。
