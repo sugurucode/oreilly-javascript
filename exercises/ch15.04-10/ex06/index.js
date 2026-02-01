@@ -16,11 +16,13 @@ template.innerHTML = `\
 class TodoApp extends HTMLElement {
   constructor() {
     super();
+    // attachShadow: この要素にShadow DOMをアタッチするメソッド
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.form = this.shadowRoot.querySelector('#new-todo-form');
     // TODO: 残りを実装
+    // shadowRoot:shadow DOM内を参照するためのプロパティ
     this.input = this.shadowRoot.querySelector('#new-todo');
     this.list = this.shadowRoot.querySelector('#todo-list');
 

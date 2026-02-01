@@ -66,8 +66,13 @@ function updateGrid(grid) {
           }
         }
       }
+
+      // 生きている隣接セルが 2 つ未満の生きているセルは、過密状態になった場合と同様に死滅します。
+      // 2 つまたは 3 つの生きている隣接細胞を持つ生きている細胞は、次の世代に生き続けます。
+      // 3 つ以上の生きている隣接セルを持つ生きているセルは、人口過密によって死滅します。
+      // ちょうど 3 つの生きている隣接細胞を持つ死んだ細胞は、再生したかのように生きた細胞になります。
       // neighbors の値に基づいてrow,colに対してライフゲームのルールを適用
-      const currentState = grid[row][col];
+      const currentState = grid[row][col]; // currentState=true or false
 
       if (currentState && (neighbors < 2 || neighbors > 3)) {
         // 【死滅】過疎(1以下)または過密(4以上)
@@ -101,6 +106,7 @@ let previousTimeStamp = 0; // 前回の描画時刻を記録
 const INTERVAL = 100; // 100ミリ秒（0.1秒）ごとに更新したい
 
 // timeStampはrequestAnimationFrameから渡される
+// timeStampとは、アニメーションが開始されてからの経過時間をミリ秒単位で表したもの
 function update(timeStamp) {
   // previousTimeStamp が未定義の場合はtimeStampを設定
 
@@ -110,7 +116,7 @@ function update(timeStamp) {
 
   // 前回のrenderGridからの経過時間を計算
   const elapsed = timeStamp - previousTimeStamp;
-
+  // アニメーション開始から100ms以上経っている場合のみ更新・描画を行う
   if (elapsed >= INTERVAL) {
     // updateGrid で grid を更新
     grid = updateGrid(grid);

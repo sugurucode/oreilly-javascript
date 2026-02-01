@@ -21,6 +21,9 @@
     sechand = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     sechand.setAttribute('class', 'secondhand');
 
+    // createElementNSでsvgのline要素を作成したことで、
+    // line要素の属性を設定する必要がある。
+    // SVGのline要素は、x1, y1, x2, y2 属性で線の始点と終点の座標を指定する。
     // 座標を設定 (中心50,50 から 上方向へ)
     // 分針(y2=20)より少し長くするために y2=10 くらいに設定
     sechand.setAttribute('x1', '50');
@@ -39,6 +42,7 @@
   // SVG 属性を設定して、時計盤の中で回転する。
   minhand.setAttribute('transform', `rotate(${minangle},50,50)`);
   hourhand.setAttribute('transform', `rotate(${hourangle},50,50)`);
+  // 50,50は回転の中心座標
   sechand.setAttribute('transform', `rotate(${secangle},50,50)`);
   // 10 秒後にこの関数を再度実行する。
   setTimeout(updateClock, 10000);
