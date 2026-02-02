@@ -1,8 +1,7 @@
-import crypto from "node:crypto";
-import fs from "node:fs/promises";
-import http from "node:http";
-import path from "node:path";
-import url from "node:url";
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import path from 'node:path';
+import url from 'node:url';
 
 // ES Modules で __dirname を取得
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -10,8 +9,8 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 // "/path/to/file.ext" の URL に対して "./contents/path/to/file.ext" のファイルを返すハンドラ
 async function serveContentsHandler(url, _req, res) {
   const mimeTypes = {
-    ".html": "text/html",
-    ".js": "text/javascript",
+    '.html': 'text/html',
+    '.js': 'text/javascript',
   };
 
   try {
@@ -19,24 +18,24 @@ async function serveContentsHandler(url, _req, res) {
     // Linux/MacOS/Windows で共通してファイルパスを構成できる処理
     const filePath = path.join(
       __dirname,
-      "contents",
-      reqPath === "/" ? "index.html" : path.join(...reqPath.split("/")),
+      'contents',
+      reqPath === '/' ? 'index.html' : path.join(...reqPath.split('/')),
     );
 
     const content = await fs.readFile(filePath);
 
     const ext = String(path.extname(filePath)).toLowerCase();
-    const contentType = mimeTypes[ext] || "application/octet-stream";
+    const contentType = mimeTypes[ext] || 'application/octet-stream';
 
-    res.writeHead(200, { "Content-Type": contentType });
+    res.writeHead(200, { 'Content-Type': contentType });
     res.end(content);
   } catch (error) {
-    if (error.code == "ENOENT") {
-      res.writeHead(404, { "Content-Type": "text/plain" });
-      res.end("Content Not Found", "utf-8");
+    if (error.code == 'ENOENT') {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Content Not Found', 'utf-8');
     } else {
       res.writeHead(500);
-      res.end(`Internal Error: ${error.code}`, "utf-8");
+      res.end(`Internal Error: ${error.code}`, 'utf-8');
     }
   }
 }
@@ -44,14 +43,18 @@ async function serveContentsHandler(url, _req, res) {
 // CSP のヘッダを返すミドルウェア
 function cspMiddleware(_url, req, res) {
   // TODO: CSP ヘッダを設定する
-  // res.setHeader("Content-Security-Policy", "TODO");
+  // Worldはのアラートは表示させない
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; script-src 'unsafe-inline' http://localhost:3000/hello.js",
+  );
   return true;
 }
 
 // ルーティングを行う関数
 function routes(...routeHandlers) {
   return async (req, res) => {
-    console.log("request:", req.method, req.url);
+    console.log('request:', req.method, req.url);
 
     // クエリパラメータを含む URL をパース
     const url = new URL(`http://localhost${req.url}`);
@@ -66,24 +69,20 @@ function routes(...routeHandlers) {
 
       if (method !== routeMethod) continue;
 
-      const routeParts = routePath.split("/");
-      const reqParts = reqPath.split("/");
+      const routeParts = routePath.split('/');
+      const reqParts = reqPath.split('/');
 
-      if (routeParts.length !== reqParts.length && !routePath.includes("*"))
-        continue;
+      if (routeParts.length !== reqParts.length && !routePath.includes('*')) continue;
 
       const params = {};
       let match = true;
 
       for (let i = 0; i < routeParts.length; i++) {
-        if (routeParts[i] === "*") {
+        if (routeParts[i] === '*') {
           // ワイルドカードセグメントの場合、残りのパスを全て受け入れる
-          params["*"] = reqParts.slice(i).join("/");
+          params['*'] = reqParts.slice(i).join('/');
           break;
-        } else if (
-          routeParts[i].startsWith("{") &&
-          routeParts[i].endsWith("}")
-        ) {
+        } else if (routeParts[i].startsWith('{') && routeParts[i].endsWith('}')) {
           // パラメータセグメントの場合、パラメータ名をキーにして値を取得
           const paramName = routeParts[i].slice(1, -1);
           params[paramName] = reqParts[i];
@@ -105,21 +104,18 @@ function routes(...routeHandlers) {
       }
     }
 
-    res.writeHead(404, { "Content-Type": "text/plain" });
-    res.end("Not Found", "utf-8");
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found', 'utf-8');
   };
 }
 
 async function main() {
   http
     .createServer(async function (req, res) {
-      await routes(["GET", "/*", serveContentsHandler, cspMiddleware])(
-        req,
-        res,
-      );
+      await routes(['GET', '/*', serveContentsHandler, cspMiddleware])(req, res);
     })
     .listen(3000);
-  console.log("Server running at http://localhost:3000/");
+  console.log('Server running at http://localhost:3000/');
 }
 
 await main();

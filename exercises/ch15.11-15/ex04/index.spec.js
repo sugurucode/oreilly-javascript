@@ -1,0 +1,136 @@
+import { expect, test } from '@playwright/test';
+
+/**
+ * @param {import("@playwright/test").Page} page
+ * @param {string} todo
+ */
+async function addToDo(page, todo) {
+  await page.getByRole('textbox').fill(todo);
+  await page.getByRole('button', { name: 'Add' }).click();
+}
+
+/**
+ * @param {import("@playwright/test").Page} page
+ * @param {number} index
+ */
+async function checkToDo(page, index) {
+  await page.getByRole('listitem').nth(index).getByRole('checkbox').check();
+}
+
+/**
+ * @param {import("@playwright/test").Page} page
+ * @param {number} index
+ */
+async function deleteToDo(page, index) {
+  // ★修正: ボタンの名前を 'Delete' に変更
+  await page.getByRole('listitem').nth(index).getByRole('button', { name: 'Delete' }).click();
+}
+
+/**
+ * @param {import("@playwright/test").Page} page
+ */
+async function countToDos(page) {
+  return await page.getByRole('listitem').count();
+}
+
+/**
+ * @param {import("@playwright/test").Page} page
+ * @param {number} index
+ */
+function queryToDo(page, index) {
+  return page.getByRole('listitem').nth(index);
+}
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('http://localhost:3000/ch15.11-15/ex04/index.html');
+});
+
+test('no default todos', async ({ page }) => {
+  expect(await countToDos(page)).toBe(0);
+});
+
+test('add new todo', async ({ page }) => {
+  await addToDo(page, '質問表に質問を記載する');
+
+  expect(await countToDos(page)).toBe(1);
+
+  const todo = queryToDo(page, 0);
+  const label = todo.getByText('質問表に質問を記載する');
+  await expect(label).toBeVisible();
+  await expect(label).toHaveCSS('text-decoration-line', 'none');
+});
+
+test('add multiple todos', async ({ page }) => {
+  await addToDo(page, '質問表に質問を記載する');
+  await addToDo(page, '練習問題を完了する');
+
+  expect(await countToDos(page)).toBe(2);
+
+  // prepend なので後から入れたものが先頭(0)に来る
+  const todo1 = queryToDo(page, 0);
+  const label1 = todo1.getByText('練習問題を完了する');
+  await expect(label1).toBeVisible();
+  await expect(label1).toHaveCSS('text-decoration-line', 'none');
+
+  const todo2 = queryToDo(page, 1);
+  const label2 = todo2.getByText('質問表に質問を記載する');
+  await expect(label2).toBeVisible();
+  await expect(label2).toHaveCSS('text-decoration-line', 'none');
+});
+
+test('delete todo', async ({ page }) => {
+  await addToDo(page, '質問表に質問を記載する');
+  await addToDo(page, '練習問題を完了する'); // index 0
+  await deleteToDo(page, 0); // '練習...' を削除
+
+  expect(await countToDos(page)).toBe(1);
+
+  const todo = queryToDo(page, 0);
+  const label = todo.getByText('質問表に質問を記載する');
+  await expect(label).toBeVisible();
+});
+
+test('complete todo', async ({ page }) => {
+  await addToDo(page, '質問表に質問を記載する');
+  await addToDo(page, '練習問題を完了する');
+
+  // index 1 ('質問...') を完了にする
+  await checkToDo(page, 1);
+
+  expect(await countToDos(page)).toBe(2);
+
+  const todo2 = queryToDo(page, 1);
+  const label2 = todo2.getByText('質問表に質問を記載する');
+  await expect(label2).toBeVisible();
+  await expect(label2).toHaveCSS('text-decoration-line', 'line-through');
+});
+
+// ★追加: リロードしてもデータが残っているか (localStorage)
+test('persist todos after reload', async ({ page }) => {
+  await addToDo(page, '永続化テスト');
+  expect(await countToDos(page)).toBe(1);
+
+  // ページをリロード
+  await page.reload();
+
+  // まだ残っているはず
+  expect(await countToDos(page)).toBe(1);
+  await expect(page.getByText('永続化テスト')).toBeVisible();
+});
+
+// ★追加: 別タブと同期されるか (storage event)
+test('sync todos across tabs', async ({ context, page }) => {
+  // page は「タブA」とする
+
+  // 「タブB」を作成
+  const page2 = await context.newPage();
+  // URLを環境に合わせて修正済み
+  await page2.goto('http://localhost:3000/ch15.11-15/ex04/index.html');
+
+  // タブAでタスクを追加
+  await addToDo(page, '同期テスト');
+
+  // タブBに自動的に反映されているか確認
+  await expect(page2.getByText('同期テスト')).toBeVisible();
+  expect(await countToDos(page2)).toBe(1);
+});

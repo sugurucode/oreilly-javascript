@@ -1,4 +1,4 @@
-function retryWithExponentialBackoff(func, maxRetry, callback) {
+export function retryWithExponentialBackoff(func, maxRetry, callback) {
   let tryCount = 0;
   function tryFunc() {
     tryCount++;

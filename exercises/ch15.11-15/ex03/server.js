@@ -1,8 +1,8 @@
-import crypto from "node:crypto";
-import fs from "node:fs/promises";
-import http from "node:http";
-import path from "node:path";
-import url from "node:url";
+import crypto from 'node:crypto';
+import fs from 'node:fs/promises';
+import http from 'node:http';
+import path from 'node:path';
+import url from 'node:url';
 
 // ES Modules で __dirname を取得
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -19,7 +19,7 @@ type Task = {
 
 const taskListStore = {}; // {[sid]: {tasks: [Task, ...], currentId: number}} のデータを保持するストア
 
-const notFoundError = { status: 404, message: "not found" };
+const notFoundError = { status: 404, message: 'not found' };
 const badRequestError = (message) => ({ status: 400, message });
 
 // Task 一覧を取得
@@ -51,7 +51,7 @@ function createTask(sid, { name }) {
   }
   const tasks = taskEntry.tasks;
 
-  const task = { id: taskEntry.currentId, name, status: "active" };
+  const task = { id: taskEntry.currentId, name, status: 'active' };
   const { ok, error } = validateTask(task);
   if (!ok) {
     return { ok: false, error };
@@ -106,10 +106,10 @@ function deleteTask(sid, id) {
 
 function validateTask({ name, status }) {
   if (!name) {
-    return { ok: false, error: badRequestError("name is required") };
+    return { ok: false, error: badRequestError('name is required') };
   }
-  if (status && !["active", "completed"].includes(status)) {
-    return { ok: false, error: badRequestError("invalid status") };
+  if (status && !['active', 'completed'].includes(status)) {
+    return { ok: false, error: badRequestError('invalid status') };
   }
   return { ok: true };
 }
@@ -189,8 +189,8 @@ async function nopHandler(_url, _req, res) {
 // "/path/to/file.ext" の URL に対して "./contents/path/to/file.ext" のファイルを返すハンドラ
 async function serveContentsHandler(url, _req, res) {
   const mimeTypes = {
-    ".html": "text/html",
-    ".js": "text/javascript",
+    '.html': 'text/html',
+    '.js': 'text/javascript',
   };
 
   try {
@@ -198,73 +198,77 @@ async function serveContentsHandler(url, _req, res) {
     // Linux/MacOS/Windows で共通してファイルパスを構成できる処理
     const filePath = path.join(
       __dirname,
-      "contents",
-      reqPath === "/" ? "index.html" : path.join(...reqPath.split("/")),
+      'contents',
+      reqPath === '/' ? 'index.html' : path.join(...reqPath.split('/')),
     );
 
     const content = await fs.readFile(filePath);
 
     const ext = String(path.extname(filePath)).toLowerCase();
-    const contentType = mimeTypes[ext] || "application/octet-stream";
+    const contentType = mimeTypes[ext] || 'application/octet-stream';
 
-    res.writeHead(200, { "Content-Type": contentType });
+    res.writeHead(200, { 'Content-Type': contentType });
     res.end(content);
   } catch (error) {
-    if (error.code == "ENOENT") {
-      res.writeHead(404, { "Content-Type": "text/plain" });
-      res.end("Content Not Found", "utf-8");
+    if (error.code == 'ENOENT') {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Content Not Found', 'utf-8');
     } else {
       res.writeHead(500);
-      res.end(`Internal Error: ${error.code}`, "utf-8");
+      res.end(`Internal Error: ${error.code}`, 'utf-8');
     }
   }
 }
 
 // Cookie による簡易的な認証/認可を行うミドルウェア
 function cookieAuthzMiddleware(_url, req, res, params) {
-  const cookieData = req.headers.cookie || "";
-  const fields = cookieData.split(";").map((data) => data.trim());
+  const cookieData = req.headers.cookie || '';
+  const fields = cookieData.split(';').map((data) => data.trim());
 
   // セッションに対して ID を付与し、セッション毎に Task API のデータを分離する
-  const sidPrefix = "sid=";
+  const sidPrefix = 'sid=';
   const sidField = fields.find((data) => data.startsWith(sidPrefix));
   const sid = sidField ? sidField.slice(sidPrefix.length) : crypto.randomUUID();
-  console.log("session:", sid);
+  console.log('session:', sid);
   params.__sid = sid;
 
   // HttpOnly を有効にしてクライアントの JavaScript から Cookie を参照できないようにする
-  res.setHeader(
-    "Set-Cookie",
-    `sid=${encodeURIComponent(sid)}; SameSite=Lax; Path=/; HttpOnly;`,
-  );
+  res.setHeader('Set-Cookie', `sid=${encodeURIComponent(sid)}; SameSite=Lax; Path=/; HttpOnly;`);
   return true;
 }
 
 // CORS のヘッダを返すミドルウェア
+// CORS のヘッダを返すミドルウェア
 function corsMiddleware(_url, _req, res) {
-  // TODO: CORS に必要なヘッダを複数設定する
-  res.setHeader("TODO", "TODO");
+  // アクセスを許可するオリジン (mode: 'cors' と設定した場合に必要)
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  // Cookie の送受信を許可する(credentials:`include`と設定した場合に必要)
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // 許可する HTTP メソッド()
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
+  // 許可するヘッダー (Content-Type など)
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   return true;
 }
 
 // リクエストボディを読み込む関数
 async function readBodyJson(req) {
   return new Promise((resolve, reject) => {
-    let body = "";
-    req.on("data", (chunk) => {
+    let body = '';
+    req.on('data', (chunk) => {
       body += chunk.toString();
     });
-    req.on("end", () => {
+    req.on('end', () => {
       resolve(JSON.parse(body));
     });
-    req.on("error", reject);
+    req.on('error', reject);
   });
 }
 
 // JSON レスポンスを返す関数
 function respondJson(res, status, data = undefined) {
-  console.log("response:", status, data);
-  res.writeHead(status, { "Content-Type": "application/json; charset=UTF-8" });
+  console.log('response:', status, data);
+  res.writeHead(status, { 'Content-Type': 'application/json; charset=UTF-8' });
   if (data) {
     res.end(JSON.stringify(data));
   } else {
@@ -275,7 +279,7 @@ function respondJson(res, status, data = undefined) {
 // ルーティングを行う関数
 function routes(...routeHandlers) {
   return async (req, res) => {
-    console.log("request:", req.method, req.url);
+    console.log('request:', req.method, req.url);
 
     // クエリパラメータを含む URL をパース
     const url = new URL(`http://localhost${req.url}`);
@@ -290,24 +294,20 @@ function routes(...routeHandlers) {
 
       if (method !== routeMethod) continue;
 
-      const routeParts = routePath.split("/");
-      const reqParts = reqPath.split("/");
+      const routeParts = routePath.split('/');
+      const reqParts = reqPath.split('/');
 
-      if (routeParts.length !== reqParts.length && !routePath.includes("*"))
-        continue;
+      if (routeParts.length !== reqParts.length && !routePath.includes('*')) continue;
 
       const params = {};
       let match = true;
 
       for (let i = 0; i < routeParts.length; i++) {
-        if (routeParts[i] === "*") {
+        if (routeParts[i] === '*') {
           // ワイルドカードセグメントの場合、残りのパスを全て受け入れる
-          params["*"] = reqParts.slice(i).join("/");
+          params['*'] = reqParts.slice(i).join('/');
           break;
-        } else if (
-          routeParts[i].startsWith("{") &&
-          routeParts[i].endsWith("}")
-        ) {
+        } else if (routeParts[i].startsWith('{') && routeParts[i].endsWith('}')) {
           // パラメータセグメントの場合、パラメータ名をキーにして値を取得
           const paramName = routeParts[i].slice(1, -1);
           params[paramName] = reqParts[i];
@@ -329,8 +329,8 @@ function routes(...routeHandlers) {
       }
     }
 
-    res.writeHead(404, { "Content-Type": "text/plain" });
-    res.end("Not Found", "utf-8");
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found', 'utf-8');
   };
 }
 
@@ -340,7 +340,7 @@ async function main() {
 
   http
     .createServer(async function (req, res) {
-      await routes(["GET", "/*", serveContentsHandler, authz])(req, res);
+      await routes(['GET', '/*', serveContentsHandler, authz])(req, res);
     })
     .listen(3000);
 
@@ -348,17 +348,18 @@ async function main() {
     .createServer(async function (req, res) {
       await routes(
         // TODO: この行のコメントを外す
-        // ["OPTIONS", "/api/*", nopHandler, cors],
-        ["GET", "/api/tasks", listTasksHandler, authz, cors],
-        ["GET", "/api/tasks/{id}", getTaskHandler, authz, cors],
-        ["POST", "/api/tasks", createTaskHandler, authz, cors],
-        ["PATCH", "/api/tasks/{id}", patchTaskHandler, authz, cors],
-        ["DELETE", "/api/tasks/{id}", deleteTaskHandler, authz, cors],
+        // 3000から3001（クロスオリジン）にリクエストしたことによりブラウザが勝手にOPTIONSメソッドでプリフライトリクエストを送信するため、そのリクエストに対応するハンドラを追加
+        ['OPTIONS', '/api/*', nopHandler, cors],
+        ['GET', '/api/tasks', listTasksHandler, authz, cors],
+        ['GET', '/api/tasks/{id}', getTaskHandler, authz, cors],
+        ['POST', '/api/tasks', createTaskHandler, authz, cors],
+        ['PATCH', '/api/tasks/{id}', patchTaskHandler, authz, cors],
+        ['DELETE', '/api/tasks/{id}', deleteTaskHandler, authz, cors],
       )(req, res);
     })
     .listen(3001);
-  console.log("Contents server running at http://localhost:3000/");
-  console.log("API server running at http://localhost:3001/");
+  console.log('Contents server running at http://localhost:3000/');
+  console.log('API server running at http://localhost:3001/');
 }
 
 await main();

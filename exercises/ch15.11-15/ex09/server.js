@@ -1,4 +1,4 @@
-import WebSocket, { WebSocketServer } from "ws";
+import WebSocket, { WebSocketServer } from 'ws';
 
 // 50 x 50 の盤面とする
 const ROWS = 50;
@@ -12,41 +12,39 @@ const wss = new WebSocketServer({ port });
 
 // ライフゲームのセル (true or false) をランダムに初期化する
 let grid = new Array(ROWS)
-.fill(null)
-.map(() =>
-  new Array(COLS).fill(null).map(() => !!Math.floor(Math.random() * 2))
-);
+  .fill(null)
+  .map(() => new Array(COLS).fill(null).map(() => !!Math.floor(Math.random() * 2)));
 // 停止状態
 let paused = true;
 
-wss.on("connection", (ws) => {
+wss.on('connection', (ws) => {
   // 接続されたクライアントに初期のグリッドを送信
-  ws.send(JSON.stringify({ type: "update", grid }));
+  ws.send(JSON.stringify({ type: 'update', grid }));
 
-  ws.on("message", (message) => {
+  ws.on('message', (message) => {
     const data = JSON.parse(message.toString());
     switch (data.type) {
-      case "toggle": // セルの反転
+      case 'toggle': // セルの反転
         grid[data.row][data.col] = !grid[data.row][data.col];
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: "update", grid }));
+            client.send(JSON.stringify({ type: 'update', grid }));
           }
         });
         break;
-      case "pause": // 停止
+      case 'pause': // 停止
         paused = true;
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: "pause" }));
+            client.send(JSON.stringify({ type: 'pause' }));
           }
         });
         break;
-      case "start": // 開始・再開
+      case 'start': // 開始・再開
         paused = false;
         wss.clients.forEach((client) => {
           if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: "start" }));
+            client.send(JSON.stringify({ type: 'start' }));
           }
         });
         break;
@@ -62,6 +60,24 @@ function updateGrid(grid) {
     for (let col = 0; col < COLS; col++) {
       // 周囲のセルの生存数を数えて nextGrid[row][col] に true or false を設定する
       //（15.04-10.10の実装を利用）
+      let neighbors = 0;
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          if (i === 0 && j === 0) continue;
+          const x = row + i;
+          const y = col + j;
+          if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
+            if (grid[x][y]) neighbors++;
+          }
+        }
+      }
+
+      const currentState = grid[row][col];
+      if (currentState && (neighbors < 2 || neighbors > 3)) {
+        nextGrid[row][col] = false;
+      } else if (!currentState && neighbors === 3) {
+        nextGrid[row][col] = true;
+      }
     }
   }
   return nextGrid;
@@ -69,7 +85,7 @@ function updateGrid(grid) {
 
 // 全クライアントにグリッドの状態をブロードキャストする
 function broadcast(grid) {
-  const message = JSON.stringify({ type: "update", grid });
+  const message = JSON.stringify({ type: 'update', grid });
   wss.clients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(message);
@@ -85,3 +101,5 @@ setInterval(() => {
   grid = updateGrid(grid);
   broadcast(grid);
 }, 1000 / FRAME_RATE);
+
+console.log(`Server started on ws://localhost:${port}`);
