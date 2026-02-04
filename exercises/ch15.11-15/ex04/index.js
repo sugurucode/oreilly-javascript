@@ -35,7 +35,7 @@ const saveTodosToLocalStorage = () => {
 };
 
 // 課題要件: 画面更新しても維持されるように復元する(localStorageから読み込み)
-const loadTodosToLocalStorage = () => {
+const loadTodosFromLocalstorage = () => {
   if (!storage) return;
   // localStorageからデータを取得。getItemの戻り値はJSON文字列
   const json = storage.getItem(STORAGE_KEY); // {"text":"買い物","completed":false} の配列のJSON文字列
@@ -44,7 +44,6 @@ const loadTodosToLocalStorage = () => {
     const todos = JSON.parse(json); // [{text: "買い物", completed: false}, ...]
     // innerHTMLは既存の要素をクリアする
     list.innerHTML = '';
-    // prepend
     todos.forEach((todo) => {
       // 要素を先頭から順に追加
       appendTodoItem(todo.text, todo.completed);
@@ -56,7 +55,7 @@ const loadTodosToLocalStorage = () => {
 // localStorageの内容が変更されると storage イベントが発生する
 window.addEventListener('storage', (e) => {
   if (e.key === STORAGE_KEY) {
-    loadTodosToLocalStorage();
+    loadTodosFromLocalstorage();
   }
 });
 
@@ -123,4 +122,4 @@ form.addEventListener('submit', (e) => {
 });
 
 // 初回読み込みを実行
-loadTodosToLocalStorage();
+loadTodosFromLocalstorage();

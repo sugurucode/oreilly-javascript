@@ -20,7 +20,7 @@ test('新しいToDoを追加できる', async ({ page }) => {
   // テキストの中身も確認
   const todo = page.getByRole('listitem').nth(0);
   // liの中には×ボタンやcheckboxもあるので、完全一致ではなく部分一致で確認
-  await expect(todo).toHaveText(/質問表に質問を記載する/);
+  await expect(todo).toHaveText(/新しいTODO!!/);
 });
 
 test('ToDoを削除できる', async ({ page }) => {
