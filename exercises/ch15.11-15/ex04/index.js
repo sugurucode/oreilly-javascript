@@ -2,7 +2,7 @@ const form = document.querySelector('#new-todo-form');
 const list = document.querySelector('#todo-list');
 const input = document.querySelector('#new-todo');
 
-// 課題要件: localStorage の無効化対応 (必要最低限の実装)
+// 課題要件: localStorage の無効化対応
 let storage = null;
 try {
   // localStorage が利用可能か確認
