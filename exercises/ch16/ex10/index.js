@@ -2,7 +2,7 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 
-function serve(rootDirectory, port) {
+export function serve(rootDirectory, port) {
   let server = new http.Server();
   server.listen(port);
   console.log('Listening on port', port);
