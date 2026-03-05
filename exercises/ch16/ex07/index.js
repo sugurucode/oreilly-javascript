@@ -1,48 +1,28 @@
-// index.js
 import fs from 'fs/promises';
-/**
- * 指定されたパスの状態を判定する
- * @param {string} pathString - 判定したいパス
- * @returns {Promise<string>} 'file', 'directory', 'not found', 'permission denied', または 'other'
- */
 
 /**
- * 指定されたパスの状態を詳細に判定する
- * @param {string} pathString - 判定したいパス
- * @returns {Promise<string>} ファイルタイプ、またはエラー状況を表す文字列
+ * fs.stat を利用して実体のタイプを判定する
  */
 export async function checkEntry(pathString) {
   try {
-    // シンボリックリンクそのものを判定するため、statではなくlstatを使用
-    const stats = await fs.lstat(pathString);
+    // statはシンボリックリンクを自動で解決（リンク先を参照）する
+    const stats = await fs.stat(pathString);
+    console.log(stats);
 
+    // stats.isFileはstatsのmode（16877）などの数値をビット演算して判定している。
     if (stats.isFile()) {
       return 'file';
     } else if (stats.isDirectory()) {
       return 'directory';
-    } else if (stats.isSymbolicLink()) {
-      return 'symbolic link'; // シンボリックリンク
-    } else if (stats.isSocket()) {
-      return 'socket'; // ソケット
-    } else if (stats.isFIFO()) {
-      return 'fifo'; // 名前付きパイプ
-    } else if (stats.isCharacterDevice()) {
-      return 'character device'; // キャラクターデバイス
-    } else if (stats.isBlockDevice()) {
-      return 'block device'; // ブロックデバイス
     } else {
-      // それ以外のファイルタイプ（例: 不明なファイルタイプ）
-      return '';
+      // リンク先が特殊ファイル（ソケットやデバイス等）の場合
+      // 例えばstats.isSocket()やstats.isCharacterDevice()などがある。
+      return 'ファイルでもディレクトリでもありません。';
     }
   } catch (error) {
-    // ENOENT: ファイルやディレクトリが存在しない
-    if (error.code === 'ENOENT') {
-      return 'not found';
-      // EACCES: アクセス権限がない、EPERM: 操作が許可されていない
-    } else if (error.code === 'EACCES' || error.code === 'EPERM') {
-      return 'permission denied';
-    } else {
-      throw error;
-    }
+    return 'エラーが発生しました: ' + error.message;
   }
 }
+
+// const obj = await checkEntry(`exercises/ch16/ex07/test`);
+// console.log(obj); // directory

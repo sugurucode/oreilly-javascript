@@ -1,59 +1,17 @@
-import { jest, describe, test, expect, beforeEach } from '@jest/globals';
-import fs from 'fs/promises';
 import { checkEntry } from './index.js';
 
-describe('checkEntry', () => {
-  beforeEach(() => {
-    // 実行環境の fs.lstat を jest の関数に置き換える
-    fs.lstat = jest.fn();
-  });
+test(`ファイルが存在する場合は 'file' を返す`, async () => {
+  const filePath = `exercises/ch16/ex07/index.test.js`;
+  expect(await checkEntry(filePath)).toBe('file');
+});
 
-  describe('正常系: ファイルタイプの判定', () => {
-    const cases = [
-      ['isFile', 'file'],
-      ['isDirectory', 'directory'],
-      ['isSymbolicLink', 'symbolic link'],
-      ['isSocket', 'socket'],
-      ['isFIFO', 'fifo'],
-      ['isCharacterDevice', 'character device'],
-      ['isBlockDevice', 'block device'],
-    ];
+test(`ディレクトリが存在する場合は 'directory' を返す`, async () => {
+  const dirPath = `exercises/ch16/ex07`;
+  expect(await checkEntry(dirPath)).toBe('directory');
+});
 
-    test.each(cases)('%s のとき "%s" を返すこと', async (method, expected) => {
-      const mockStats = {
-        isFile: () => method === 'isFile',
-        isDirectory: () => method === 'isDirectory',
-        isSymbolicLink: () => method === 'isSymbolicLink',
-        isSocket: () => method === 'isSocket',
-        isFIFO: () => method === 'isFIFO',
-        isCharacterDevice: () => method === 'isCharacterDevice',
-        isBlockDevice: () => method === 'isBlockDevice',
-      };
-
-      fs.lstat.mockResolvedValue(mockStats);
-
-      const result = await checkEntry('/dummy/path');
-      expect(result).toBe(expected);
-    });
-  });
-
-  describe('異常系: エラーハンドリング', () => {
-    test('ファイルが存在しない（ENOENT）とき "not found" を返すこと', async () => {
-      const error = new Error('no such file');
-      error.code = 'ENOENT';
-      fs.lstat.mockRejectedValue(error);
-
-      const result = await checkEntry('/missing/path');
-      expect(result).toBe('not found');
-    });
-
-    test('権限エラー（EACCES）のとき "permission denied" を返すこと', async () => {
-      const error = new Error('permission denied');
-      error.code = 'EACCES';
-      fs.lstat.mockRejectedValue(error);
-
-      const result = await checkEntry('/root/path');
-      expect(result).toBe('permission denied');
-    });
-  });
+test(`存在しないパスの場合はエラーメッセージを返す`, async () => {
+  const nonExistentPath = `exercises/ch16/ex07/nonexistent`;
+  const result = await checkEntry(nonExistentPath);
+  expect(result).toMatch(/エラーが発生しました/);
 });

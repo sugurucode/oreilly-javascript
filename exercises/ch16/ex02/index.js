@@ -13,18 +13,23 @@ let child = null;
 // cf. https://nodejs.org/api/child_process.html#event-close
 async function startChild() {
   const childPath = path.join(__dirname, 'child.js');
+  // spawnはコマンドと引数の配列を受け取る。今回は node ./child.js を起動する
   child = spawn('node', [childPath]);
-
+  // stdout.on('data')は、子プロセスが標準出力にデータを書き込んだときに呼び出されるイベントリスナー。
   child.stdout.on('data', (data) => {
+    // Bufferオブジェクトとは、Node.jsでバイナリデータを扱うためのクラス。
     console.log(`stdout: ${data}`);
   });
-
+  // stderr.on('data')は、子プロセスが標準エラー出力にデータを書き込んだときに呼び出されるイベントリスナー。
   child.stderr.on('data', (data) => {
     console.error(`stderr: ${data}`);
   });
-
+  // closeイベントは、子プロセスが終了したときに発生するイベント。引数codeは終了コード、signalはシグナル名。
+  // codeは例えば0は正常終了、1は異常終了を意味する。signalは例えばSIGINTやSIGTERMなどのシグナル名を意味する。
   return new Promise((res) => {
     child.on('close', (code, signal) => {
+      // resはPromiseが解決されたときに呼び出される関数。
+      // resの引数はPromiseが解決されたときの値。ここでは、codeとsignalを配列にして返す。
       res([code, signal]);
     });
   });
@@ -32,7 +37,7 @@ async function startChild() {
 
 // TODO: ここに処理を書く
 
-// runChile関数にした理由は、子プロセスが異常終了したときに再起動するためです。
+// runChile関数にした理由は、子プロセスが異常終了したときに再起動するため。
 function runChild() {
   startChild().then(([code, signal]) => {
     // codeが0とは正常終了、signalがnullでない場合はシグナル終了を意味する

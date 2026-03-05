@@ -1,5 +1,7 @@
 import request from 'supertest';
 import { createServer } from './index.js';
+import fs from 'fs'; // 【追加】実際にファイルが作られたか確認・削除するために必要
+import path from 'path'; // 【追加】ファイルのパスを計算するために必要
 
 // テスト対象のアプリ（カレントディレクトリをルートとして設定）
 const app = createServer('./');
@@ -31,5 +33,32 @@ describe('HTTPサーバーの動作テスト', () => {
 
     expect(response.status).toBe(404);
     expect(response.text).toBe('Not Found'); // エラーメッセージが正しいか
+  });
+
+  // 【追加】PUTによるファイルアップロードのテスト
+  test('PUTリクエストで新しい階層にファイルをアップロードできること', async () => {
+    const uploadData = 'PUTリクエストのテスト';
+    const testUrlPath = '/test-dir/test-upload.txt';
+
+    // サーバーにPUTリクエストでデータを送信する
+    const response = await request(app).put(testUrlPath).send(uploadData);
+
+    // サーバーから「アップロード完了」の返事が来ているか？
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('アップロード完了');
+
+    // 🌟 実際にファイルが作られたか
+    const testUploadFileLocation = path.resolve('./', 'test-dir/test-upload.txt');
+    // existsSyncでファイルが存在するか確認する。存在しない場合はテスト失敗。
+    expect(fs.existsSync(testUploadFileLocation)).toBe(true);
+    // ファイルの中身が、アップロードしたデータと同じか確認する。違う場合はテスト失敗。
+    expect(fs.readFileSync(testUploadFileLocation, 'utf8')).toBe(uploadData); // 中身が一致するか？
+  });
+  // いらないのでフォルダ削除
+  afterAll(() => {
+    const testDirPath = path.resolve('./', 'test-dir');
+    if (fs.existsSync(testDirPath)) {
+      fs.rmSync(testDirPath, { recursive: true, force: true });
+    }
   });
 });

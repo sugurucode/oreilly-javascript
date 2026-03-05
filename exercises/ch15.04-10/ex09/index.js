@@ -6,11 +6,11 @@ document.getElementById('image').addEventListener('change', (event) => {
 
   const img = new Image();
   const reader = new FileReader();
-
+  // readerのloadイベントは、ファイルの読み込みが完了したときに発火する
   reader.addEventListener('load', (e) => {
     img.src = e.target.result;
   });
-
+  // load イベントは画像が完全に読み込まれたときに発火する
   img.addEventListener('load', () => {
     const originalCanvas = document.getElementById('original');
     const filteredCanvas = document.getElementById('filtered');

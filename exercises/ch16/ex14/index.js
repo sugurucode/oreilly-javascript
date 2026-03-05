@@ -1,15 +1,20 @@
+// index.js
+
 document.getElementById('image').addEventListener('change', (event) => {
   const file = event.target.files[0];
-  if (!file) return;
+  if (!file) {
+    return;
+  }
 
   const img = new Image();
   const reader = new FileReader();
-
+  // readerのloadイベントは、ファイルの読み込みが完了したときに発火する
   reader.addEventListener('load', (e) => {
     img.src = e.target.result;
   });
-
+  // imgのloadイベントは、画像が完全に読み込まれたときに発火する
   img.addEventListener('load', () => {
+    // Canvasを操作するための準備
     const originalCanvas = document.getElementById('original');
     const filteredCanvas = document.getElementById('filtered');
     const originalCtx = originalCanvas.getContext('2d');
@@ -21,34 +26,32 @@ document.getElementById('image').addEventListener('change', (event) => {
     filteredCanvas.height = img.height;
 
     originalCtx.drawImage(img, 0, 0);
+    // 画像のピクセルデータを取得
     const imageData = originalCtx.getImageData(0, 0, img.width, img.height);
 
-    // --- ブラウザ標準の Web Worker を作成 ---
-    // Node.js の worker_threads ではなく、ブラウザの Worker を使用します
-    const worker = new Worker('worker.js', { type: 'module' });
+    //-------------------ここまでは元のコードと同じ----------------------------------------
 
-    // データの送信（転送リストを使用して高速化）
-    worker.postMessage(
-      {
-        data: imageData.data,
-        w: img.width,
-        h: img.height,
-      },
-      [imageData.data.buffer],
-    );
+    // worker.js を使って、重い計算を別スレッドで行うためのコード
+    const worker = new Worker('worker.js');
 
-    // 結果の受信
+    // Worker から計算結果が返ってきた時の処理
     worker.onmessage = (e) => {
-      const { outputData } = e.data;
+      // 返ってきた生データ（Uint8ClampedArray）を、Canvas用の画像データに変換
+      const outputData = e.data;
       const outputImageData = new ImageData(outputData, img.width, img.height);
+
+      // フィルタ適用画像用の Canvas に描画
       filteredCtx.putImageData(outputImageData, 0, 0);
-      worker.terminate(); // 終了
+      // ない場合でもブラウザを閉じるとWorkerは自動的に終了するが、明示的に終了させるのがベストプラクティス
+      worker.terminate();
     };
 
-    worker.onerror = (err) => {
-      console.error('Worker Error:', err);
-    };
+    // workerに画像データを送る
+    worker.postMessage({
+      data: imageData.data,
+      width: img.width,
+      height: img.height,
+    });
   });
-
   reader.readAsDataURL(file);
 });

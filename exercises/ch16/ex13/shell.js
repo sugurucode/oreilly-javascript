@@ -91,11 +91,12 @@ async function runcmd(cmd, stdin = null, stdout = null) {
 
 // メイン関数
 async function main() {
+  // createInterface で readline インターフェースを作成する
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: '> ',
-    terminal: false,
+    terminal: false, // これを false にすると、プロンプトが表示される前にユーザーの入力が表示されるようになる
   });
 
   rl.prompt(); // > を表示

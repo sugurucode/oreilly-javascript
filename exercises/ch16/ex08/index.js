@@ -1,10 +1,5 @@
 #!/usr/bin/env node
-import { parseArgs } from 'node:util';
-
-// 設定（環境変数または直接入力）
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const REPO_OWNER = 'sugurucode'; // 書き換えてください
-const REPO_NAME = 'oreilly-javascript'; // 書き換えてください
+import { Octokit } from 'octokit';
 
 const HELP_TEXT = `
 Usage: node index.js [options] [command]
@@ -19,91 +14,49 @@ Options:
   -v, --verbose     HTTPリクエストのログを出力
 `;
 
-async function githubRequest(path, options = {}) {
-  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}${path}`;
-  const headers = {
-    Authorization: `Bearer ${GITHUB_TOKEN}`,
-    Accept: 'application/vnd.github+json',
-    'X-GitHub-Api-Version': '2022-11-28',
-    'Content-Type': 'application/json',
-  };
+// node index.js list などのコマンドとオプションを取得するために、slice(2)で最初の2つを除いた引数を取得する。
+const args = process.argv.slice(2);
 
-  if (args.values.verbose) {
-    console.error(`[LOG] ${options.method || 'GET'} ${url}`);
-  }
+// オプションの抽出
+// `-h`または`--help`オプションで使い方が確認できる
+// `-v`または`--verbose`オプションで HTTP ログを出力する
+const showHelp = args.includes('-h') || args.includes('--help');
+const verbose = args.includes('-v') || args.includes('--verbose');
 
-  const response = await fetch(url, { ...options, headers });
+// オプションを除いた純粋な引数（コマンドと値）だけを取り出す
+// node index.js -h listならば、argsは['-h', 'list']となる
+// filterでオプションを除外して['list']だけを取得する。
+const cmdArgs = args.filter((arg) => !arg.startsWith('-'));
+// console.log(cmdArgs); // [ 'list' ] などのコマンドと値の配列
+// create や close コマンドは、コマンドの後に値が必要なので
+// cmdArgsからコマンドと値を分割して取得。
+const [command, value] = cmdArgs;
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(`GitHub API Error: ${response.status} - ${error.message}`);
-  }
-
-  return response.json();
+// コマンドが指定されていない、またはヘルプオプションが指定されている場合は、HELP_TEXTを表示して終了
+if (showHelp || !command) {
+  console.log(HELP_TEXT);
+  process.exit();
 }
+// Octokitのインスタンスを作成する際に、authオプションでGitHubトークンを指定。
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const repositoryInfo = { owner: 'sugurucode', repo: 'oreilly-javascript' };
 
-// 1. 一覧表示
-async function listIssues() {
-  const issues = await githubRequest('/issues?state=open');
-  console.log('ID\tTitle');
-  console.log('--\t-----');
-  issues.forEach((i) => console.log(`${i.number}\t${i.title}`));
-}
-
-// 2. 作成
-async function createIssue(title) {
-  const res = await githubRequest('/issues', {
-    method: 'POST',
-    body: JSON.stringify({ title }),
+if (command === 'list') {
+  if (verbose) console.log('GET /repos/{owner}/{repo}/issues');
+  // オープンなIssueの一覧取得にはstate: 'open'を指定する必要がある。
+  const { data } = await octokit.rest.issues.listForRepo({ ...repositoryInfo, state: 'open' });
+  // i.numberはIssueの番号、i.titleはIssueのタイトルを表す。
+  data.forEach((i) => console.log(`Issueの番号: ${i.number}, タイトル: ${i.title}`));
+} else if (command === 'create' && value) {
+  if (verbose) console.log('POST /repos/{owner}/{repo}/issues');
+  const { data } = await octokit.rest.issues.create({ ...repositoryInfo, title: value });
+  console.log(`Issueを作成しました: #${data.number} ${data.title}`);
+} else if (command === 'close' && value) {
+  if (verbose) console.log('PATCH /repos/{owner}/{repo}/issues/{issue_number}');
+  await octokit.rest.issues.update({
+    ...repositoryInfo,
+    issue_number: Number(value),
+    state: 'closed',
   });
-  console.log(`Issue Created: #${res.number}`);
-}
-
-// 3. クローズ
-async function closeIssue(number) {
-  await githubRequest(`/issues/${number}`, {
-    method: 'PATCH',
-    body: JSON.stringify({ state: 'closed' }),
-  });
-  console.log(`Issue #${number} closed.`);
-}
-
-// メイン処理
-const args = parseArgs({
-  options: {
-    help: { type: 'boolean', short: 'h' },
-    verbose: { type: 'boolean', short: 'v' },
-  },
-  allowPositionals: true,
-});
-
-try {
-  if (!GITHUB_TOKEN) throw new Error('GITHUB_TOKEN environment variable is required.');
-
-  const [command, value] = args.positionals;
-
-  if (args.values.help || !command) {
-    console.log(HELP_TEXT);
-    process.exit(0);
-  }
-
-  switch (command) {
-    case 'list':
-      await listIssues();
-      break;
-    case 'create':
-      if (!value) throw new Error('Title is required for create command.');
-      await createIssue(value);
-      break;
-    case 'close':
-      if (!value) throw new Error('Issue number is required for close command.');
-      await closeIssue(value);
-      break;
-    default:
-      console.log('Unknown command.');
-      console.log(HELP_TEXT);
-  }
-} catch (err) {
-  console.error('Error:', err.message);
-  process.exit(1);
+  console.log(`Closed: #${value}`);
 }
