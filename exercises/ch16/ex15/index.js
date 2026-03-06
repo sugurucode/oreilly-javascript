@@ -1,40 +1,51 @@
 import threads from 'worker_threads';
 import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-// Jestなどの環境で __filename を正しく扱うための処理
 const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 if (threads.isMainThread) {
   // 1. sharedArray を number 型の変数 num にする
   let num = 0;
-  let workerFinished = false;
+  let workersFinished = false;
 
+  // ワーカースレッドを作成
   const worker = new threads.Worker(__filename);
 
-  worker.on('online', () => {
-    // 2. メインスレッドの for ループで num をインクリメントする
-    for (let i = 0; i < 10_000_000; i++) num++;
-
-    // 自分の処理が終わった際、既にワーカーが終わっていれば結果を表示
-    if (workerFinished) console.log(num);
-  });
-
-  // 3. サブスレッドからのメッセージを受信してインクリメント
-  worker.on('message', (message) => {
-    if (message === 'increment') {
+  // 3. メインスレッドでメッセージを受信したら num をインクリメントする
+  worker.on('message', (msg) => {
+    if (msg === 'numをインクリメントせよ') {
       num++;
-    } else if (message === 'done') {
-      workerFinished = true;
-      // メイン側のループも終わっていれば結果を表示
-      // (通常、メッセージ送信のオーバーヘッドでメインが先に終わります)
-      console.log(`最終結果: ${num}`);
+    } else if (msg === 'done') {
+      workersFinished = true;
+      // 両方のインクリメントが終了したかチェックして表示
+      // (メインのループも終わっていることが前提)
+      checkFinished();
     }
   });
-} else {
-  // 3. サブスレッドの for ループでメッセージを送る
+
+  // 2. メインスレッドの for ループで num をインクリメントする
+  let mainFinished = false;
   for (let i = 0; i < 10_000_000; i++) {
-    threads.parentPort.postMessage('increment');
+    num++;
   }
-  // インクリメントが終わったら、メインスレッドに通知する
+  mainFinished = true;
+
+  function checkFinished() {
+    if (mainFinished && workersFinished) {
+      // メッセージパッシングの場合、正しく 20,000,000 と表示される
+      console.log(num);
+    }
+  }
+} else {
+  // 3. サブスレッドから "num をインクリメントせよ" というメッセージを送る
+  for (let i = 0; i < 10_000_000; i++) {
+    // threads.parentPortは、ワーカースレッドからメインスレッドにメッセージを送るためのオブジェクト。
+    // postMessage() メソッドを使ってメッセージを送ることができる。
+    threads.parentPort.postMessage('numをインクリメントせよ');
+  }
+
+  // インクリメント依頼が終わったら通知
   threads.parentPort.postMessage('done');
 }

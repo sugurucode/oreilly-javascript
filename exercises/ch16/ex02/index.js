@@ -66,6 +66,7 @@ function main() {
         process.exit(0);
       });
       console.log('子プロセスにSIGINTを送信します。');
+      // killは子プロセスにシグナルを送るメソッド。引数はシグナル名。ここではSIGINTを送る。
       child.kill('SIGINT');
     }
   });
