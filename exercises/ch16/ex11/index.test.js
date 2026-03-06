@@ -24,12 +24,22 @@ describe('HTTPサーバーの基本テスト', () => {
     expect(res).toContain('<form');
   });
 
-  test('POST /greeting で挨拶が返ってくること', async () => {
-    const body = 'name=Tanaka&greeting=Hello';
+  test('POST /greeting で送信した名前と挨拶がHTMLに含まれていること', async () => {
+    const name = 'test';
+    const greeting = 'Hello';
+    const body = `name=${name}&greeting=${greeting}`;
+
+    // POSTリクエストを送るときは、リクエストライン、ヘッダー、空行、そしてボディを正しい形式で送る必要がある。
+    // ここでは、Content-Type と Content-Length をヘッダーに含めている
     const res = await request(
-      `POST /greeting HTTP/1.1\r\nContent-Length: ${body.length}\r\n\r\n${body}`,
+      `POST /greeting HTTP/1.1\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: ${body.length}\r\n\r\n${body}`,
     );
-    expect(res).toContain('Hello, Tanaka!');
+
+    expect(res).toContain('HTTP/1.1 200 OK');
+
+    expect(res).toContain(`${name} ${greeting}`);
+
+    console.log(res);
   });
 
   test('存在しないパスで 404 が返ってくること', async () => {

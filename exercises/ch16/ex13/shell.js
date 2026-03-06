@@ -41,6 +41,7 @@ class PipeCmd {
 
 // コマンドを実行する関数
 async function runcmd(cmd, stdin = null, stdout = null) {
+  console.log('Running command:', cmd);
   switch (cmd.type) {
     case ' ': // ExecCmd
       await new Promise((resolve, reject) => {
@@ -63,6 +64,8 @@ async function runcmd(cmd, stdin = null, stdout = null) {
 
     case '>': // 書き込みリダイレクト
       {
+        // FIXME: ここを実装してね (2行程度)
+        // HINT: cmd.file のストリームを createWriteStream で作成し runcmd を再帰的に呼び出す
         const out = fs.createWriteStream(cmd.file);
         await runcmd(cmd.cmd, stdin, out);
       }
@@ -70,6 +73,8 @@ async function runcmd(cmd, stdin = null, stdout = null) {
 
     case '<': // 読み込みリダイレクト
       {
+        // FIXME: ここを実装してね (2行程度)
+        // HINT: cmd.file のストリームを createReadStream で作成し runcmd を再帰的に呼び出す
         const ins = fs.createReadStream(cmd.file);
         await runcmd(cmd.cmd, ins, stdout);
       }
@@ -77,9 +82,16 @@ async function runcmd(cmd, stdin = null, stdout = null) {
 
     case '|': // パイプ
       {
+        // FIXME: ここを実装してね (4行程度)
+        // HINT: cmd.left と cmd.right に対して runcmd を再帰的に呼び出し Promise.all で待つ
+        // HINT: left と right を繋ぐには new PassThrought() で作成したストリームを使用する
         const p = new PassThrough();
         // 左側の出力を PassThrough に流し、右側の入力として PassThrough を渡す
-        await Promise.all([runcmd(cmd.left, stdin, p), runcmd(cmd.right, p, stdout)]);
+        await Promise.all([
+          // 左側のコマンドが終了したら p.end() を呼んで「送信終了」を伝える
+          runcmd(cmd.left, stdin, p).then(() => p.end()),
+          runcmd(cmd.right, p, stdout),
+        ]);
       }
       break;
 
