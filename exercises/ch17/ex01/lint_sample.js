@@ -11,7 +11,7 @@ const r = 10;
 // }
 
 // Google Style 5.10.1: with文を廃止し、明示的に Math オブジェクトを使用する
-const { PI, cos, sin } = Math;
+const {PI, cos, sin} = Math;
 
 console.log(a, x, y);
 // no-unused-varsを消すため
