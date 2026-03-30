@@ -1,12 +1,15 @@
 {
   "name": "ch17",
   "version": "1.0.0",
+  "type": "module",
   "description": "17章専用のpackage.json",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "npx webpack ./ex05/index.js --mode production --output-path ./ex05/dist",
+    "serve": "npx serve . -l 3000"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,8 @@
     "globals": "^17.4.0",
     "jest": "^30.3.0",
     "prettier": "3.8.1",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "webpack": "^5.105.4",
+    "webpack-cli": "^7.0.2"
   }
 }
