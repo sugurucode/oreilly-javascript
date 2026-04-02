@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    // ルートのtsconfig.jsonの設定を踏襲
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "inlineSourceMap": true,
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.flow.js"
+  ],
+  "ts-node": {
+    "esm": true
+  }
+}

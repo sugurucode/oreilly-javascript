@@ -1,22 +1,39 @@
-##　バンドル
+↓でバンドルした
+
 `npx webpack ./ex05/index.js --mode production --output-path ./ex05/dist`
 
-1. バンドル前の計測
-ex05/index.html を開き、<script type="module" src="./index.js"></script> になっていることを確認。
+# バンドル前とバンドル後のコード比較
+prettier playgroundでバンドル後のファイルを整形して比較
+`ex05/compare_bundle/bundle.js`に記載。
 
-ターミナルで npm run serve を実行。
+# スクリプトのダウンロード時間、ページの読み込み完了時間の比較
+## バンドル前
 
-ブラウザで http://localhost:3000/ex05/ を開く。
+![alt text](image.png)
 
-開発者ツール（F12）の「ネットワーク」タブを開き、リロード（Ctrl+R）。
+- index.js：19 ms
+- renderGrid.js：6 ms
+- updateGrid.js ： 5 ms
 
-リクエスト数（Requests） と 完了時間（Finish） をメモする。
+合計3ファイルが別々にリクエストされている
 
-2. バンドル後の計測
-ターミナルで npm run build を実行。（ex05/dist/main.js が更新される）
+- 終了：219ms
 
-ex05/index.html を書き換え： <script defer src="./dist/main.js"></script> にする。
 
-ブラウザに戻ってリロード。
+## バンドル後
+ex05/index.html を書き換え <script defer src="./dist/main.js"></script> にする。
+（deferとtype="modeule"が同じ挙動なので公平）
+それから`npm run build`実行
 
-同じく リクエスト数 と 完了時間 をメモして、バンドル前と比較する。
+![alt text](image-2.png)
+
+- main.js 10ms
+
+バンドルしたので1ファイルでまとめてリクエスト
+
+- 終了 99ms
+
+
+### 結論
+
+バンドルした方がパフォーマンスが良さそう

@@ -8,6 +8,7 @@ import {
 const user1 = { id: 1, name: 'Alice' };
 const user2 = { id: 2, name: 'Bob' };
 
+// エラーが残る。ジェネリクス使うと解決するっぽい
 const taskManager = new TaskManager<PriorityTask>();
 
 taskManager.add({
@@ -42,4 +43,5 @@ taskManager.completeTask(user1);
 taskManager.completeTask('質問表を確認する');
 
 console.log(taskManager.getTasks());
+console.log(`------------------------------`);
 console.log(taskManager.getTasks(not(isLowOrCompletedTask)));

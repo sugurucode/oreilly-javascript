@@ -9,12 +9,17 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "build": "npx webpack ./ex05/index.js --mode production --output-path ./ex05/dist",
-    "serve": "npx serve . -l 3000"
+    "serve": "npx serve . -l 3000",
+    "flow:transpile": "babel ex09/task.flow.js -o ex09/task.flow.compiled.js --plugins @babel/plugin-transform-flow-strip-types && babel ex09/caller.js -o ex09/caller.compiled.js --plugins @babel/plugin-transform-flow-strip-types",
+    "flow:run": "npm run flow:transpile && node ex09/caller.compiled.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.27.1",
     "@pollyjs/adapter-node-http": "^6.0.6",
     "@pollyjs/core": "^6.0.6",
     "@pollyjs/persister-fs": "^6.0.6",
@@ -22,6 +27,8 @@
     "@types/node": "^25.5.0",
     "eslint": "^8.57.1",
     "flow-bin": "^0.307.0",
+    "flow-node": "^2.307.1",
+    "flow-remove-types": "^2.307.1",
     "globals": "^17.4.0",
     "jest": "^30.3.0",
     "prettier": "3.8.1",

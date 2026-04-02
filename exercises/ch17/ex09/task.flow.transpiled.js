@@ -1,4 +1,4 @@
-// @flow
+//      
 
 // # 1. task.flow.jsをトランスパイル（型アノテーションを削除）
 // npx flow-remove-types ex09/task.flow.js -o ex09/task.flow.transpiled.js
@@ -10,13 +10,13 @@
 // node ex09/caller.transpiled.js
 
 
-export type User = { id: number, name: string };
-export type Task = { title: string, completed: boolean, user: User };
-export type Priority = "low" | "middle" | "high";
-export type PriorityTask = Task & { priority: Priority };
+                                                
+                                                                     
+                                                 
+                                                         
 
 // Userオブジェクトであることを判定する
-export function isUserObject(obj: any): boolean {
+export function isUserObject(obj     )          {
   return (
     typeof obj === 'object' &&
     typeof obj['id'] === 'number' &&
@@ -27,15 +27,15 @@ export function isUserObject(obj: any): boolean {
 
 
 export class TaskManager {
-  _tasks: Array<PriorityTask> = [];
+  _tasks                      = [];
 
   // タスクを追加する
-  add(task: PriorityTask): void {
+  add(task              )       {
     this._tasks.push(task);
   }
 
   // タスクを完了にする
-  completeTask(target: User | string): void {
+  completeTask(target               )       {
     if (isUserObject(target)) {
       this._tasks
         .filter((t) => t.user === target)
@@ -48,7 +48,7 @@ export class TaskManager {
   }
 
   // 引数の関数にマッチするタスクを返す
-  getTasks(predicate?: (task: PriorityTask) => boolean): Array<PriorityTask> {
+  getTasks(predicate                                  )                      {
     if (predicate === undefined) {
       return this._tasks;
     } else {
@@ -58,11 +58,11 @@ export class TaskManager {
 }
 
 // priority="low"または完了済のタスクを判定する
-export function isLowOrCompletedTask(priorityTask: PriorityTask): boolean {
+export function isLowOrCompletedTask(priorityTask              )          {
   return priorityTask.priority === 'low' || priorityTask.completed;
 }
 
 // 判定関数の否定結果を返す関数を生成する
-export function not(f: (arg: PriorityTask) => boolean): (arg: PriorityTask) => boolean {
+export function not(f                                )                                 {
   return (arg) => !f(arg);
 }

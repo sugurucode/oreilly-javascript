@@ -1,16 +1,11 @@
-// 以下の型を定義すること
-//  - User: { id: number, name: string }
-//  - Task: { title: string, completed: boolean, user: User }
-//  - Priority: "low"|"middle"|"high"のいずれかの値をとる
-//  - PriorityTask: Taskかつ{ priority: Priority }を持つ型
-
+// npx tsx ex09/caller.t
 export type User = { id: number; name: string };
 export type Task = { title: string; completed: boolean; user: User };
 export type Priority = "low" | "middle" | "high";
 export type PriorityTask = Task & { priority: Priority };
 
 // Userオブジェクトであることを判定する
-function isUserObject(obj: any): obj is User {
+function isUserObject(obj: any):boolean{
   return (
     typeof obj === 'object' &&
     typeof obj['id'] === 'number' &&
@@ -18,11 +13,11 @@ function isUserObject(obj: any): obj is User {
   );
 }
 
-export class TaskManager<T extends Task> {
-  _tasks: T[] = [];
+export class TaskManager {
+  _tasks: PriorityTask[] = [];
 
   // タスクを追加する
-  add(task: T): void {
+  add(task: PriorityTask): void {
     this._tasks.push(task);
   }
 
@@ -43,7 +38,7 @@ export class TaskManager<T extends Task> {
 
   // 引数の関数にマッチするタスクを返す
   // 引数を省略した場合はすべてのタスクを返す
-  getTasks(predicate?: (task: T) => boolean): T[] {
+  getTasks(predicate?: (task: PriorityTask) => boolean): PriorityTask[] {
     if (predicate === undefined) {
       return this._tasks;
     } else {
@@ -58,6 +53,6 @@ export function isLowOrCompletedTask(priorityTask: PriorityTask): boolean {
 }
 
 // 判定関数の否定結果を返す関数を生成する
-export function not<T>(f: (arg: T) => boolean): (arg: T) => boolean {
+export function not(f: (arg: PriorityTask) => boolean): (arg: PriorityTask) => boolean {
   return (arg) => !f(arg);
 }
