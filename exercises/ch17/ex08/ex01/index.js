@@ -44,5 +44,6 @@ form.addEventListener('submit', (e) => {
   elem.appendChild(toggle);
   elem.appendChild(label);
   elem.appendChild(destroy);
+  // prependでelemをリストの先頭に追加した
   list.prepend(elem);
 });

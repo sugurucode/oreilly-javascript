@@ -1,60 +1,68 @@
-import {jest} from '@jest/globals'; // 🌟 これを一番上に追加！
-import {listIssues, createIssue, closeIssue} from './github.js';
-import {Polly} from '@pollyjs/core';
+import { Polly } from '@pollyjs/core';
 import NodeHttpAdapter from '@pollyjs/adapter-node-http';
-import FetchAdapter from '@pollyjs/adapter-fetch';
 import FSPersister from '@pollyjs/persister-fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { listIssues, createIssue, closeIssue } from './github.js';
 
 Polly.register(NodeHttpAdapter);
-Polly.register(FetchAdapter);
 Polly.register(FSPersister);
 
-describe('Polly.JS を利用したテスト', () => {
-  // これで jest が認識されるようになります！
-  jest.setTimeout(30000);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+describe('GitHub API with Polly.js', () => {
   let polly;
-  let createdIssueNumber;
 
-  beforeEach(() => {
-    polly = new Polly('github-api-test', {
-      adapters: ['node-http', 'fetch'],
+  beforeAll(() => {
+    polly = new Polly('GitHub_API_Test', {
+      // トークンがあれば実際に通信して録音(record)、なければ保存データを使用(replay)
+      mode: process.env.GITHUB_TOKEN ? 'record' : 'replay',
+      adapters: ['node-http'],
       persister: 'fs',
       persisterOptions: {
-        fs: {
-          recordingsDir: '__recordings__',
-        },
+        fs: { recordingsDir: path.resolve(__dirname, '__recordings__') }
       },
-      recordIfMissing: true,
       matchRequestsBy: {
-        headers: {
-          exclude: ['authorization'],
-        },
-      },
+        headers: false,
+        body: false,
+        order: false
+      }
+    });
+    // Github Tokenがある場合は、Authorizationヘッダーをマスクして記録する
+    // Githubに上げるとまずいので
+    polly.server.any().on('beforePersist', (req, recording) => {
+      if (recording.request.headers) {
+        recording.request.headers = recording.request.headers.map(h => 
+          // toLowerCase()でヘッダー名を小文字にして比較するのは、HTTPヘッダーは大文字小文字を区別しないため
+          h.name.toLowerCase() === 'authorization' ? { ...h, value: 'GitHubトークン' } : h
+        );
+      }
     });
   });
 
-  afterEach(async () => {
-    await polly.flush();
+  afterAll(async () => {
     await polly.stop();
   });
 
-  test('listIssues: 実際のAPIと通信して一覧を取得する', async () => {
-    const issues = await listIssues();
-    expect(Array.isArray(issues)).toBe(true);
+  test('listIssues: 実際のレスポンスを記録/再生して検証', async () => {
+    const result = await listIssues();
+    // レスポンスが配列である
+    expect(Array.isArray(result)).toBe(true);
+    // 少なくとも1件のIssueがある場合は、idプロパティが存在することを確認
+    if (result.length > 0) {
+      expect(result[0]).toHaveProperty('id');
+    }
   });
 
-  test('createIssue: 新規Issueを作成する', async () => {
-    const issue = await createIssue('Polly Test Issue');
-    expect(issue.title).toBe('Polly Test Issue');
-
-    createdIssueNumber = issue.number;
+  test('createIssue: 新規作成を記録', async () => {
+    const title = 'Polly.js Test Issue';
+    const result = await createIssue(title);
+    expect(result.title).toBe(title);
   });
 
-  test('closeIssue: 作成したIssueをクローズする', async () => {
-    const targetNumber = createdIssueNumber || 1;
-    const issue = await closeIssue(targetNumber);
-
-    expect(issue.state).toBe('closed');
+  test('closeIssue: クローズ処理を記録', async () => {
+    const issueNumber = 1; 
+    const result = await closeIssue(issueNumber);
+    expect(result.state).toBe('closed');
   });
 });

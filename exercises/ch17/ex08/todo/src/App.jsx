@@ -33,12 +33,17 @@ export default function App() {
   const toggleTodo = (id) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        // 全てのtodoを走査。クリックしたtodoのidと一致したら、...todoで既存のプロパティを展開し、completedだけ反転させる。
+        // そうでないtodoはそのまま返す。
+        // 
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo // {id:1, text:'...', completed:true} => {id:1, text:'...', completed:false}
       )
     );
   };
 
   // 削除ボタン押下時の処理
+  // destroy.addEventListener('click', () => {...}
+  // に相当する処理。クリックされたtodoのidと一致しないものだけを残す。
   const deleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
@@ -59,13 +64,21 @@ export default function App() {
       <ul id="todo-list">
         {todos.map((todo) => (
           <li key={todo.id}>
+            {/* htmlのtoggleに相当する */}
             <input
               type="checkbox"
               checked={todo.completed}
               onChange={() => toggleTodo(todo.id)}
             />
+            {/* htmlのラベルに相当する */}
             <label
               style={{
+                // if (toggle.checked) {
+                //   label.style.textDecorationLine = 'line-through';
+                // } else {
+                //   label.style.textDecorationLine = 'none';
+                // }
+                // 上記の条件式を三項演算子で表現
                 textDecorationLine: todo.completed ? 'line-through' : 'none',
               }}
             >

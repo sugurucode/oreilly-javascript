@@ -97,10 +97,9 @@ added 1 package in 5m
 
 ```
 
-「`format_sample.js は lint の警告を修正するのではなく、ESLint の設定で lint 対象から除外`」の要件を満たす必要があるが、`format_sample.js`の警告が出ているので`.eslintegnore`で`ex01/format_sample.js`を除外設定。
+「`format_sample.js は lint の警告を修正するのではなく、ESLint の設定で lint 対象から除外`」の要件を満たす必要がある。.eslintegnore`で`ex01/format_sample.js`を除外設定。
 
-`npx eslint ex01/lint_sample.js --fix`で修正出来なかったので手動で消えるまで修正。
-
+↓ 警告は消えた
 ```bash
 suguru@A081003065:~/oreilly_javascript7_fix/exercises-public/exercises/ch17$ npx eslint ex01/lint_sample.js --fix
 =============
@@ -127,5 +126,7 @@ Please only submit bug reports when using the officially supported version.
 
 ✖ 6 problems (6 errors, 0 warnings)
 ```
+
+`npx eslint ex01/lint_sample.js --fix`で修正出来なかったので手動で消えるまで修正。
 
 以上

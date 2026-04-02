@@ -1,45 +1,37 @@
-## tsc（TypeScript公式トランスパイラ）
+#### 1. tsc（公式コンパイラ）
+TypeScript公式コンパイラで、型チェック＋トランスパイル＋型情報ファイル（.d.ts）生成をしてくれる。tsconfig.jsonで調整可能。
 
-`tsc`は、TypeScriptが公式に提供しているコンパイラ（トランスパイラ）。
-TypeScriptのコードを解析して型チェックを行い、実行可能なJavaScriptコードへと変換する。`tsconfig.json`の設定によって、モダンな構文を古い環境（ES5など）向けに変換することも可能。
+#### 2. @babel/preset-typescript（Babel）
+Babelのプリセットで、型注釈を除去（型チェックなし）しトランスパイル。他のBabelツールと組み合わせると、古いブラウザ向け変換（preset-env使用）も同時にできて便利。
 
-ただし、`tsc`の変換対象はあくまで「JavaScriptの構文」のみであるため、アロー関数を通常の関数に変換することはできても、`Promise`や`Map`のようなES6意向の新しい組み込みオブジェクトに対するPolyfill（未実装機能の補完）は一切行わない。
+```
+// .babelrc
+{
+  "presets": [
+    "@babel/preset-typescript",  // TypeScript→JS
+    "@babel/preset-env"         // 最新JS→古いブラウザ対応JS
+  ]
+}
+```
 
-※ES6で追加されたもの
-- let / const（ブロックスコープの変数宣言）
+####　比較
+| 項目    | tsc       | @babel/preset-typescript |
+| ----- | --------- | ------------------------ |
+| 型チェック | ○（必須）     | ×（別途tsc推奨）         |
+| 出力    | JS + d.ts | JSのみ                     |
+| 速度    | 標準        | 高速（型除去のみ）         |
+| 用途    | 開発/ライブラリ  | Webpack等のビルドパイプライン  |
 
-- アロー関数（=>）
+→大規模なプロジェクトならbabel使うと高速だし良いのかも
 
-- クラス（class）
+webpackをtscで作ると型チェックの分遅い。babelだと速い(型除去のみなので)
 
-- Set / Symbol
 
-- モジュール（import / export）
-
-## @babel/preset-typescript (Babel)
-
-`@babel/preset-typescript`は、JavaScriptの汎用コンパイラであるBabelに、TypeScriptを解釈させるためのプリセット（設定集）。
-
-Babel自体の強力なエコシステムを利用できるのが最大の特徴である。`@babel/preset-env`などと組み合わせることで、ターゲットとするブラウザ環境に合わせて、構文の変換だけでなく必要なPolyfillを自動的に注入できる。また、豊富なプラグインを用いて柔軟なコード変換（例：特定のテストコードの除去など）を行うことも可能である。
-
-ただし、Babelが行うのは「型情報をコードから剥がす（消去する）こと」だけであり、**型チェック自体は一切行わない**。そのため、開発時はBabelで高速にトランスパイルしつつ、型チェックは別途`tsc --noEmit`を実行して担保する、という運用が一般的。
-
----
-
-## tscとBabelの主な違い
-
-| 比較項目 | tsc | @babel/preset-typescript (Babel) |
-| :--- | :--- | :--- |
-| **役割と拡張性** | TypeScriptの構文変換と型チェックに特化。 | プラグインを用いた柔軟なコード変換・最適化が可能。 |
-| **Polyfillの注入** | 行わない（構文の変換のみ）。 | 行う（`@babel/preset-env`等の設定により自動注入が可能）。 |
-| **型チェック** | トランスパイルと同時に実行する。 | 実行しない（型情報を剥がすのみ。別途`tsc`でのチェックが必要）。 |
-| **TS機能の対応** | 公式のため全機能に完全対応している。 | `const enum`や一部のデコレーターなど、特定のTS機能は正常に変換できない制約がある。 |
-
-## まとめ
-- tsc: 現代の「書き方（構文）」を昔の書き方に直すだけで、昔の環境に存在しない「機能（オブジェクト）」までは面倒を見てくれない。
-
-- Babel: 昔の環境に存在しない「機能」が使われているのを見つけると、それを動かすための部品（Polyfill）を自動的にインポートして、無理やり動くようにしてくれる。
 
 参考
 
-- [tscとBabel](https://t-yng.jp/post/tsc-and-babel)
+- [@babel/preset-typescriptを使ってTypeScriptを変換する](https://qiita.com/nacam403/items/edf3e2c8ff364aff910f)
+
+- [TypeScriptでのBabelの使用](https://typescript.dokyumento.jp/docs/handbook/babel-with-typescript.html)
+
+- [@babel/preset-typescript](https://babeljs.io/docs/babel-preset-typescript)
